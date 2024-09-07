@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Dashboard</h1>
+      <nav>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="loginRegister.html">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Welcome, <span id="userName">[User Name]</span></h2>
+      <p>Role: <span id="userRole">[Role]</span></p>
+      <div id="adminContent" style="display: none">
+        <!-- Content specific to Admin -->
+        <h3>Admin Section</h3>
+        <p>This content is visible only to Admins.</p>
+      </div>
+      <div id="userContent" style="display: none">
+        <!-- Content specific to User -->
+        <h3>User Section</h3>
+        <p>This content is visible only to Users.</p>
+      </div>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Inventory Management System</p>
+    </footer>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>
