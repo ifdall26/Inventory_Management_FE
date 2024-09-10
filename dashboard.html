@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
-    <link rel="stylesheet" href="/css/dashborad.css" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
     <!-- SweetAlert2 CSS -->
     <link
       rel="stylesheet"
@@ -16,7 +16,6 @@
       <h1>Dashboard</h1>
       <nav>
         <ul>
-          <!-- <li><a href="#">Home</a></li> -->
           <li><a href="loginRegister.html">Logout</a></li>
         </ul>
       </nav>
@@ -25,10 +24,11 @@
     <main>
       <h2>Welcome, <span id="userName">[User Name]</span></h2>
       <p>Role: <span id="userRole">[Role]</span></p>
-      <div id="adminContent" style="display: none">
-        <!-- Content specific to Admin -->
+
+      <!-- Admin Gudang Content -->
+      <div id="adminGudangContent" style="display: none">
         <h3>Admin Section</h3>
-        <p>This content is visible only to Admins.</p>
+        <p>This content is visible only to Admin Gudang.</p>
 
         <!-- Form Entry Data Barang -->
         <h4>Entry Data Barang</h4>
@@ -40,7 +40,6 @@
             name="kode_barang"
             required
           /><br />
-
           <label for="nama_barang">Nama Barang:</label>
           <input
             type="text"
@@ -48,13 +47,10 @@
             name="nama_barang"
             required
           /><br />
-
           <label for="quantity">Jumlah Stok:</label>
           <input type="number" id="quantity" name="quantity" required /><br />
-
           <label for="satuan">Satuan:</label>
           <input type="text" id="satuan" name="satuan" required /><br />
-
           <label for="harga_satuan">Harga Satuan:</label>
           <input
             type="number"
@@ -62,23 +58,167 @@
             name="harga_satuan"
             required
           /><br />
-
           <button type="submit">Tambah Barang</button>
         </form>
-
         <p id="statusMessage"></p>
+
+        <!-- Tabel Daftar Barang -->
+        <h4>Daftar Barang</h4>
+        <table id="itemsTable">
+          <thead>
+            <tr>
+              <th>Kode Barang</th>
+              <th>Nama Barang</th>
+              <th>Jumlah Stok</th>
+              <th>Satuan</th>
+              <th>Harga Satuan</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data barang akan dimuat di sini -->
+          </tbody>
+        </table>
       </div>
+
+      <!-- User Content -->
       <div id="userContent" style="display: none">
-        <!-- Content specific to User -->
         <h3>User Section</h3>
         <p>This content is visible only to Users.</p>
+
+        <!-- Tabel Daftar Barang (untuk User) -->
+        <h4>Daftar Barang</h4>
+        <table id="userItemsTable">
+          <thead>
+            <tr>
+              <th>Kode Barang</th>
+              <th>Nama Barang</th>
+              <th>Jumlah Stok</th>
+              <th>Satuan</th>
+              <th>Harga Satuan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Data barang akan dimuat di sini -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="adminDaerahContent" style="display: none">
+        <h3>Admin Daerah Section</h3>
+        <p>This content is visible only to Admin Daerah</p>
+
+        <!-- Tabel untuk menampilkan barang daerah -->
+        <h4>Daftar Barang Daerah</h4>
+        <div class="search-filter">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Cari barang..."
+            oninput="searchBarang()"
+          />
+
+          <select id="tipeBarangFilter" onchange="filterBarang()">
+            <option value="">Pilih Tipe Barang</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="Electrical">Electrical</option>
+          </select>
+
+          <select id="lokasiDaerahFilter" onchange="filterBarang()">
+            <option value="">Pilih Lokasi Daerah</option>
+            <option value="Indarung 1">Indarung 1</option>
+            <option value="Indarung 2">Indarung 2</option>
+            <option value="Indarung 3">Indarung 3</option>
+            <option value="Indarung 4">Indarung 4</option>
+            <option value="Indarung 5">Indarung 5</option>
+            <option value="Indarung 6">Indarung 6</option>
+          </select>
+
+          <select id="lokasiAreaFilter" onchange="filterBarang()">
+            <option value="">Pilih Lokasi Area</option>
+            <option value="Raw Mill">Raw Mill</option>
+            <option value="Kiln">Kiln</option>
+            <option value="Sement Mill">Sement Mill</option>
+          </select>
+        </div>
+        <div class="tabelBarangDaerah">
+          <table id="barangDaerahTable">
+            <thead>
+              <tr>
+                <th>Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>Quantity</th>
+                <th>Satuan</th>
+                <th>Harga Satuan</th>
+                <th>Lokasi Daerah</th>
+                <th>Lokasi Area</th>
+                <th>Tipe Barang</th>
+              </tr>
+            </thead>
+            <tbody id="barangTableBody">
+              <!-- Data akan ditambahkan di sini oleh JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <form id="barangDaerahForm">
+          <!-- Kolom barang yang sama dengan tabel barang -->
+          <label for="kode_barang">Kode Barang:</label>
+          <input type="text" id="kode_barang" name="kode_barang" required />
+
+          <label for="nama_barang">Nama Barang:</label>
+          <input type="text" id="nama_barang" name="nama_barang" required />
+
+          <label for="quantity">Quantity:</label>
+          <input type="number" id="quantity" name="quantity" required />
+
+          <label for="satuan">Satuan:</label>
+          <input type="text" id="satuan" name="satuan" required />
+
+          <label for="harga_satuan">Harga Satuan:</label>
+          <input type="number" id="harga_satuan" name="harga_satuan" required />
+
+          <label for="lokasi_daerah">Lokasi Daerah:</label>
+          <select id="lokasi_daerah" name="lokasi_daerah">
+            <option value="Indarung 1">Indarung 1</option>
+            <option value="Indarung 2">Indarung 2</option>
+            <option value="Indarung 3">Indarung 3</option>
+            <option value="Indarung 4">Indarung 4</option>
+            <option value="Indarung 5">Indarung 5</option>
+            <option value="Indarung 6">Indarung 6</option>
+            <!-- Tambahkan tipe barang lainnya jika ada -->
+          </select>
+
+          <label for="lokasi_area">Lokasi Area:</label>
+          <select id="lokasi_area" name="lokasi_area">
+            <option value="Raw Mill">Raw Mill</option>
+            <option value="Kiln">Kiln</option>
+            <option value="Sement Mill">Sement Mill</option>
+            <!-- Tambahkan tipe barang lainnya jika ada -->
+          </select>
+
+          <label for="tipe_barang">Tipe Barang:</label>
+          <select id="tipe_barang" name="tipe_barang">
+            <option value="Mechanical">Mechanical</option>
+            <option value="Electrical">Electrical</option>
+            <!-- Tambahkan tipe barang lainnya jika ada -->
+          </select>
+
+          <button type="submit">Simpan</button>
+        </form>
+      </div>
+      <div id="superAdminContent" style="display: none">
+        <h3>Admin Super Section</h3>
+        <p>This content is visible only to Admin Daerah</p>
       </div>
     </main>
 
     <footer>
       <p>&copy; 2024 Inventory Management System</p>
     </footer>
+
     <script src="/js/dashboard.js"></script>
+    <script src="/js/barang_daerah.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
