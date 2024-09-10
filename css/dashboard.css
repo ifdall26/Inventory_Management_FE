@@ -65,8 +65,9 @@ main p {
   color: #666;
 }
 
-#adminContent,
-#userContent {
+#adminGudangContent,
+#userContent,
+#adminDaerahContent {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
@@ -74,14 +75,16 @@ main p {
   margin-top: 20px;
 }
 
-#adminContent h3,
-#userContent h3 {
+#adminGudangContent h3,
+#userContent h3,
+#adminDaerahContent h3 {
   font-size: 1.5rem;
   color: #1f2833;
 }
 
-#adminContent p,
-#userContent p {
+#adminGudangContent p,
+#userContent p,
+#adminDaerahContent p {
   color: #666;
   font-size: 1rem;
 }
@@ -105,12 +108,16 @@ form label {
 
 form input,
 form select {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
+}
+
+form select {
+  width: 99%;
 }
 
 form input[type="submit"] {
@@ -139,6 +146,118 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #45a049; /* Warna lebih gelap saat hover */
+}
+
+/* Style untuk tabel barang di dashboard */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+}
+
+th,
+td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+.tabelBarangDaerah {
+  overflow-x: scroll;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button.delete-btn {
+  background-color: #dc3545;
+}
+
+button.delete-btn:hover {
+  background-color: #c82333;
+}
+
+h3,
+h4 {
+  margin-top: 20px;
+  color: #333;
+}
+
+.editBarang {
+  width: 100%;
+}
+
+.swal2-input {
+  margin: 0;
+  width: 100%;
+}
+
+#statusMessage {
+  margin-top: 15px;
+  font-size: 16px;
+  color: green;
+}
+
+#statusMessage.error {
+  color: red;
+}
+
+.search-filter {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.search-filter input,
+.search-filter select {
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  flex: 1; /* Flexibility for responsive layout */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+@media (max-width: 600px) {
+  .search-filter {
+    flex-direction: column;
+  }
+
+  .search-filter input,
+  .search-filter select {
+    margin-right: 0;
+    margin-bottom: 10px; /* Add spacing between fields */
+  }
 }
 
 /* Untuk responsivitas */
