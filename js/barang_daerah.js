@@ -16,7 +16,6 @@ document
     };
 
     fetch("http://localhost:3000/api/barang_daerah", {
-      // Port yang benar
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,6 +31,7 @@ document
       .then((data) => {
         alert("Barang berhasil ditambahkan");
         document.getElementById("barangDaerahForm").reset(); // Clear form fields
+        fetchBarang(); // Reload data after adding
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -39,58 +39,29 @@ document
       });
   });
 
-// Function to fetch and display barang daerah
-function loadBarangDaerah() {
-  fetch("http://localhost:3000/api/barang_daerah")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const tableBody = document.querySelector("#barangDaerahTable tbody");
-      tableBody.innerHTML = ""; // Clear existing rows
+let allBarang = []; // Menyimpan semua barang
+let currentPage = 1; // Halaman saat ini
+const itemsPerPage = 10; // Jumlah barang per halaman
 
-      data.forEach((item) => {
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-          <td>${item.kode_barang}</td>
-          <td>${item.nama_barang}</td>
-          <td>${item.quantity}</td>
-          <td>${item.satuan}</td>
-          <td>${item.harga_satuan}</td>
-          <td>${item.lokasi_daerah}</td>
-          <td>${item.lokasi_area}</td>
-          <td>${item.tipe_barang}</td>
-        `;
-
-        tableBody.appendChild(row);
-      });
-    })
-    .catch((error) => {
-      console.error("Error fetching barang daerah:", error);
-      alert("Gagal memuat data barang daerah: " + error.message);
-    });
-}
-
-// Call loadBarangDaerah when the page loads or when needed
-document.addEventListener("DOMContentLoaded", function () {
-  loadBarangDaerah();
-});
-
-let allBarang = [];
-
-// Fungsi untuk mengambil data barang dari server dan menyimpan di allBarang
+// Fungsi untuk mengambil data barang dari server
 function fetchBarang() {
   fetch("http://localhost:3000/api/barang_daerah")
     .then((response) => response.json())
     .then((data) => {
       allBarang = data; // Simpan semua barang
-      displayBarang(allBarang); // Tampilkan semua barang
+      displayBarangWithPagination(); // Tampilkan barang dengan pagination
     })
     .catch((error) => console.error("Error fetching barang:", error));
+}
+
+// Fungsi untuk menampilkan barang dengan pagination
+function displayBarangWithPagination() {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBarang = allBarang.slice(startIndex, endIndex);
+
+  displayBarang(paginatedBarang);
+  displayPagination();
 }
 
 // Fungsi untuk menampilkan barang dalam tabel
@@ -141,5 +112,56 @@ function filterBarang() {
   displayBarang(filteredBarang);
 }
 
-// Ambil data barang saat halaman dimuat
-document.addEventListener("DOMContentLoaded", fetchBarang);
+// Fungsi untuk menampilkan kontrol pagination
+function displayPagination() {
+  const paginationContainer = document.getElementById("pagination");
+  paginationContainer.innerHTML = ""; // Kosongkan elemen pagination
+
+  const totalPages = Math.ceil(allBarang.length / itemsPerPage);
+
+  const prevButton = document.createElement("button");
+  prevButton.textContent = "Previous";
+  prevButton.disabled = currentPage === 1;
+  prevButton.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayBarangWithPagination();
+    }
+  });
+  paginationContainer.appendChild(prevButton);
+
+  const pageDisplay = document.createElement("span");
+  pageDisplay.textContent = `Page ${currentPage} of ${totalPages}`;
+  paginationContainer.appendChild(pageDisplay);
+
+  const nextButton = document.createElement("button");
+  nextButton.textContent = "Next";
+  nextButton.disabled = currentPage === totalPages;
+  nextButton.addEventListener("click", () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayBarangWithPagination();
+    }
+  });
+  paginationContainer.appendChild(nextButton);
+}
+
+// Fungsi untuk menjalankan pencarian dan pagination bersamaan
+function searchWithPagination() {
+  const query = document.getElementById("searchInput").value.toLowerCase();
+  const filteredBarang = allBarang.filter((item) =>
+    item.nama_barang.toLowerCase().includes(query)
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedBarang = filteredBarang.slice(startIndex, endIndex);
+
+  displayBarang(paginatedBarang);
+  displayPagination();
+}
+
+// Panggil fetchBarang saat halaman dimuat
+document.addEventListener("DOMContentLoaded", function () {
+  fetchBarang();
+});
