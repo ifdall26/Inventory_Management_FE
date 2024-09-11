@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("adminGudangContent").style.display = "none";
         document.getElementById("adminDaerahContent").style.display = "none";
         document.getElementById("userContent").style.display = "block";
-        fetchAndDisplayItemsForUser(); // Ambil data barang untuk User Area
+        // fetchAndDisplayItemsForUser(); // Ambil data barang untuk User Area
       }
     } else {
       // Jika tidak ada user yang login, redirect ke login page
@@ -114,33 +114,6 @@ async function fetchAndDisplayItemsForAdmin() {
     });
 
     setupEditAndDeleteButtons(); // Setup tombol edit dan hapus
-  } catch (error) {
-    console.error("Error fetching items:", error);
-  }
-}
-
-// Fungsi untuk mengambil dan menampilkan data barang untuk User
-async function fetchAndDisplayItemsForUser() {
-  try {
-    const response = await fetch("http://localhost:3000/api/items");
-    const items = await response.json();
-
-    const userItemsTableBody = document.querySelector("#userItemsTable tbody");
-    userItemsTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data baru
-
-    items.forEach((item) => {
-      const row = document.createElement("tr");
-
-      row.innerHTML = `
-        <td>${item.kode_barang}</td>
-        <td>${item.nama_barang}</td>
-        <td>${item.quantity}</td>
-        <td>${item.satuan}</td>
-        <td>${item.harga_satuan}</td>
-      `;
-
-      userItemsTableBody.appendChild(row);
-    });
   } catch (error) {
     console.error("Error fetching items:", error);
   }

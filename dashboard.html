@@ -86,22 +86,78 @@
         <h3>User Section</h3>
         <p>This content is visible only to Users.</p>
 
+        <div class="search-filter">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Cari barang..."
+            oninput="searchBarangUser()"
+          />
+
+          <select id="tipeBarangFilter" onchange="filterBarangUser()">
+            <option value="">Pilih Tipe Barang</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="Electrical">Electrical</option>
+            <!-- Tambahkan opsi tipe barang sesuai dengan data yang ada -->
+          </select>
+
+          <select id="lokasiDaerahFilter" onchange="filterBarangUser()">
+            <option value="">Pilih Lokasi Daerah</option>
+            <option value="Indarung 1">Indarung 1</option>
+            <option value="Indarung 2">Indarung 2</option>
+            <option value="Indarung 3">Indarung 3</option>
+            <option value="Indarung 4">Indarung 4</option>
+            <option value="Indarung 5">Indarung 5</option>
+            <option value="Indarung 6">Indarung 6</option>
+            <!-- Tambahkan lebih banyak opsi jika diperlukan -->
+          </select>
+
+          <select id="lokasiAreaFilter" onchange="filterBarangUser()">
+            <option value="">Pilih Lokasi Area</option>
+            <option value="Raw Mill">Raw Mill</option>
+            <option value="Kiln">Kiln</option>
+            <option value="Sement Mill">Sement Mill</option>
+            <!-- Tambahkan lebih banyak opsi jika diperlukan -->
+          </select>
+        </div>
+
         <!-- Tabel Daftar Barang (untuk User) -->
         <h4>Daftar Barang</h4>
-        <table id="userItemsTable">
-          <thead>
-            <tr>
-              <th>Kode Barang</th>
-              <th>Nama Barang</th>
-              <th>Jumlah Stok</th>
-              <th>Satuan</th>
-              <th>Harga Satuan</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Data barang akan dimuat di sini -->
-          </tbody>
-        </table>
+        <div class="tabelBarangDaerah">
+          <table id="barangDaerahUserTable">
+            <thead>
+              <tr>
+                <th>Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>Quantity</th>
+                <th>Satuan</th>
+                <th>Harga Satuan</th>
+                <th>Lokasi Daerah</th>
+                <th>Lokasi Area</th>
+                <th>Tipe Barang</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="barangDaerahUserTableBody"></tbody>
+          </table>
+        </div>
+        <!-- Modal/Formulir Permintaan Barang -->
+        <div id="requestFormModal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Permintaan Barang</h2>
+            <form id="requestForm">
+              <input type="hidden" id="kodeBarang" name="kode_barang" />
+              <label for="quantity">Jumlah:</label>
+              <input type="number" id="quantity" name="quantity" required />
+
+              <label for="catatan">Catatan:</label>
+              <textarea id="catatan" name="catatan"></textarea>
+
+              <button type="submit">Kirim Permintaan</button>
+            </form>
+          </div>
+        </div>
       </div>
 
       <div id="adminDaerahContent" style="display: none">
@@ -224,6 +280,7 @@
 
     <script src="/js/dashboard.js"></script>
     <script src="/js/barang_daerah.js"></script>
+    <script src="/js/user_content.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>

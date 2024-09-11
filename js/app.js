@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const email = document.getElementById("login-email").value;
     const password = document.getElementById("login-password").value;
 
+    // Validasi input
     if (!email || !password) {
       document.getElementById("login-error").textContent =
         "All fields are required.";
@@ -75,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     try {
+      // Kirim request login ke server
       const response = await fetch("http://localhost:3000/api/users/login", {
         method: "POST",
         headers: {
@@ -86,16 +88,22 @@ document.addEventListener("DOMContentLoaded", () => {
         }),
       });
 
+      // Ambil data dari respons server
       const userData = await response.json();
       console.log("Server response:", userData); // Debugging output
 
-      if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(userData));
+      if (response.ok && userData.id_user) {
+        // Simpan data penting di localStorage
+        localStorage.setItem("userId", userData.id_user);
+        localStorage.setItem("userName", userData.nama);
+
+        // Redirect ke dashboard
         alert(
           `Login successful! Welcome, ${userData.nama}. Redirecting to dashboard...`
         );
         window.location.href = "dashboard.html";
       } else {
+        // Tampilkan pesan error dari server atau fallback message
         document.getElementById("login-error").textContent =
           userData.message || "Failed to login.";
       }
