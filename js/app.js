@@ -92,7 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const userData = await response.json();
       console.log("Server response:", userData); // Debugging output
 
-      if (response.ok && userData.id_user) {
+      if (response.ok) {
+        localStorage.setItem("user", JSON.stringify(userData));
         // Simpan data penting di localStorage
         localStorage.setItem("userId", userData.id_user);
         localStorage.setItem("userName", userData.nama);
