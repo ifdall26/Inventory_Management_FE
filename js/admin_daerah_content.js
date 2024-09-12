@@ -88,7 +88,29 @@ function filterBarang() {
   displayBarangWithPagination();
 }
 
-// Fungsi untuk menjalankan filter dan pencarian bersamaan
+// Fungsi untuk menampilkan pagination
+function displayPagination() {
+  const paginationElement = document.getElementById("pagination");
+  paginationElement.innerHTML = ""; // Kosongkan pagination
+
+  const totalPages = Math.ceil(filteredBarang.length / itemsPerPage);
+
+  for (let i = 1; i <= totalPages; i++) {
+    const pageButton = document.createElement("button");
+    pageButton.innerText = i;
+    pageButton.classList.add("page-btn");
+    if (i === currentPage) {
+      pageButton.classList.add("active"); // Tandai halaman aktif
+    }
+    pageButton.addEventListener("click", function () {
+      currentPage = i;
+      displayBarangWithPagination();
+    });
+    paginationElement.appendChild(pageButton);
+  }
+}
+
+// Fungsi pencarian dan filter
 function applySearchAndFilter() {
   const query = document.getElementById("adminSearchInput").value.toLowerCase();
   const tipeBarang = document.getElementById("adminTipeBarangFilter").value;
