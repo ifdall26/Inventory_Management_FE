@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   let allBarang = [];
+  let currentPage = 1;
+  const itemsPerPage = 10; // Menentukan jumlah item per halaman
 
   // Fungsi untuk mengambil data barang dari server dan menyimpan di allBarang
   function fetchBarang() {
@@ -7,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => response.json())
       .then((data) => {
         allBarang = data; // Simpan semua barang
-        displayBarang(allBarang); // Tampilkan semua barang
+        displayBarang(allBarang, currentPage); // Tampilkan barang untuk halaman saat ini
       })
       .catch((error) => console.error("Error fetching barang:", error));
   }
@@ -98,12 +100,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Fungsi untuk menampilkan barang dalam tabel
-  function displayBarang(barang) {
+  // Fungsi untuk menampilkan barang dalam tabel berdasarkan halaman
+  function displayBarang(barang, page) {
     const tbody = document.getElementById("barangDaerahUserTableBody");
     tbody.innerHTML = ""; // Kosongkan tabel
 
-    barang.forEach((item) => {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedItems = barang.slice(start, end);
+
+    paginatedItems.forEach((item) => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${item.kode_barang}</td>
@@ -118,9 +124,33 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
       tbody.appendChild(row);
     });
+
+    setupPaginationControls(barang.length, page);
+  }
+  // Fungsi untuk membuat tombol pagination
+  function setupPaginationControls(totalItems, currentPage) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const paginationControls = document.getElementById("paginationControls");
+    paginationControls.innerHTML = ""; // Kosongkan pagination
+
+    for (let i = 1; i <= totalPages; i++) {
+      const pageButton = document.createElement("button");
+      pageButton.textContent = i;
+      pageButton.className = i === currentPage ? "active" : "";
+      pageButton.addEventListener("click", function () {
+        changePage(i);
+      });
+      paginationControls.appendChild(pageButton);
+    }
   }
 
-  // Fungsi pencarian
+  // Fungsi untuk mengubah halaman
+  function changePage(page) {
+    currentPage = page;
+    displayBarang(allBarang, currentPage);
+  }
+
+  // Fungsi pencarian dan filter tetap menggunakan displayBarang dengan parameter page
   document
     .getElementById("searchInput")
     .addEventListener("input", searchBarang);
@@ -130,10 +160,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const filteredBarang = allBarang.filter((item) =>
       item.nama_barang.toLowerCase().includes(query)
     );
-    displayBarang(filteredBarang);
+    displayBarang(filteredBarang, 1); // Tampilkan hasil pencarian mulai dari halaman pertama
   }
 
-  // Fungsi filter
   document
     .getElementById("tipeBarangFilter")
     .addEventListener("change", filterBarang);
@@ -158,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return matchesTipe && matchesLokasiDaerah && matchesLokasiArea;
     });
 
-    displayBarang(filteredBarang);
+    displayBarang(filteredBarang, 1); // Tampilkan hasil filter mulai dari halaman pertama
   }
 
   // Ambil data barang saat halaman dimuat
