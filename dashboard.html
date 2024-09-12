@@ -169,18 +169,18 @@
         <div class="search-filter">
           <input
             type="text"
-            id="searchInput"
+            id="adminSearchInput"
             placeholder="Cari barang..."
             oninput="searchBarang()"
           />
 
-          <select id="tipeBarangFilter" onchange="filterBarang()">
+          <select id="adminTipeBarangFilter" onchange="filterBarang()">
             <option value="">Pilih Tipe Barang</option>
             <option value="Mechanical">Mechanical</option>
             <option value="Electrical">Electrical</option>
           </select>
 
-          <select id="lokasiDaerahFilter" onchange="filterBarang()">
+          <select id="adminLokasiDaerahFilter" onchange="filterBarang()">
             <option value="">Pilih Lokasi Daerah</option>
             <option value="Indarung 1">Indarung 1</option>
             <option value="Indarung 2">Indarung 2</option>
@@ -190,7 +190,7 @@
             <option value="Indarung 6">Indarung 6</option>
           </select>
 
-          <select id="lokasiAreaFilter" onchange="filterBarang()">
+          <select id="adminLokasiAreaFilter" onchange="filterBarang()">
             <option value="">Pilih Lokasi Area</option>
             <option value="Raw Mill">Raw Mill</option>
             <option value="Kiln">Kiln</option>
@@ -281,6 +281,7 @@
     <script src="/js/dashboard.js"></script>
     <script src="/js/barang_daerah.js"></script>
     <script src="/js/user_content.js"></script>
+    <script src="/js/admin_daerah_content.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
