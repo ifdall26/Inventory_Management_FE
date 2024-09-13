@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   let allBarang = [];
+  let filteredBarang = [];
   let currentPage = 1;
   const itemsPerPage = 10; // Menentukan jumlah item per halaman
 
@@ -9,7 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => response.json())
       .then((data) => {
         allBarang = data; // Simpan semua barang
-        displayBarang(allBarang, currentPage); // Tampilkan barang untuk halaman saat ini
+        filteredBarang = allBarang; // Awalnya, filteredBarang sama dengan allBarang
+        displayBarang(filteredBarang, currentPage); // Tampilkan barang untuk halaman saat ini
       })
       .catch((error) => console.error("Error fetching barang:", error));
   }
@@ -127,6 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     setupPaginationControls(barang.length, page);
   }
+
   // Fungsi untuk membuat tombol pagination
   function setupPaginationControls(totalItems, currentPage) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -147,47 +150,52 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fungsi untuk mengubah halaman
   function changePage(page) {
     currentPage = page;
-    displayBarang(allBarang, currentPage);
+    displayBarang(filteredBarang, currentPage);
   }
 
   // Fungsi pencarian dan filter tetap menggunakan displayBarang dengan parameter page
-  document
-    .getElementById("searchInput")
-    .addEventListener("input", searchBarang);
-
-  function searchBarang() {
-    const query = document.getElementById("searchInput").value.toLowerCase();
-    const filteredBarang = allBarang.filter((item) =>
-      item.nama_barang.toLowerCase().includes(query)
-    );
-    displayBarang(filteredBarang, 1); // Tampilkan hasil pencarian mulai dari halaman pertama
-  }
+  document.getElementById("searchInput").addEventListener("input", function () {
+    searchAndFilterBarang();
+  });
 
   document
     .getElementById("tipeBarangFilter")
-    .addEventListener("change", filterBarang);
+    .addEventListener("change", function () {
+      searchAndFilterBarang();
+    });
+
   document
     .getElementById("lokasiDaerahFilter")
-    .addEventListener("change", filterBarang);
+    .addEventListener("change", function () {
+      searchAndFilterBarang();
+    });
+
   document
     .getElementById("lokasiAreaFilter")
-    .addEventListener("change", filterBarang);
+    .addEventListener("change", function () {
+      searchAndFilterBarang();
+    });
 
-  function filterBarang() {
+  // Fungsi gabungan pencarian dan filter
+  function searchAndFilterBarang() {
+    const query = document.getElementById("searchInput").value.toLowerCase();
     const tipeBarang = document.getElementById("tipeBarangFilter").value;
     const lokasiDaerah = document.getElementById("lokasiDaerahFilter").value;
     const lokasiArea = document.getElementById("lokasiAreaFilter").value;
 
-    const filteredBarang = allBarang.filter((item) => {
+    filteredBarang = allBarang.filter((item) => {
+      const matchesSearch = item.nama_barang.toLowerCase().includes(query);
       const matchesTipe = !tipeBarang || item.tipe_barang === tipeBarang;
       const matchesLokasiDaerah =
         !lokasiDaerah || item.lokasi_daerah === lokasiDaerah;
       const matchesLokasiArea = !lokasiArea || item.lokasi_area === lokasiArea;
 
-      return matchesTipe && matchesLokasiDaerah && matchesLokasiArea;
+      return (
+        matchesSearch && matchesTipe && matchesLokasiDaerah && matchesLokasiArea
+      );
     });
 
-    displayBarang(filteredBarang, 1); // Tampilkan hasil filter mulai dari halaman pertama
+    displayBarang(filteredBarang, 1); // Tampilkan hasil pencarian dan filter mulai dari halaman pertama
   }
 
   // Ambil data barang saat halaman dimuat

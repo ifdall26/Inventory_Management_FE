@@ -133,7 +133,7 @@ form input[type="submit"]:hover {
 }
 
 button[type="submit"] {
-  background-color: #4caf50; /* Warna hijau untuk button */
+  background-color: #1f2833; /* Warna hijau untuk button */
   color: white; /* Warna teks putih */
   padding: 12px 20px; /* Padding untuk ruang yang cukup */
   border: none; /* Menghilangkan border */
@@ -145,8 +145,14 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-  background-color: #45a049; /* Warna lebih gelap saat hover */
+  background-color: #66fcf1; /* Warna lebih gelap saat hover */
+  color: #fff;
 }
+
+/* .request-button {
+  background-image: url(../images/receive.png);
+  background-size: cover;
+} */
 
 /* Style untuk tabel barang di dashboard */
 table {
@@ -164,8 +170,6 @@ td {
 }
 
 th {
-  background-color: #f4f4f4;
-  color: #333;
   font-weight: bold;
 }
 
@@ -248,11 +252,33 @@ table {
   border-collapse: collapse;
 }
 
+th {
+  background-color: #1f2833;
+  color: #fff;
+}
+
 div#pagination {
   display: flex;
   justify-content: center;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+div#paginationControls {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+#pagination button {
+  background-color: #1f2833;
+  color: #fff;
+}
+
+#paginationControls button {
+  background-color: #1f2833;
+  color: #fff;
 }
 
 /* Style untuk modal */
