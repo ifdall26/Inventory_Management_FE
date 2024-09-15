@@ -3,14 +3,16 @@ let filteredBarang = []; // Menyimpan barang setelah difilter atau dicari
 let currentPage = 1; // Halaman saat ini
 const itemsPerPage = 10; // Jumlah barang per halaman
 
+let allRequests = []; // Menyimpan semua request
+
 // Fungsi untuk mengambil data barang dari server
 function fetchBarang() {
   fetch("http://localhost:3000/api/barang_daerah")
     .then((response) => response.json())
     .then((data) => {
-      allBarang = data; // Simpan semua barang
-      filteredBarang = allBarang; // Inisialisasi filter dengan semua barang
-      displayBarangWithPagination(); // Tampilkan barang dengan pagination
+      allBarang = data;
+      filteredBarang = allBarang;
+      displayBarangWithPagination();
     })
     .catch((error) => console.error("Error fetching barang:", error));
 }
@@ -28,7 +30,7 @@ function displayBarangWithPagination() {
 // Fungsi untuk menampilkan barang dalam tabel
 function displayBarang(barang) {
   const tbody = document.getElementById("barangTableBody");
-  tbody.innerHTML = ""; // Kosongkan tabel
+  tbody.innerHTML = "";
 
   barang.forEach((item) => {
     const row = document.createElement("tr");
@@ -129,7 +131,7 @@ function applySearchAndFilter() {
     );
   });
 
-  currentPage = 1; // Reset ke halaman pertama
+  currentPage = 1;
   displayBarangWithPagination();
 }
 
@@ -150,4 +152,77 @@ document
 // Panggil fetchBarang saat halaman dimuat
 document.addEventListener("DOMContentLoaded", function () {
   fetchBarang();
+  loadRequests(); // Panggil fungsi untuk load requests
 });
+
+// Fungsi untuk load request dari server
+function loadRequests() {
+  fetch("http://localhost:3000/api/requests")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      allRequests = data;
+      displayRequests(allRequests);
+    })
+    .catch((error) => console.error("Error loading requests:", error));
+}
+
+// Fungsi untuk menampilkan requests dalam tabel
+function displayRequests(requests) {
+  const tbody = document.getElementById("requestTableBody");
+  tbody.innerHTML = "";
+
+  requests.forEach((request) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${request.id_request}</td>
+      <td>${request.nama_user}</td>
+      <td>${request.kode_barang}</td>
+      <td>${request.quantity_diminta}</td>
+      <td>${request.status}</td>
+      <td>
+        <button onclick="approveRequest(${request.id_request})">Approve</button>
+        <button onclick="rejectRequest(${request.id_request})">Reject</button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+}
+
+// Fungsi untuk menyetujui request
+function approveRequest(id_request) {
+  updateRequestStatus(id_request, "Disetujui");
+}
+
+// Fungsi untuk menolak request
+function rejectRequest(id_request) {
+  updateRequestStatus(id_request, "Ditolak");
+}
+
+// Fungsi untuk memperbarui status request
+function updateRequestStatus(id_request, status) {
+  fetch(`http://localhost:3000/api/requests/${id_request}/status`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status: status }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(`Request ${id_request} updated:`, data);
+      loadRequests();
+    })
+    .catch((error) =>
+      console.error(`Error updating request ${id_request}:`, error)
+    );
+}
