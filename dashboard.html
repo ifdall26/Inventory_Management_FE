@@ -85,6 +85,8 @@
       <div id="userContent" style="display: none">
         <h3>User Section</h3>
         <p>This content is visible only to Users.</p>
+        <br>
+        <h2>Daftar Barang</h4>
 
         <div class="search-filter">
           <input
@@ -122,7 +124,6 @@
         </div>
 
         <!-- Tabel Daftar Barang (untuk User) -->
-        <h4>Daftar Barang</h4>
         <div class="tabelBarangDaerah">
           <table id="barangDaerahUserTable">
             <thead>
@@ -158,6 +159,23 @@
               <button type="submit">Kirim Permintaan</button>
             </form>
           </div>
+        </div>
+
+        <h2>Riwayat Request</h2>
+        <div class="userRequestsTable">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Request</th>
+                <th>Kode Barang</th>
+                <th>Quantity Diminta</th>
+                <th>Status</th>
+                <th>Tanggal Request</th>
+                <th>Catatan</th>
+              </tr>
+            </thead>
+            <tbody id="userRequestTableBody"></tbody>
+          </table>
         </div>
       </div>
 
@@ -267,7 +285,6 @@
         </form>
 
         <!-- tabel request -->
-        <
         <div>
           <h2>Requests</h2>
           <table>

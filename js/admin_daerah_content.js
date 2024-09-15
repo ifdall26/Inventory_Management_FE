@@ -48,48 +48,6 @@ function displayBarang(barang) {
   });
 }
 
-// Fungsi pencarian
-function searchBarang() {
-  const query = document.getElementById("searchInput").value.toLowerCase();
-  filteredBarang = allBarang.filter((item) =>
-    item.nama_barang.toLowerCase().includes(query)
-  );
-  currentPage = 1; // Reset ke halaman pertama
-  displayBarangWithPagination();
-}
-
-// Fungsi pencarian
-function searchBarang() {
-  const query = document.getElementById("adminSearchInput").value.toLowerCase(); // Ubah ID sesuai dengan elemen HTML
-  console.log("Search query:", query); // Debugging
-  filteredBarang = allBarang.filter((item) =>
-    item.nama_barang.toLowerCase().includes(query)
-  );
-  currentPage = 1; // Reset ke halaman pertama
-  displayBarangWithPagination();
-}
-
-// Fungsi filter
-function filterBarang() {
-  const tipeBarang = document.getElementById("adminTipeBarangFilter").value; // Ubah ID sesuai dengan elemen HTML
-  const lokasiDaerah = document.getElementById("adminLokasiDaerahFilter").value;
-  const lokasiArea = document.getElementById("adminLokasiAreaFilter").value;
-
-  console.log("Filter values:", { tipeBarang, lokasiDaerah, lokasiArea }); // Debugging
-
-  filteredBarang = allBarang.filter((item) => {
-    const matchesTipe = !tipeBarang || item.tipe_barang === tipeBarang;
-    const matchesLokasiDaerah =
-      !lokasiDaerah || item.lokasi_daerah === lokasiDaerah;
-    const matchesLokasiArea = !lokasiArea || item.lokasi_area === lokasiArea;
-
-    return matchesTipe && matchesLokasiDaerah && matchesLokasiArea;
-  });
-
-  currentPage = 1; // Reset ke halaman pertama
-  displayBarangWithPagination();
-}
-
 // Fungsi untuk menampilkan pagination
 function displayPagination() {
   const paginationElement = document.getElementById("pagination");
@@ -131,7 +89,7 @@ function applySearchAndFilter() {
     );
   });
 
-  currentPage = 1;
+  currentPage = 1; // Reset ke halaman pertama
   displayBarangWithPagination();
 }
 

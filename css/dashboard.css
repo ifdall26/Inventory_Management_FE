@@ -185,6 +185,10 @@ tr:hover {
   overflow-x: scroll;
 }
 
+.userRequestsTable {
+  overflow-x: scroll;
+}
+
 button {
   background-color: #007bff;
   color: #fff;

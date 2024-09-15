@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let filteredBarang = [];
   let currentPage = 1;
   const itemsPerPage = 10; // Menentukan jumlah item per halaman
+  const userId = localStorage.getItem("userId");
 
   // Fungsi untuk mengambil data barang dari server dan menyimpan di allBarang
   function fetchBarang() {
@@ -198,6 +199,36 @@ document.addEventListener("DOMContentLoaded", function () {
     displayBarang(filteredBarang, 1); // Tampilkan hasil pencarian dan filter mulai dari halaman pertama
   }
 
+  // Fungsi untuk mengambil riwayat request user
+  function fetchUserRequests() {
+    fetch(`http://localhost:3000/api/requests/user/${userId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        displayUserRequests(data); // Panggil fungsi untuk menampilkan request
+      })
+      .catch((error) => console.error("Error fetching user requests:", error));
+  }
+
+  // Fungsi untuk menampilkan request user dalam tabel
+  function displayUserRequests(requests) {
+    const tbody = document.getElementById("userRequestTableBody");
+    tbody.innerHTML = "";
+
+    requests.forEach((request) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+      <td>${request.id_request}</td>
+      <td>${request.kode_barang}</td>
+      <td>${request.quantity_diminta}</td>
+      <td>${request.status}</td>
+      <td>${request.tanggal_request}</td>
+      <td>${request.catatan}</td>
+    `;
+      tbody.appendChild(row);
+    });
+  }
+
   // Ambil data barang saat halaman dimuat
   fetchBarang();
+  fetchUserRequests();
 });
