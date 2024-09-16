@@ -104,6 +104,8 @@ document.addEventListener("DOMContentLoaded", function () {
             text: "Gagal mengajukan permintaan barang: " + error.message,
             icon: "error",
             confirmButtonText: "OK",
+          }).then(() => {
+            window.location.reload(); // Refresh halaman setelah SweetAlert2 ditutup
           });
         });
     });
