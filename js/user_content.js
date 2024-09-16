@@ -2,17 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
   let allBarang = [];
   let filteredBarang = [];
   let currentPage = 1;
-  const itemsPerPage = 10; // Menentukan jumlah item per halaman
+  const itemsPerPage = 10;
   const userId = localStorage.getItem("userId");
 
-  // Fungsi untuk mengambil data barang dari server dan menyimpan di allBarang
   function fetchBarang() {
     fetch("http://localhost:3000/api/barang_daerah")
       .then((response) => response.json())
       .then((data) => {
-        allBarang = data; // Simpan semua barang
-        filteredBarang = allBarang; // Awalnya, filteredBarang sama dengan allBarang
-        displayBarang(filteredBarang, currentPage); // Tampilkan barang untuk halaman saat ini
+        allBarang = data;
+        filteredBarang = allBarang;
+        displayBarang(filteredBarang, currentPage);
       })
       .catch((error) => console.error("Error fetching barang:", error));
   }
@@ -28,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("requestFormModal").style.display = "none";
   }
 
-  // Fungsi untuk mendapatkan informasi pengguna dari localStorage atau sessionStorage
+  // Fungsi untuk mendapatkan informasi pengguna dari localStorage
   function getUserInfo() {
     return {
       id_user: parseInt(localStorage.getItem("userId")) || 0,
@@ -51,21 +50,25 @@ document.addEventListener("DOMContentLoaded", function () {
       event.preventDefault();
 
       const formData = new FormData(event.target);
-      const userInfo = getUserInfo(); // Mendapatkan informasi user
+      const userInfo = getUserInfo();
 
       const data = {
         kode_barang: formData.get("kode_barang"),
         nama_user: userInfo.nama,
-        quantity_diminta: parseInt(formData.get("quantity")), // Pastikan quantity adalah number
-        status: "Pending",
-        catatan: formData.get("catatan") || "", // Jika tidak ada catatan, set menjadi string kosong
+        quantity_diminta: parseInt(formData.get("quantity")),
+        status: "Disetujui",
+        catatan: formData.get("catatan") || "",
         id_user: userInfo.id_user,
       };
 
-      // Tambahkan check untuk id_user agar valid sebelum submit
       if (data.id_user === 0) {
-        alert("User ID tidak valid. Silakan login terlebih dahulu.");
-        return; // Stop jika user ID tidak valid
+        Swal.fire({
+          title: "Gagal!",
+          text: "User ID tidak valid. Silakan login terlebih dahulu.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+        return;
       }
 
       fetch("http://localhost:3000/api/requests", {
@@ -82,14 +85,73 @@ document.addEventListener("DOMContentLoaded", function () {
           return response.json();
         })
         .then((data) => {
-          alert("Permintaan barang berhasil diajukan.");
-          hideRequestForm(); // Tutup modal setelah permintaan dikirim
+          console.log("Request berhasil:", data);
+          updateStock(data.kode_barang, data.quantity_diminta);
+          Swal.fire({
+            title: "Permintaan Berhasil!",
+            text: "Permintaan Anda telah berhasil dikirim. Stok barang akan diperbarui.",
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then(() => {
+            hideRequestForm(); // Tutup modal setelah permintaan dikirim
+            window.location.reload(); // Refresh halaman setelah modal ditutup
+          });
         })
         .catch((error) => {
           console.error("Error:", error);
-          alert("Gagal mengajukan permintaan barang: " + error.message);
+          Swal.fire({
+            title: "Gagal!",
+            text: "Gagal mengajukan permintaan barang: " + error.message,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
         });
     });
+
+  // Fungsi untuk mengupdate stok barang
+  function updateStock(kode_barang, quantity_diminta) {
+    quantity_diminta = parseFloat(quantity_diminta);
+
+    if (isNaN(quantity_diminta) || quantity_diminta <= 0) {
+      console.error("Jumlah yang diminta tidak valid.");
+      return;
+    }
+
+    fetch(`http://localhost:3000/api/barang_daerah/${kode_barang}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ quantity: -quantity_diminta }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          return response.json().then((error) => {
+            throw new Error(error.message || "Network response was not ok");
+          });
+        }
+        return response.json();
+      })
+      .then(() => {
+        console.log("Menampilkan SweetAlert");
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            title: "Permintaan Berhasil!",
+            text: "Barang bisa diambil di lokasi. Stok barang telah diperbarui.",
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then(() => {
+            hideRequestForm(); // Tutup modal setelah permintaan dikirim
+          });
+        } else {
+          console.error("SweetAlert2 tidak terdefinisi.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error updating stock:", error);
+        alert("Gagal memperbarui stok barang: " + error.message);
+      });
+  }
 
   // Klik pada tombol close untuk menutup modal
   document
@@ -106,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Fungsi untuk menampilkan barang dalam tabel berdasarkan halaman
   function displayBarang(barang, page) {
     const tbody = document.getElementById("barangDaerahUserTableBody");
-    tbody.innerHTML = ""; // Kosongkan tabel
+    tbody.innerHTML = "";
 
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage;
@@ -135,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function setupPaginationControls(totalItems, currentPage) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const paginationControls = document.getElementById("paginationControls");
-    paginationControls.innerHTML = ""; // Kosongkan pagination
+    paginationControls.innerHTML = "";
 
     for (let i = 1; i <= totalPages; i++) {
       const pageButton = document.createElement("button");
@@ -154,28 +216,19 @@ document.addEventListener("DOMContentLoaded", function () {
     displayBarang(filteredBarang, currentPage);
   }
 
-  // Fungsi pencarian dan filter tetap menggunakan displayBarang dengan parameter page
-  document.getElementById("searchInput").addEventListener("input", function () {
-    searchAndFilterBarang();
-  });
-
+  // Fungsi pencarian dan filter
+  document
+    .getElementById("searchInput")
+    .addEventListener("input", searchAndFilterBarang);
   document
     .getElementById("tipeBarangFilter")
-    .addEventListener("change", function () {
-      searchAndFilterBarang();
-    });
-
+    .addEventListener("change", searchAndFilterBarang);
   document
     .getElementById("lokasiDaerahFilter")
-    .addEventListener("change", function () {
-      searchAndFilterBarang();
-    });
-
+    .addEventListener("change", searchAndFilterBarang);
   document
     .getElementById("lokasiAreaFilter")
-    .addEventListener("change", function () {
-      searchAndFilterBarang();
-    });
+    .addEventListener("change", searchAndFilterBarang);
 
   // Fungsi gabungan pencarian dan filter
   function searchAndFilterBarang() {
@@ -196,15 +249,14 @@ document.addEventListener("DOMContentLoaded", function () {
       );
     });
 
-    displayBarang(filteredBarang, 1); // Tampilkan hasil pencarian dan filter mulai dari halaman pertama
+    displayBarang(filteredBarang, 1);
   }
 
-  // Fungsi untuk mengambil riwayat request user
   function fetchUserRequests() {
     fetch(`http://localhost:3000/api/requests/user/${userId}`)
       .then((response) => response.json())
       .then((data) => {
-        displayUserRequests(data); // Panggil fungsi untuk menampilkan request
+        displayUserRequests(data);
       })
       .catch((error) => console.error("Error fetching user requests:", error));
   }
@@ -217,18 +269,18 @@ document.addEventListener("DOMContentLoaded", function () {
     requests.forEach((request) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-      <td>${request.id_request}</td>
-      <td>${request.kode_barang}</td>
-      <td>${request.quantity_diminta}</td>
-      <td>${request.status}</td>
-      <td>${request.tanggal_request}</td>
-      <td>${request.catatan}</td>
-    `;
+        <td>${request.kode_barang}</td>
+        <td>${request.nama_user}</td>
+        <td>${request.quantity_diminta}</td>
+        <td>${request.status}</td>
+        <td>${request.tanggal_request}</td>
+        <td>${request.catatan}</td>
+      `;
       tbody.appendChild(row);
     });
   }
 
-  // Ambil data barang saat halaman dimuat
+  // Ambil data barang dan request user saat halaman dimuat
   fetchBarang();
   fetchUserRequests();
 });
