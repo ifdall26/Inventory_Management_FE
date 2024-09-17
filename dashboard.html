@@ -6,16 +6,16 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="/css/dashboard.css" />
     <!-- SweetAlert2 CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   </head>
   <body>
     <header>
       <h1>Dashboard</h1>
       <nav>
         <ul>
+          <li><a href="#section3">Requests</a></li>
+          <li><a href="#section2">Add items</a></li>
+          <li><a href="#home">Items</a></li>
           <li><a href="loginRegister.html">Logout</a></li>
         </ul>
       </nav>
@@ -85,8 +85,7 @@
       <div id="userContent" style="display: none">
         <h3>User Section</h3>
         <p>This content is visible only to Users.</p>
-        <br>
-        <h2>Daftar Barang</h4>
+        <h2 id="section1">Daftar Barang</h4>
 
         <div class="search-filter">
           <input
@@ -118,7 +117,7 @@
             <option value="">Pilih Lokasi Area</option>
             <option value="Raw Mill">Raw Mill</option>
             <option value="Kiln">Kiln</option>
-            <option value="Sement Mill">Sement Mill</option>
+            <option value="Cement Mill">Cement Mill</option>
             <!-- Tambahkan lebih banyak opsi jika diperlukan -->
           </select>
         </div>
@@ -141,8 +140,8 @@
             </thead>
             <tbody id="barangDaerahUserTableBody"></tbody>
           </table>
-          <div id="paginationControls"></div>
         </div>
+        <div id="paginationControls"></div>
         <!-- Modal/Formulir Permintaan Barang -->
         <div id="requestFormModal" class="modal">
           <div class="modal-content">
@@ -166,8 +165,10 @@
           <table>
             <thead>
               <tr>
-                <th>ID Request</th>
+                <!-- <th>ID Request</th> -->
                 <th>Kode Barang</th>
+                <th>Nama User</th>
+                <!-- <th>ID User</th> -->
                 <th>Quantity Diminta</th>
                 <th>Status</th>
                 <th>Tanggal Request</th>
@@ -185,7 +186,7 @@
         <p>This content is visible only to Admin Daerah</p>
 
         <!-- Tabel untuk menampilkan barang daerah -->
-        <h4>Daftar Barang Daerah</h4>
+        <h2 id="home">Daftar Barang Daerah</h2>
         <div class="search-filter">
           <input
             type="text"
@@ -214,7 +215,7 @@
             <option value="">Pilih Lokasi Area</option>
             <option value="Raw Mill">Raw Mill</option>
             <option value="Kiln">Kiln</option>
-            <option value="Sement Mill">Sement Mill</option>
+            <option value="Cement Mill">Cement Mill</option>
           </select>
         </div>
         <div class="tabelBarangDaerah">
@@ -235,9 +236,10 @@
               <!-- Data akan ditambahkan di sini oleh JavaScript -->
             </tbody>
           </table>
-          <div id="pagination"></div>
         </div>
+        <div id="pagination"></div>
 
+        <h2 id="section2">Input Barang</h2>
         <form id="barangDaerahForm">
           <!-- Kolom barang yang sama dengan tabel barang -->
           <label for="kode_barang">Kode Barang:</label>
@@ -270,7 +272,7 @@
           <select id="lokasi_area" name="lokasi_area">
             <option value="Raw Mill">Raw Mill</option>
             <option value="Kiln">Kiln</option>
-            <option value="Sement Mill">Sement Mill</option>
+            <option value="Cement Mill">Cement Mill</option>
             <!-- Tambahkan tipe barang lainnya jika ada -->
           </select>
 
@@ -285,8 +287,8 @@
         </form>
 
         <!-- tabel request -->
-        <div>
-          <h2>Requests</h2>
+        <div id="requestTable">
+          <h2 id="section3">Requests</h2>
           <table>
             <thead>
               <tr>
@@ -295,7 +297,8 @@
                 <th>Kode Barang</th>
                 <th>Quantity Diminta</th>
                 <th>Status</th>
-                <th>Actions</th>
+                <th>Catatan</th>
+                <!-- <th>Actions</th> -->
               </tr>
             </thead>
             <tbody id="requestTableBody"></tbody>
@@ -318,5 +321,25 @@
     <script src="/js/admin_daerah_content.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+              e.preventDefault();
+  
+              const target = document.querySelector(this.getAttribute('href'));
+              const offset = -100; // Adjust the scroll offset here (-200px)
+              const bodyRect = document.body.getBoundingClientRect().top;
+              const targetRect = target.getBoundingClientRect().top;
+              const targetPosition = targetRect - bodyRect;
+              const offsetPosition = targetPosition + offset;
+  
+              window.scrollTo({
+                  top: offsetPosition,
+                  behavior: 'smooth'
+              });
+          });
+      });
+  </script>
+  
   </body>
 </html>

@@ -1,3 +1,6 @@
+html {
+  scroll-behavior: smooth;
+}
 /* General Styles */
 body {
   font-family: "Poppins", sans-serif;
@@ -12,11 +15,15 @@ body {
 header {
   background-color: #1f2833;
   color: white;
-  padding: 15px 20px;
+  padding: 15px 0px;
+  padding-left: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 3px solid #66fcf1;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 header h1 {
@@ -29,6 +36,7 @@ nav ul {
   display: flex;
   gap: 20px;
   margin: 0;
+  margin-right: 20px;
 }
 
 nav ul li {
@@ -51,6 +59,7 @@ nav ul li a:hover {
 /* Main Content */
 main {
   padding: 20px;
+  padding-top: 80px;
   max-width: 1200px;
   margin: auto;
 }
@@ -357,4 +366,8 @@ footer {
   padding: 15px 20px;
   text-align: center;
   margin-top: 350px;
+}
+
+div#requestTable {
+  overflow-x: scroll;
 }
