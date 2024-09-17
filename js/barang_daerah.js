@@ -32,6 +32,7 @@ document
         alert("Barang berhasil ditambahkan");
         document.getElementById("barangDaerahForm").reset(); // Clear form fields
         fetchBarang(); // Reload data after adding
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error:", error);

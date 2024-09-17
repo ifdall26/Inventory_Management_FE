@@ -107,12 +107,6 @@ document
   .getElementById("adminLokasiAreaFilter")
   .addEventListener("change", applySearchAndFilter);
 
-// Panggil fetchBarang saat halaman dimuat
-document.addEventListener("DOMContentLoaded", function () {
-  fetchBarang();
-  loadRequests(); // Panggil fungsi untuk load requests
-});
-
 // Fungsi untuk load request dari server
 function loadRequests() {
   fetch("http://localhost:3000/api/requests")
@@ -142,45 +136,14 @@ function displayRequests(requests) {
       <td>${request.kode_barang}</td>
       <td>${request.quantity_diminta}</td>
       <td>${request.status}</td>
-      <td>
-        <button onclick="approveRequest(${request.id_request})">Approve</button>
-        <button onclick="rejectRequest(${request.id_request})">Reject</button>
-      </td>
+      <td>${request.catatan}</td>
     `;
     tbody.appendChild(row);
   });
 }
 
-// Fungsi untuk menyetujui request
-function approveRequest(id_request) {
-  updateRequestStatus(id_request, "Disetujui");
-}
-
-// Fungsi untuk menolak request
-function rejectRequest(id_request) {
-  updateRequestStatus(id_request, "Ditolak");
-}
-
-// Fungsi untuk memperbarui status request
-function updateRequestStatus(id_request, status) {
-  fetch(`http://localhost:3000/api/requests/${id_request}/status`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ status: status }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(`Request ${id_request} updated:`, data);
-      loadRequests();
-    })
-    .catch((error) =>
-      console.error(`Error updating request ${id_request}:`, error)
-    );
-}
+// Panggil fetchBarang saat halaman dimuat
+document.addEventListener("DOMContentLoaded", function () {
+  fetchBarang();
+  loadRequests(); // Panggil fungsi untuk load requests
+});
