@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("adminGudangContent").style.display = "block";
         document.getElementById("adminDaerahContent").style.display = "none";
         document.getElementById("userContent").style.display = "none";
+        document.getElementById("hideFromUser").style.display = "none";
         fetchAndDisplayItemsForAdmin(); // Ambil data barang untuk Admin Gudang
       } else if (user.role === "Admin Daerah") {
         document.getElementById("superAdminContent").style.display = "none";
@@ -35,6 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("adminGudangContent").style.display = "none";
         document.getElementById("adminDaerahContent").style.display = "none";
         document.getElementById("userContent").style.display = "block";
+        document.getElementById("hideFromUser").style.display = "none";
         // fetchAndDisplayItemsForUser(); // Ambil data barang untuk User Area
       }
     } else {
@@ -55,16 +57,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         quantity: document.getElementById("quantity").value,
         satuan: document.getElementById("satuan").value,
         harga_satuan: document.getElementById("harga_satuan").value,
+        tipe_barang: document.getElementById("tipe_barang").value,
       };
 
       try {
-        const response = await fetch("http://localhost:3000/api/items", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(itemData),
-        });
+        const response = await fetch(
+          "http://localhost:3000/api/barang_gudang",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(itemData),
+          }
+        );
 
         if (response.ok) {
           const result = await response.json();
@@ -89,13 +95,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 // Fungsi untuk mengambil dan menampilkan data barang untuk Admin Gudang
 async function fetchAndDisplayItemsForAdmin() {
   try {
-    const response = await fetch("http://localhost:3000/api/items");
-    const items = await response.json();
+    const response = await fetch("http://localhost:3000/api/barang_gudang");
+    const barang_gudang = await response.json();
 
-    const itemsTableBody = document.querySelector("#itemsTable tbody");
-    itemsTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data baru
+    const barangGudangTableBody = document.querySelector("#itemsTable tbody");
+    barangGudangTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data baru
 
-    items.forEach((item) => {
+    barang_gudang.forEach((item) => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
@@ -104,18 +110,19 @@ async function fetchAndDisplayItemsForAdmin() {
         <td>${item.quantity}</td>
         <td>${item.satuan}</td>
         <td>${item.harga_satuan}</td>
+        <td>${item.tipe_barang}</td>
         <td>
           <button class="edit-btn" data-id="${item.kode_barang}">Edit</button>
           <button class="delete-btn" data-id="${item.kode_barang}">Hapus</button>
         </td>
       `;
 
-      itemsTableBody.appendChild(row);
+      barangGudangTableBody.appendChild(row);
     });
 
     setupEditAndDeleteButtons(); // Setup tombol edit dan hapus
   } catch (error) {
-    console.error("Error fetching items:", error);
+    console.error("Error fetching barang_gudang:", error);
   }
 }
 
@@ -140,7 +147,7 @@ function setupEditAndDeleteButtons() {
 async function editItem(kodeBarang) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/items/${kodeBarang}`
+      `http://localhost:3000/api/barang_gudang/${kodeBarang}`
     );
     const item = await response.json();
 
@@ -171,6 +178,10 @@ async function editItem(kodeBarang) {
           <label for="swal-input5">Harga Satuan:</label>
           <br>
           <input id="swal-input5" class="swal2-input" value="${item.harga_satuan}" style="margin-bottom: 10px;">
+
+          <label for="swal-input6">Tipe Barang:</label>
+          <br>
+          <input id="swal-input6" class="swal2-input" value="${item.tipe_barang}" style="margin-bottom: 10px;">
         </div>
       `,
       focusConfirm: false,
@@ -195,7 +206,7 @@ async function editItem(kodeBarang) {
       };
 
       const updateResponse = await fetch(
-        `http://localhost:3000/api/items/${kodeBarang}`,
+        `http://localhost:3000/api/barang_gudang/${kodeBarang}`,
         {
           method: "PUT",
           headers: {
@@ -243,7 +254,7 @@ async function deleteItem(kodeBarang) {
     if (result.isConfirmed) {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/items/${kodeBarang}`,
+          `http://localhost:3000/api/barang_gudang/${kodeBarang}`,
           {
             method: "DELETE",
           }
@@ -251,7 +262,7 @@ async function deleteItem(kodeBarang) {
 
         if (response.ok) {
           Swal.fire("Deleted!", "Barang berhasil dihapus.", "success");
-          fetchAndDisplayItems(); // Refresh data barang
+          fetchAndDisplayItemsForAdmin(); // Refresh data barang
         } else {
           Swal.fire("Error!", "Gagal menghapus barang.", "error");
         }

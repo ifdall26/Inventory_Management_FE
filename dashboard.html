@@ -10,11 +10,11 @@
   </head>
   <body>
     <header>
-      <h1>Dashboard</h1>
+      <h1>InventoryPro</h1>
       <nav>
         <ul>
           <li><a href="#section3">Requests</a></li>
-          <li><a href="#section2">Add items</a></li>
+          <li id="hideFromUser"><a href="#section2">Add items</a></li>
           <li><a href="#home">Items</a></li>
           <li><a href="loginRegister.html">Logout</a></li>
         </ul>
@@ -47,7 +47,7 @@
             name="nama_barang"
             required
           /><br />
-          <label for="quantity">Jumlah Stok:</label>
+          <label for="quantity">Quantity:</label>
           <input type="number" id="quantity" name="quantity" required /><br />
           <label for="satuan">Satuan:</label>
           <input type="text" id="satuan" name="satuan" required /><br />
@@ -58,34 +58,44 @@
             name="harga_satuan"
             required
           /><br />
+          <label for="tipe_barang">Tipe Barang:</label>
+          <select id="tipe_barang" name="tipe_barang">
+            <option value="Mechanical">Mechanical</option>
+            <option value="Electrical">Electrical</option>
+            <!-- Tambahkan tipe barang lainnya jika ada -->
+          </select>
+          <br>
           <button type="submit">Tambah Barang</button>
         </form>
         <p id="statusMessage"></p>
 
         <!-- Tabel Daftar Barang -->
         <h4>Daftar Barang</h4>
-        <table id="itemsTable">
-          <thead>
-            <tr>
-              <th>Kode Barang</th>
-              <th>Nama Barang</th>
-              <th>Jumlah Stok</th>
-              <th>Satuan</th>
-              <th>Harga Satuan</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Data barang akan dimuat di sini -->
-          </tbody>
-        </table>
+        <div class="tabelBrangGudang" style="overflow-x: scroll;">
+          <table id="itemsTable">
+            <thead>
+              <tr>
+                <th>Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>Jumlah Stok</th>
+                <th>Satuan</th>
+                <th>Harga Satuan</th>
+                <th>Tipe Barang</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Data barang akan dimuat di sini -->
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- User Content -->
       <div id="userContent" style="display: none">
         <h3>User Section</h3>
         <p>This content is visible only to Users.</p>
-        <h2 id="section1">Daftar Barang</h4>
+        <h2 id="home">Daftar Barang</h4>
 
         <div class="search-filter">
           <input
@@ -160,7 +170,7 @@
           </div>
         </div>
 
-        <h2>Riwayat Request</h2>
+        <h2 id="section3">Riwayat Request</h2>
         <div class="userRequestsTable">
           <table>
             <thead>
@@ -311,8 +321,33 @@
       </div>
     </main>
 
-    <footer>
-      <p>&copy; 2024 Inventory Management System</p>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-logo">
+            <h2>InventoryPro</h2>
+            <p>
+              Optimizing inventory management for better business efficiency.
+            </p>
+          </div>
+          <div class="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Features</a></li>
+              <li><a href="#">Support</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-social">
+            <h3>Follow Us</h3>
+            <a href="#"><img src="/images/facebook.png" alt="Facebook" /></a>
+            <a href="#"><img src="/images/twitter.png" alt="Twitter" /></a>
+            <a href="#"><img src="/images/linkedIn.png" alt="LinkedIn" /></a>
+          </div>
+        </div>
+        <p>&copy; 2024 InventoryPro | All Rights Reserved</p>
+      </div>
     </footer>
 
     <script src="/js/dashboard.js"></script>

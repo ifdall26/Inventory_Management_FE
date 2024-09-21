@@ -15,7 +15,7 @@ body {
 header {
   background-color: #1f2833;
   color: white;
-  padding: 15px 0px;
+  padding: 20px 0px;
   padding-left: 20px;
   display: flex;
   justify-content: space-between;
@@ -27,14 +27,17 @@ header {
 }
 
 header h1 {
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
   margin: 0;
+  color: #66fcf1;
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 15px;
   margin: 0;
   margin-right: 20px;
 }
@@ -207,6 +210,8 @@ button {
   cursor: pointer;
   font-size: 14px;
   margin-right: 5px;
+  width: -webkit-fill-available;
+  margin-bottom: 5px;
 }
 
 button:hover {
@@ -359,15 +364,71 @@ div#paginationControls {
   }
 }
 
-/* Footer */
-footer {
-  background-color: #1f2833;
-  color: white;
-  padding: 15px 20px;
-  text-align: center;
-  margin-top: 350px;
-}
-
 div#requestTable {
   overflow-x: scroll;
+}
+
+/* Footer */
+.footer {
+  background-color: #1f2833;
+  color: white;
+  padding: 60px 20px;
+}
+
+.footer-grid {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-logo h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: #66fcf1;
+}
+
+.footer-links h3,
+.footer-social h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links ul li {
+  margin-bottom: 10px;
+}
+
+.footer-links ul li a {
+  text-decoration: none;
+  color: white;
+  font-size: 1rem;
+}
+
+.footer-links ul li a:hover {
+  text-decoration: underline;
+}
+
+.footer-social a {
+  margin-right: 15px;
+  transition: transform 0.3s ease;
+}
+
+.footer-social img {
+  width: 40px;
+}
+
+.footer-social a:hover img {
+  transform: scale(1.1);
+}
+
+.footer p {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #bbb;
 }
