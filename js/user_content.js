@@ -39,9 +39,138 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", function (event) {
     if (event.target.classList.contains("request-button")) {
       const kode_barang = event.target.getAttribute("data-kode-barang");
-      showRequestForm(kode_barang);
+
+      // Cek apakah stok barang habis
+      const selectedBarang = allBarang.find(
+        (item) => item.kode_barang === kode_barang
+      );
+
+      if (selectedBarang.quantity <= 0) {
+        // Tampilkan SweetAlert jika stok habis
+        Swal.fire({
+          title: "Stok Habis!",
+          text: "Lakukan permintaan ke gudang?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Ya",
+          cancelButtonText: "Tidak",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Jika pengguna memilih "Ya", tampilkan form pencarian barang di gudang
+            showGudangRequestForm();
+          }
+        });
+      } else {
+        // Jika stok cukup, tampilkan form permintaan barang biasa
+        showRequestForm(kode_barang);
+      }
     }
   });
+
+  function showGudangRequestForm() {
+    Swal.fire({
+      title: "Cari Barang di Gudang",
+      html: `
+        <form id="gudangRequestForm">
+          <label for="namaBarangGudang">Nama Barang:</label>
+          <input type="text" id="namaBarangGudang" name="nama_barang" required>
+        </form>
+      `,
+      showCancelButton: true,
+      confirmButtonText: "Cari",
+      preConfirm: () => {
+        const namaBarangGudang =
+          document.getElementById("namaBarangGudang").value;
+        return namaBarangGudang
+          ? namaBarangGudang
+          : Swal.showValidationMessage("Nama barang diperlukan");
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Lakukan pencarian barang di gudang berdasarkan nama
+        searchBarangGudang(result.value);
+      }
+    });
+  }
+
+  function searchBarangGudang(namaBarang) {
+    fetch(`http://localhost:3000/api/barang_gudang?nama_barang=${namaBarang}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length > 0) {
+          // Jika barang ditemukan, tampilkan SweetAlert untuk konfirmasi request
+          Swal.fire({
+            title: "Barang Ditemukan!",
+            text: `Nama Barang: ${data[0].nama_barang}. Lakukan permintaan?`,
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonText: "Ya, Lakukan Permintaan",
+            cancelButtonText: "Tidak",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Kirim request ke admin gudang untuk disetujui
+              submitGudangRequest(data[0].kode_barang);
+            }
+          });
+        } else {
+          Swal.fire({
+            title: "Barang Tidak Ditemukan!",
+            text: "Tidak ada barang yang sesuai dengan pencarian.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      })
+      .catch((error) =>
+        console.error("Error mencari barang di gudang:", error)
+      );
+  }
+
+  function submitGudangRequest() {
+    const userInfo = getUserInfo();
+
+    const data = {
+      nama_user: userInfo.nama,
+      quantity_diminta: parseInt(
+        prompt("Masukkan jumlah barang yang diminta:")
+      ),
+      status: "Pending",
+      catatan: "Permintaan ke gudang",
+      id_user: userInfo.id_user,
+    };
+
+    fetch("http://localhost:3000/api/requests_gudang", {
+      // Update URL endpoint sesuai dengan requests_gudang
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(() => {
+        Swal.fire({
+          title: "Permintaan Berhasil!",
+          text: "Permintaan Anda telah dikirim ke admin gudang untuk persetujuan.",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      })
+      .catch((error) => {
+        console.error("Error submitting gudang request:", error);
+        Swal.fire({
+          title: "Gagal!",
+          text: "Gagal mengirim permintaan ke gudang: " + error.message,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      });
+  }
 
   // Menangani pengiriman formulir permintaan
   document
