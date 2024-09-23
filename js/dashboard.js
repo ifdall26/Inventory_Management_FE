@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("userContent").style.display = "none";
         document.getElementById("hideFromUser").style.display = "none";
         fetchAndDisplayItemsForAdmin(); // Ambil data barang untuk Admin Gudang
+        fetchAndDisplayRequestsForAdmin();
       } else if (user.role === "Admin Daerah") {
         document.getElementById("superAdminContent").style.display = "none";
         document.getElementById("adminGudangContent").style.display = "none";
@@ -276,4 +277,37 @@ async function deleteItem(kodeBarang) {
       }
     }
   });
+}
+
+async function fetchAndDisplayRequestsForAdmin() {
+  try {
+    const response = await fetch("http://localhost:3000/api/requests_gudang"); // Sesuaikan endpoint
+    const requests = await response.json();
+
+    const requestsTableBody = document.querySelector("#requestsTableBody"); // Pastikan ID tabel sesuai
+    requestsTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data baru
+
+    requests.forEach((request) => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${request.id_request}</td>
+        <td>${request.nama_user}</td>
+        <td>${request.nama_barang}</td>
+        <td>${request.quantity_diminta}</td>
+        <td>${request.status}</td>
+        <td>${request.catatan}</td>
+        <td>
+          <button class="approve-btn" data-id="${request.id_request}">Approve</button>
+          <button class="reject-btn" data-id="${request.id_request}">Reject</button>
+        </td>
+      `;
+
+      requestsTableBody.appendChild(row);
+    });
+
+    setupApproveAndRejectButtons(); // Setup untuk tombol approve dan reject
+  } catch (error) {
+    console.error("Error fetching requests:", error);
+  }
 }
