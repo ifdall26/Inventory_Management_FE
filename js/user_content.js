@@ -94,14 +94,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function searchBarangGudang(namaBarang) {
-    fetch(`http://localhost:3000/api/barang_gudang?nama_barang=${namaBarang}`)
+    fetch(
+      `http://localhost:3000/api/barang_gudang/by-name/${encodeURIComponent(
+        namaBarang
+      )}`
+    )
       .then((response) => response.json())
       .then((data) => {
-        if (data.length > 0) {
+        if (data) {
           // Jika barang ditemukan, tampilkan SweetAlert untuk konfirmasi request
           Swal.fire({
             title: "Barang Ditemukan!",
-            text: `Nama Barang: ${data[0].nama_barang}. Lakukan permintaan?`,
+            text: `Nama Barang: ${data.nama_barang}. Lakukan permintaan?`,
             icon: "info",
             showCancelButton: true,
             confirmButtonText: "Ya, Lakukan Permintaan",
@@ -109,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }).then((result) => {
             if (result.isConfirmed) {
               // Kirim request ke admin gudang untuk disetujui
-              submitGudangRequest(data[0].kode_barang);
+              submitGudangRequest(data.nama_barang);
             }
           });
         } else {
@@ -126,21 +130,21 @@ document.addEventListener("DOMContentLoaded", function () {
       );
   }
 
-  function submitGudangRequest() {
+  function submitGudangRequest(namaBarang) {
     const userInfo = getUserInfo();
 
     const data = {
       nama_user: userInfo.nama,
+      nama_barang: namaBarang, // Tambahkan nama_barang
       quantity_diminta: parseInt(
         prompt("Masukkan jumlah barang yang diminta:")
       ),
-      status: "Pending",
+      status: "Menunggu Persetujuan Admin",
       catatan: "Permintaan ke gudang",
       id_user: userInfo.id_user,
     };
 
     fetch("http://localhost:3000/api/requests_gudang", {
-      // Update URL endpoint sesuai dengan requests_gudang
       method: "POST",
       headers: {
         "Content-Type": "application/json",
