@@ -24,6 +24,7 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 999;
 }
 
 header h1 {
@@ -431,4 +432,14 @@ div#requestTable {
   margin-top: 40px;
   font-size: 0.9rem;
   color: #bbb;
+}
+
+button:disabled,
+button.disabled {
+  background-color: #ccc; /* Warna latar belakang tombol yang sudah di-disable */
+  color: #666; /* Warna teks tombol yang sudah di-disable */
+  cursor: not-allowed; /* Menunjukkan bahwa tombol tidak bisa diklik */
+  border: 1px solid #999; /* Ubah warna border agar tampak tidak aktif */
+  opacity: 0.6; /* Tambahkan transparansi untuk efek visual tambahan */
+  z-index: -1;
 }
