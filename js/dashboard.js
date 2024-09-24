@@ -187,23 +187,32 @@ async function editItem(kodeBarang) {
       `,
       focusConfirm: false,
       preConfirm: () => {
-        return [
-          document.getElementById("swal-input2").value,
-          document.getElementById("swal-input3").value,
-          document.getElementById("swal-input4").value,
-          document.getElementById("swal-input5").value,
-        ];
+        const nama_barang = document.getElementById("swal-input2").value;
+        const quantity = document.getElementById("swal-input3").value;
+        const satuan = document.getElementById("swal-input4").value;
+        const harga_satuan = document.getElementById("swal-input5").value;
+        const tipe_barang = document.getElementById("swal-input6").value;
+
+        console.log("Nama Barang:", nama_barang);
+        console.log("Quantity:", quantity);
+        console.log("Satuan:", satuan);
+        console.log("Harga Satuan:", harga_satuan);
+        console.log("Tipe Barang:", tipe_barang);
+
+        return [nama_barang, quantity, satuan, harga_satuan, tipe_barang];
       },
     });
 
     if (formValues) {
-      const [nama_barang, quantity, satuan, harga_satuan] = formValues;
+      const [nama_barang, quantity, satuan, harga_satuan, tipe_barang] =
+        formValues;
 
       const updatedItem = {
         nama_barang,
         quantity,
         satuan,
         harga_satuan,
+        tipe_barang,
       };
 
       const updateResponse = await fetch(
@@ -220,36 +229,26 @@ async function editItem(kodeBarang) {
       if (updateResponse.ok) {
         Swal.fire("Success!", "Barang berhasil diperbarui!", "success");
 
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (user.role === "Admin") {
-          fetchAndDisplayItemsForAdmin(); // Refresh data barang untuk Admin
-        } else if (user.role === "User") {
-          fetchAndDisplayItemsForUser(); // Refresh data barang untuk User
-        }
+        // Refresh data barang
+        fetchAndDisplayItemsForAdmin();
       } else {
         Swal.fire("Error!", "Gagal memperbarui barang.", "error");
       }
     }
   } catch (error) {
-    Swal.fire(
-      "Error!",
-      "Terjadi kesalahan saat mengambil data barang.",
-      "error"
-    );
-    console.error("Error fetching item:", error);
+    Swal.fire("Error!", "Terjadi kesalahan saat mengedit barang.", "error");
+    console.error("Error editing item:", error);
   }
 }
 
 // Fungsi untuk menghapus barang
 async function deleteItem(kodeBarang) {
   Swal.fire({
-    title: "Apakah Anda yakin?",
-    text: "Data barang ini akan dihapus secara permanen!",
+    title: "Hapus Barang",
+    text: "Apakah Anda yakin ingin menghapus barang ini?",
     icon: "warning",
     showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Ya, hapus!",
+    confirmButtonText: "Ya, hapus",
     cancelButtonText: "Batal",
   }).then(async (result) => {
     if (result.isConfirmed) {
@@ -279,9 +278,10 @@ async function deleteItem(kodeBarang) {
   });
 }
 
+// Fungsi untuk mengambil dan menampilkan permintaan untuk Admin Gudang
 async function fetchAndDisplayRequestsForAdmin() {
   try {
-    const response = await fetch("http://localhost:3000/api/requests_gudang"); // Sesuaikan endpoint
+    const response = await fetch("http://localhost:3000/api/requests_gudang");
     const requests = await response.json();
 
     const requestsTableBody = document.querySelector("#requestsTableBody"); // Pastikan ID tabel sesuai
@@ -298,16 +298,164 @@ async function fetchAndDisplayRequestsForAdmin() {
         <td>${request.status}</td>
         <td>${request.catatan}</td>
         <td>
-          <button class="approve-btn" data-id="${request.id_request}">Approve</button>
-          <button class="reject-btn" data-id="${request.id_request}">Reject</button>
+          <button id="approve-btn-${
+            request.id_request
+          }" class="approve-btn" data-id="${request.id_request}" ${
+        request.status !== "Menunggu Persetujuan Admin" ? "disabled" : ""
+      } >Setujui</button>
+          <button id="reject-btn-${
+            request.id_request
+          }" class="reject-btn" data-id="${request.id_request}"  ${
+        request.status !== "Menunggu Persetujuan Admin" ? "disabled" : ""
+      }>Tolak</button>
         </td>
       `;
 
       requestsTableBody.appendChild(row);
     });
 
-    setupApproveAndRejectButtons(); // Setup untuk tombol approve dan reject
+    setupApproveAndRejectButtons(); // Setup tombol setujui dan tolak
   } catch (error) {
     console.error("Error fetching requests:", error);
   }
+}
+
+// Setup tombol setujui dan tolak
+function setupApproveAndRejectButtons() {
+  document.querySelectorAll(".approve-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id_request = button.getAttribute("data-id");
+      approveRequest(id_request);
+    });
+  });
+
+  document.querySelectorAll(".reject-btn").forEach((button) => {
+    button.addEventListener("click", () => {
+      const id_request = button.getAttribute("data-id");
+      rejectRequest(id_request);
+    });
+  });
+}
+
+// Fungsi untuk menonaktifkan tombol Setujui dan Tolak
+function disableButtons(id_request) {
+  const approveButton = document.querySelector(`#approve-btn-${id_request}`);
+  const rejectButton = document.querySelector(`#reject-btn-${id_request}`);
+
+  // Log untuk memeriksa apakah tombol ditemukan
+  console.log("Approve Button:", approveButton);
+  console.log("Reject Button:", rejectButton);
+
+  if (approveButton) {
+    approveButton.disabled = true; // Nonaktifkan tombol
+    approveButton.classList.add("disabled"); // Tambahkan class CSS untuk disabled
+    console.log("Class 'disabled' added to approve button"); // Log ketika class berhasil ditambahkan
+  }
+
+  if (rejectButton) {
+    rejectButton.disabled = true; // Nonaktifkan tombol
+    rejectButton.classList.add("disabled"); // Tambahkan class CSS untuk disabled
+    console.log("Class 'disabled' added to reject button"); // Log ketika class berhasil ditambahkan
+  }
+
+  setTimeout(() => {
+    const approveButton = document.querySelector(`#approve-btn-${id_request}`);
+    console.log("Approve Button after timeout:", approveButton);
+    console.log("Approve Button classList:", approveButton.classList);
+  }, 1000);
+}
+
+// Fungsi untuk menyetujui permintaan
+async function approveRequest(id_request) {
+  Swal.fire({
+    title: "Setujui Permintaan",
+    text: "Apakah Anda yakin ingin menyetujui permintaan ini?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Ya, setujui",
+    cancelButtonText: "Batal",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/requests_gudang/${id_request}/approve`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status: "Disetujui" }),
+          }
+        );
+
+        if (response.ok) {
+          Swal.fire("Success!", "Permintaan berhasil disetujui!", "success");
+          disableButtons(id_request);
+          fetchAndDisplayRequestsForAdmin();
+          fetchAndDisplayItemsForAdmin();
+        } else {
+          Swal.fire("Error!", "Gagal menyetujui permintaan.", "error");
+        }
+      } catch (error) {
+        Swal.fire(
+          "Error!",
+          "Terjadi kesalahan saat menyetujui permintaan.",
+          "error"
+        );
+        console.error("Error approving request:", error);
+      }
+    }
+  });
+}
+
+// Fungsi untuk menolak permintaan
+async function rejectRequest(id_request) {
+  Swal.fire({
+    title: "Tolak Permintaan",
+    text: "Apakah Anda yakin ingin menolak permintaan ini?",
+    icon: "warning",
+    input: "textarea",
+    inputPlaceholder: "Berikan alasan penolakan",
+    showCancelButton: true,
+    confirmButtonText: "Ya, tolak",
+    cancelButtonText: "Batal",
+  }).then(async (result) => {
+    if (result.isConfirmed && result.value) {
+      const reason = result.value;
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/requests_gudang/${id_request}/reject`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status: "Ditolak", catatan: reason }), // Kirim status dan alasan penolakan
+          }
+        );
+
+        if (response.ok) {
+          Swal.fire("Rejected!", "Permintaan berhasil ditolak.", "success");
+          disableButtons(id_request); // Nonaktifkan tombol
+          fetchAndDisplayRequestsForAdmin(); // Refresh daftar permintaan
+          fetchAndDisplayItemsForAdmin();
+        } else {
+          Swal.fire("Error!", "Gagal menolak permintaan.", "error");
+        }
+      } catch (error) {
+        Swal.fire(
+          "Error!",
+          "Terjadi kesalahan saat menolak permintaan.",
+          "error"
+        );
+        console.error("Error rejecting request:", error);
+      }
+    } else if (!result.value) {
+      Swal.fire(
+        "Error!",
+        "Anda harus memberikan alasan untuk menolak permintaan.",
+        "error"
+      );
+    }
+  });
 }
