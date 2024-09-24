@@ -21,7 +21,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("adminGudangContent").style.display = "block";
         document.getElementById("adminDaerahContent").style.display = "none";
         document.getElementById("userContent").style.display = "none";
-        document.getElementById("hideFromUser").style.display = "none";
+        document.getElementById("userNavigation").style.display = "none";
+        document.getElementById("adminDaerahNavigation").style.display = "none";
+        document.getElementById("adminGudangNavigation").style.display = "flex";
         fetchAndDisplayItemsForAdmin(); // Ambil data barang untuk Admin Gudang
         fetchAndDisplayRequestsForAdmin();
       } else if (user.role === "Admin Daerah") {
@@ -29,16 +31,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("adminGudangContent").style.display = "none";
         document.getElementById("adminDaerahContent").style.display = "block";
         document.getElementById("userContent").style.display = "none";
-        // fetchAndDisplayItemsForAdminDaerah(); // Ambil data barang untuk Admin Daerah
-        // // Menampilkan area-area dalam daerah
-        // fetchAndDisplayAreasForAdminDaerah(); // Ambil data area untuk Admin Daerah
+        document.getElementById("userNavigation").style.display = "none";
+        document.getElementById("adminDaerahNavigation").style.display = "flex";
+        document.getElementById("adminGudangNavigation").style.display = "none";
       } else if (user.role === "User Area") {
         document.getElementById("superAdminContent").style.display = "none";
         document.getElementById("adminGudangContent").style.display = "none";
         document.getElementById("adminDaerahContent").style.display = "none";
         document.getElementById("userContent").style.display = "block";
-        document.getElementById("hideFromUser").style.display = "none";
-        // fetchAndDisplayItemsForUser(); // Ambil data barang untuk User Area
+        document.getElementById("userNavigation").style.display = "flex";
+        document.getElementById("adminDaerahNavigation").style.display = "none";
+        document.getElementById("adminGudangNavigation").style.display = "none";
       }
     } else {
       // Jika tidak ada user yang login, redirect ke login page

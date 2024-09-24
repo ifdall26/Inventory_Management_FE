@@ -12,10 +12,21 @@
     <header>
       <h1>InventoryPro</h1>
       <nav>
-        <ul>
-          <li><a href="#section3">Requests</a></li>
-          <li id="hideFromUser"><a href="#section2">Add items</a></li>
-          <li><a href="#home">Items</a></li>
+        <ul id="userNavigation" style="display: none;">
+          <li><a href="#req">Requests</a></li>
+          <li><a href="#items">Items</a></li>
+          <li><a href="loginRegister.html">Logout</a></li>
+        </ul>
+        <ul id="adminDaerahNavigation" style="display: none;">
+          <li><a href="#reqAdminDaerah">Requests</a></li>
+          <li><a href="#addAdminDaerah">Add items</a></li>
+          <li><a href="#itemsAdminDaerah">Items</a></li>
+          <li><a href="loginRegister.html">Logout</a></li>
+        </ul>
+        <ul id="adminGudangNavigation" style="display: none;">
+          <li><a href="#reqAdminGudang">Requests</a></li>
+          <li><a href="#addAdminGudang">Add items</a></li>
+          <li><a href="#itemsAdminGudang">Items</a></li>
           <li><a href="loginRegister.html">Logout</a></li>
         </ul>
       </nav>
@@ -31,7 +42,7 @@
         <p>This content is visible only to Admin Gudang.</p>
 
         <!-- Form Entry Data Barang -->
-        <h2>Entry Data Barang</h2>
+        <h2 id="addAdminGudang">Entry Data Barang</h2>
         <form id="itemForm">
           <label for="kode_barang">Kode Barang:</label>
           <input
@@ -70,7 +81,7 @@
         <p id="statusMessage"></p>
 
         <!-- Tabel Daftar Barang -->
-        <h2>Daftar Barang</h2>
+        <h2 id="itemsAdminGudang">Daftar Barang</h2>
         <div class="tabelBrangGudang" style="overflow-x: scroll;">
           <table id="itemsTable">
             <thead>
@@ -90,7 +101,7 @@
           </table>
         </div>
 
-        <h2>Daftar Permintaan Gudang</h2>
+        <h2 id="reqAdminGudang">Daftar Permintaan Gudang</h2>
         <div class="tabelRequests" style="overflow-x: scroll;">
           <table id="requestsTable">
             <thead>
@@ -115,7 +126,7 @@
       <div id="userContent" style="display: none">
         <h3>User Section</h3>
         <p>This content is visible only to Users.</p>
-        <h2 id="home">Daftar Barang</h4>
+        <h2 id="items">Daftar Barang</h4>
 
         <div class="search-filter">
           <input
@@ -190,7 +201,7 @@
           </div>
         </div>
 
-        <h2 id="section3">Riwayat Request</h2>
+        <h2 id="req">Riwayat Request</h2>
         <div class="userRequestsTable">
           <table>
             <thead>
@@ -216,7 +227,7 @@
         <p>This content is visible only to Admin Daerah</p>
 
         <!-- Tabel untuk menampilkan barang daerah -->
-        <h2 id="home">Daftar Barang Daerah</h2>
+        <h2 id="itemsAdminDaerah">Daftar Barang Daerah</h2>
         <div class="search-filter">
           <input
             type="text"
@@ -269,7 +280,7 @@
         </div>
         <div id="pagination"></div>
 
-        <h2 id="section2">Input Barang</h2>
+        <h2 id="addAdminDaerah">Input Barang</h2>
         <form id="barangDaerahForm">
           <!-- Kolom barang yang sama dengan tabel barang -->
           <label for="kode_barang">Kode Barang:</label>
@@ -318,7 +329,7 @@
 
         <!-- tabel request -->
         <div id="requestTable">
-          <h2 id="section3">Requests</h2>
+          <h2 id="reqAdminDaerah">Requests</h2>
           <table>
             <thead>
               <tr>
