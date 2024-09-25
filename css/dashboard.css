@@ -290,6 +290,10 @@ div#paginationControls {
   margin-bottom: 15px;
 }
 
+div#paginationControls button {
+  width: auto;
+}
+
 #pagination button {
   background-color: #1f2833;
   color: #fff;

@@ -415,7 +415,35 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function fetchUserRequestsGudang() {
+    fetch(`http://localhost:3000/api/requests_gudang/user/${userId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        displayUserRequestsGudang(data);
+      })
+      .catch((error) => console.error("Error fetching user requests:", error));
+  }
+
+  // Fungsi untuk menampilkan request user dalam tabel
+  function displayUserRequestsGudang(requests_gudang) {
+    const tbody = document.getElementById("userRequestGudangTableBody");
+    tbody.innerHTML = "";
+
+    requests_gudang.forEach((request) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${request.nama_barang}</td>
+        <td>${request.quantity_diminta}</td>
+        <td>${request.status}</td>
+        <td>${request.tanggal_request}</td>
+        <td>${request.catatan}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
   // Ambil data barang dan request user saat halaman dimuat
   fetchBarang();
   fetchUserRequests();
+  fetchUserRequestsGudang();
 });
