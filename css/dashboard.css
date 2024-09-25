@@ -15,8 +15,7 @@ body {
 header {
   background-color: #1f2833;
   color: white;
-  padding: 20px 0px;
-  padding-left: 20px;
+  padding: 20px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,6 +32,77 @@ header h1 {
   letter-spacing: 1px;
   margin: 0;
   color: #66fcf1;
+}
+
+header #hamburger-btn:hover {
+  background-color: unset;
+}
+
+.hamburger {
+  margin-right: 20px;
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+/* Navigation styling */
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  margin-left: 20px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+/* Responsiveness: Menu is hidden for small screens */
+@media screen and (max-width: 768px) {
+  header {
+    justify-content: flex-start;
+  }
+  .hamburger {
+    display: block; /* Show hamburger button on small screens */
+  }
+
+  #navMenu {
+    opacity: 0; /* Initially hidden */
+    visibility: hidden; /* Prevent clicks when hidden */
+    transition: opacity 0.3s ease-in, visibility 0.3s ease; /* Smooth transition */
+  }
+
+  #navMenu.show {
+    opacity: 1; /* Show with transition */
+    visibility: visible; /* Make it visible */
+  }
+
+  #navMenu ul {
+    flex-direction: column;
+    background-color: #1f2833;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  #navMenu ul li {
+    margin: 10px 0;
+  }
+}
+
+.navMenu {
+  margin-top: 20px;
 }
 
 nav ul {
@@ -202,7 +272,7 @@ tr:hover {
   overflow-x: scroll;
 }
 
-button {
+main button {
   background-color: #007bff;
   color: #fff;
   border: none;

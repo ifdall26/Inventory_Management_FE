@@ -10,20 +10,23 @@
   </head>
   <body>
     <header>
+      <button class="hamburger" id="hamburger-btn" aria-label="Toggle navigation">
+        ☰
+      </button>
       <h1>InventoryPro</h1>
-      <nav>
-        <ul id="userNavigation" style="display: none;">
+      <nav id="navMenu">
+        <ul class="navMenu" id="userNavigation" style="display: none;">
           <li><a href="#req">Requests</a></li>
           <li><a href="#items">Items</a></li>
           <li><a href="loginRegister.html">Logout</a></li>
         </ul>
-        <ul id="adminDaerahNavigation" style="display: none;">
+        <ul class="navMenu" id="adminDaerahNavigation" style="display: none;">
           <li><a href="#reqAdminDaerah">Requests</a></li>
           <li><a href="#addAdminDaerah">Add items</a></li>
           <li><a href="#itemsAdminDaerah">Items</a></li>
           <li><a href="loginRegister.html">Logout</a></li>
         </ul>
-        <ul id="adminGudangNavigation" style="display: none;">
+        <ul class="navMenu" id="adminGudangNavigation" style="display: none;">
           <li><a href="#reqAdminGudang">Requests</a></li>
           <li><a href="#addAdminGudang">Add items</a></li>
           <li><a href="#itemsAdminGudang">Items</a></li>

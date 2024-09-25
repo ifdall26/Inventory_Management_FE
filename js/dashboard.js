@@ -1,4 +1,14 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  // Get the hamburger button and the navigation menu
+  const hamburgerBtn = document.getElementById("hamburger-btn");
+  const navMenu = document.getElementById("navMenu");
+
+  // Add event listener to the hamburger button
+  hamburgerBtn.addEventListener("click", () => {
+    // Toggle the "show" class to either display or hide the menu
+    navMenu.classList.toggle("show");
+  });
+
   if (window.location.pathname.endsWith("dashboard.html")) {
     const user = JSON.parse(localStorage.getItem("user"));
 
