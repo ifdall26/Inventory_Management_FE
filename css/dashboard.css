@@ -94,6 +94,8 @@ nav ul li a {
     right: 0;
     width: 100%;
     text-align: center;
+    gap: 20px;
+    padding: 10px;
   }
 
   #navMenu ul li {
