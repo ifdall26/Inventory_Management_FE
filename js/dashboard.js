@@ -106,6 +106,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
 
+// Pencarian dan Filter untuk Admin Gudang
+document
+  .getElementById("gudangSearchInput")
+  .addEventListener("input", applyGudangSearchAndFilter);
+document
+  .getElementById("gudangTipeBarangFilter")
+  .addEventListener("change", applyGudangSearchAndFilter);
+
+function applyGudangSearchAndFilter() {
+  const searchKeyword = document
+    .getElementById("gudangSearchInput")
+    .value.toLowerCase();
+  const tipeFilter = document.getElementById("gudangTipeBarangFilter").value;
+
+  const rows = document.querySelectorAll("#itemsTable tbody tr");
+
+  rows.forEach((row) => {
+    const namaBarang = row.cells[1].textContent.toLowerCase();
+    const tipeBarang = row.cells[5].textContent;
+
+    const matchesSearch = namaBarang.includes(searchKeyword);
+    const matchesTipe = tipeFilter === "" || tipeBarang === tipeFilter;
+
+    if (matchesSearch && matchesTipe) {
+      row.style.display = ""; // Tampilkan baris yang cocok
+    } else {
+      row.style.display = "none"; // Sembunyikan baris yang tidak cocok
+    }
+  });
+}
+
 // Fungsi untuk mengambil dan menampilkan data barang untuk Admin Gudang
 async function fetchAndDisplayItemsForAdmin() {
   try {
@@ -134,6 +165,7 @@ async function fetchAndDisplayItemsForAdmin() {
       barangGudangTableBody.appendChild(row);
     });
 
+    applyGudangSearchAndFilter();
     setupEditAndDeleteButtons(); // Setup tombol edit dan hapus
   } catch (error) {
     console.error("Error fetching barang_gudang:", error);

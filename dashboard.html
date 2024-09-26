@@ -85,6 +85,16 @@
 
         <!-- Tabel Daftar Barang -->
         <h2 id="itemsAdminGudang">Daftar Barang</h2>
+        <div class="search-filter">
+        <!-- Input Pencarian dan Filter -->
+        <input type="text" id="gudangSearchInput" placeholder="Cari Nama Barang" />
+        <select id="gudangTipeBarangFilter">
+          <option value="">Semua Tipe</option>
+          <option value="Mechanical">Mechanical</option>
+          <option value="Electrical">Electrical</option>
+          <!-- Tambahkan tipe barang lainnya jika ada -->
+        </select>
+        </div>
         <div class="tabelBrangGudang" style="overflow-x: scroll;">
           <table id="itemsTable">
             <thead>
