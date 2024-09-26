@@ -1,9 +1,11 @@
 let allBarang = []; // Menyimpan semua barang
 let filteredBarang = []; // Menyimpan barang setelah difilter atau dicari
-let currentPage = 1; // Halaman saat ini
+let currentPage = 1; // Halaman saat ini untuk barang
 const itemsPerPage = 10; // Jumlah barang per halaman
 
 let allRequests = []; // Menyimpan semua request
+let currentRequestPage = 1; // Halaman saat ini untuk request
+const requestsPerPage = 10; // Jumlah request per halaman
 
 // Fungsi untuk mengambil data barang dari server
 function fetchBarang() {
@@ -24,7 +26,7 @@ function displayBarangWithPagination() {
   const paginatedBarang = filteredBarang.slice(startIndex, endIndex);
 
   displayBarang(paginatedBarang);
-  displayPagination();
+  displayBarangPagination();
 }
 
 // Fungsi untuk menampilkan barang dalam tabel
@@ -48,8 +50,8 @@ function displayBarang(barang) {
   });
 }
 
-// Fungsi untuk menampilkan pagination
-function displayPagination() {
+// Fungsi untuk menampilkan pagination untuk barang
+function displayBarangPagination() {
   const paginationElement = document.getElementById("pagination");
   paginationElement.innerHTML = ""; // Kosongkan pagination
 
@@ -93,20 +95,6 @@ function applySearchAndFilter() {
   displayBarangWithPagination();
 }
 
-// Event listeners for search and filter
-document
-  .getElementById("adminSearchInput")
-  .addEventListener("input", applySearchAndFilter);
-document
-  .getElementById("adminTipeBarangFilter")
-  .addEventListener("change", applySearchAndFilter);
-document
-  .getElementById("adminLokasiDaerahFilter")
-  .addEventListener("change", applySearchAndFilter);
-document
-  .getElementById("adminLokasiAreaFilter")
-  .addEventListener("change", applySearchAndFilter);
-
 // Fungsi untuk load request dari server
 function loadRequests() {
   fetch("http://localhost:3000/api/requests")
@@ -118,9 +106,19 @@ function loadRequests() {
     })
     .then((data) => {
       allRequests = data;
-      displayRequests(allRequests);
+      displayRequestsWithPagination();
     })
     .catch((error) => console.error("Error loading requests:", error));
+}
+
+// Fungsi untuk menampilkan request dengan pagination
+function displayRequestsWithPagination() {
+  const startIndex = (currentRequestPage - 1) * requestsPerPage;
+  const endIndex = startIndex + requestsPerPage;
+  const paginatedRequests = allRequests.slice(startIndex, endIndex);
+
+  displayRequests(paginatedRequests);
+  displayRequestPagination();
 }
 
 // Fungsi untuk menampilkan requests dalam tabel
@@ -141,6 +139,42 @@ function displayRequests(requests) {
     tbody.appendChild(row);
   });
 }
+
+// Fungsi untuk menampilkan pagination untuk requests
+function displayRequestPagination() {
+  const paginationElement = document.getElementById("requestPagination");
+  paginationElement.innerHTML = ""; // Kosongkan pagination
+
+  const totalPages = Math.ceil(allRequests.length / requestsPerPage);
+
+  for (let i = 1; i <= totalPages; i++) {
+    const pageButton = document.createElement("button");
+    pageButton.innerText = i;
+    pageButton.classList.add("page-btn");
+    if (i === currentRequestPage) {
+      pageButton.classList.add("active"); // Tandai halaman aktif
+    }
+    pageButton.addEventListener("click", function () {
+      currentRequestPage = i;
+      displayRequestsWithPagination();
+    });
+    paginationElement.appendChild(pageButton);
+  }
+}
+
+// Event listeners for search and filter
+document
+  .getElementById("adminSearchInput")
+  .addEventListener("input", applySearchAndFilter);
+document
+  .getElementById("adminTipeBarangFilter")
+  .addEventListener("change", applySearchAndFilter);
+document
+  .getElementById("adminLokasiDaerahFilter")
+  .addEventListener("change", applySearchAndFilter);
+document
+  .getElementById("adminLokasiAreaFilter")
+  .addEventListener("change", applySearchAndFilter);
 
 // Panggil fetchBarang saat halaman dimuat
 document.addEventListener("DOMContentLoaded", function () {
