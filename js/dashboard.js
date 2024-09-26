@@ -34,8 +34,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("userNavigation").style.display = "none";
         document.getElementById("adminDaerahNavigation").style.display = "none";
         document.getElementById("adminGudangNavigation").style.display = "flex";
-        fetchAndDisplayItemsForAdmin(); // Ambil data barang untuk Admin Gudang
-        fetchAndDisplayRequestsForAdmin();
+        fetchAndDisplayItemsForAdmin(1, 5); // Ambil data barang untuk Admin Gudang
+        fetchAndDisplayRequestsForAdmin(1, 5);
       } else if (user.role === "Admin Daerah") {
         document.getElementById("superAdminContent").style.display = "none";
         document.getElementById("adminGudangContent").style.display = "none";
@@ -138,15 +138,19 @@ function applyGudangSearchAndFilter() {
 }
 
 // Fungsi untuk mengambil dan menampilkan data barang untuk Admin Gudang
-async function fetchAndDisplayItemsForAdmin() {
+async function fetchAndDisplayItemsForAdmin(page = 1, itemsPerPage = 5) {
   try {
     const response = await fetch("http://localhost:3000/api/barang_gudang");
     const barang_gudang = await response.json();
 
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedItems = barang_gudang.slice(start, end);
+
     const barangGudangTableBody = document.querySelector("#itemsTable tbody");
     barangGudangTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data baru
 
-    barang_gudang.forEach((item) => {
+    paginatedItems.forEach((item) => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
@@ -165,8 +169,14 @@ async function fetchAndDisplayItemsForAdmin() {
       barangGudangTableBody.appendChild(row);
     });
 
-    applyGudangSearchAndFilter();
     setupEditAndDeleteButtons(); // Setup tombol edit dan hapus
+    setupPagination(
+      barang_gudang.length,
+      page,
+      itemsPerPage,
+      "paginationBarang",
+      fetchAndDisplayItemsForAdmin
+    ); // Setup pagination
   } catch (error) {
     console.error("Error fetching barang_gudang:", error);
   }
@@ -324,15 +334,19 @@ async function deleteItem(kodeBarang) {
 }
 
 // Fungsi untuk mengambil dan menampilkan permintaan untuk Admin Gudang
-async function fetchAndDisplayRequestsForAdmin() {
+async function fetchAndDisplayRequestsForAdmin(page = 1, itemsPerPage = 5) {
   try {
     const response = await fetch("http://localhost:3000/api/requests_gudang");
     const requests = await response.json();
 
-    const requestsTableBody = document.querySelector("#requestsTableBody"); // Pastikan ID tabel sesuai
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedRequests = requests.slice(start, end);
+
+    const requestsTableBody = document.querySelector("#requestsTable tbody");
     requestsTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data baru
 
-    requests.forEach((request) => {
+    paginatedRequests.forEach((request) => {
       const row = document.createElement("tr");
 
       row.innerHTML = `
@@ -343,26 +357,64 @@ async function fetchAndDisplayRequestsForAdmin() {
         <td>${request.status}</td>
         <td>${request.catatan}</td>
         <td>
-          <button id="approve-btn-${
-            request.id_request
-          }" class="approve-btn" data-id="${request.id_request}" ${
-        request.status !== "Menunggu Persetujuan Admin" ? "disabled" : ""
-      } >Setujui</button>
-          <button id="reject-btn-${
-            request.id_request
-          }" class="reject-btn" data-id="${request.id_request}"  ${
-        request.status !== "Menunggu Persetujuan Admin" ? "disabled" : ""
-      }>Tolak</button>
+          <button class="approve-btn" data-id="${request.id_request}">Approve</button>
+          <button class="reject-btn" data-id="${request.id_request}">Reject</button>
         </td>
       `;
 
       requestsTableBody.appendChild(row);
     });
 
-    setupApproveAndRejectButtons(); // Setup tombol setujui dan tolak
+    setupPagination(
+      requests.length,
+      page,
+      itemsPerPage,
+      "paginationRequests",
+      fetchAndDisplayRequestsForAdmin
+    ); // Setup pagination
   } catch (error) {
     console.error("Error fetching requests:", error);
   }
+}
+
+function setupPagination(
+  totalItems,
+  currentPage,
+  itemsPerPage,
+  paginationElementId,
+  fetchFunction
+) {
+  const paginationElement = document.getElementById(paginationElementId);
+  paginationElement.innerHTML = "";
+
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  // Tombol Previous
+  const prevButton = document.createElement("button");
+  prevButton.innerText = "Previous";
+  prevButton.disabled = currentPage === 1;
+  prevButton.addEventListener("click", () =>
+    fetchFunction(currentPage - 1, itemsPerPage)
+  );
+  paginationElement.appendChild(prevButton);
+
+  // Tombol halaman
+  for (let i = 1; i <= totalPages; i++) {
+    const pageButton = document.createElement("button");
+    pageButton.innerText = i;
+    pageButton.disabled = i === currentPage;
+    pageButton.addEventListener("click", () => fetchFunction(i, itemsPerPage));
+    paginationElement.appendChild(pageButton);
+  }
+
+  // Tombol Next
+  const nextButton = document.createElement("button");
+  nextButton.innerText = "Next";
+  nextButton.disabled = currentPage === totalPages;
+  nextButton.addEventListener("click", () =>
+    fetchFunction(currentPage + 1, itemsPerPage)
+  );
+  paginationElement.appendChild(nextButton);
 }
 
 // Setup tombol setujui dan tolak

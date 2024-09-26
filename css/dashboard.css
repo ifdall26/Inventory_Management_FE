@@ -367,11 +367,35 @@ div#paginationControls {
   margin-bottom: 15px;
 }
 
+div#paginationBarang {
+  margin: 20px auto;
+  width: 100%;
+  text-align: center;
+}
+
+div#paginationRequests {
+  margin: 20px auto;
+  width: 100%;
+  text-align: center;
+}
+
 div#paginationControls button {
   width: auto;
 }
 
 #pagination button {
+  background-color: #1f2833;
+  color: #fff;
+  width: auto;
+}
+
+#paginationBarang button {
+  background-color: #1f2833;
+  color: #fff;
+  width: auto;
+}
+
+#paginationRequests button {
   background-color: #1f2833;
   color: #fff;
   width: auto;
