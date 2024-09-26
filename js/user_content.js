@@ -334,6 +334,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const paginationControls = document.getElementById("paginationControls");
     paginationControls.innerHTML = "";
 
+    // Tombol Previous
+    const prevButton = document.createElement("button");
+    prevButton.textContent = "Previous";
+    prevButton.disabled = currentPage === 1; // Disable jika di halaman pertama
+    prevButton.addEventListener("click", function () {
+      if (currentPage > 1) {
+        changePage(currentPage - 1);
+      }
+    });
+    paginationControls.appendChild(prevButton);
+
+    // Tombol untuk setiap halaman
     for (let i = 1; i <= totalPages; i++) {
       const pageButton = document.createElement("button");
       pageButton.textContent = i;
@@ -343,6 +355,17 @@ document.addEventListener("DOMContentLoaded", function () {
       });
       paginationControls.appendChild(pageButton);
     }
+
+    // Tombol Next
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.disabled = currentPage === totalPages; // Disable jika di halaman terakhir
+    nextButton.addEventListener("click", function () {
+      if (currentPage < totalPages) {
+        changePage(currentPage + 1);
+      }
+    });
+    paginationControls.appendChild(nextButton);
   }
 
   // Fungsi untuk mengubah halaman
