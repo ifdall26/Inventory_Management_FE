@@ -357,8 +357,17 @@ async function fetchAndDisplayRequestsForAdmin(page = 1, itemsPerPage = 5) {
         <td>${request.status}</td>
         <td>${request.catatan}</td>
         <td>
-          <button class="approve-btn" data-id="${request.id_request}">Approve</button>
-          <button class="reject-btn" data-id="${request.id_request}">Reject</button>
+                    <button id="approve-btn-${
+                      request.id_request
+                    }" class="approve-btn" data-id="${request.id_request}" ${
+        request.status !== "Menunggu Persetujuan Admin" ? "disabled" : ""
+      } >Setujui</button>
+          <button id="reject-btn-${
+            request.id_request
+          }" class="reject-btn" data-id="${request.id_request}"  ${
+        request.status !== "Menunggu Persetujuan Admin" ? "disabled" : ""
+      }>Tolak</button>
+
         </td>
       `;
 
