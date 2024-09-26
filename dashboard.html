@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/css/dashboard.css" />
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
   </head>
   <body>
     <header>
@@ -16,22 +18,25 @@
       <h1>InventoryPro</h1>
       <nav id="navMenu">
         <ul class="navMenu" id="userNavigation" style="display: none;">
-          <li><a href="#req">Requests</a></li>
-          <li><a href="#items">Items</a></li>
-          <li><a href="loginRegister.html">Logout</a></li>
+          <li><a href="#req"><i class="fas fa-list"></i>  Requests</a></li>
+          <li><a href="#items"><i class="fas fa-box"></i>  Items</a></li>
+          <li><a href="loginRegister.html"><i class="fas fa-sign-out-alt"></i>  Logout</a></li>
         </ul>
+        
         <ul class="navMenu" id="adminDaerahNavigation" style="display: none;">
-          <li><a href="#reqAdminDaerah">Requests</a></li>
-          <li><a href="#addAdminDaerah">Add items</a></li>
-          <li><a href="#itemsAdminDaerah">Items</a></li>
-          <li><a href="loginRegister.html">Logout</a></li>
+          <li><a href="#reqAdminDaerah"><i class="fas fa-list"></i> Requests</a></li>
+          <li><a href="#addAdminDaerah"><i class="fas fa-plus-square"></i> Add items</a></li>
+          <li><a href="#itemsAdminDaerah"><i class="fas fa-boxes"></i> Items</a></li>
+          <li><a href="loginRegister.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
+        
         <ul class="navMenu" id="adminGudangNavigation" style="display: none;">
-          <li><a href="#reqAdminGudang">Requests</a></li>
-          <li><a href="#addAdminGudang">Add items</a></li>
-          <li><a href="#itemsAdminGudang">Items</a></li>
-          <li><a href="loginRegister.html">Logout</a></li>
+          <li><a href="#reqAdminGudang"><i class="fas fa-list-alt"></i> Requests</a></li>
+          <li><a href="#addAdminGudang"><i class="fas fa-plus"></i> Add items</a></li>
+          <li><a href="#itemsAdminGudang"><i class="fas fa-warehouse"></i> Items</a></li>
+          <li><a href="loginRegister.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
+        
       </nav>
     </header>
 
@@ -199,7 +204,7 @@
             <tbody id="barangDaerahUserTableBody"></tbody>
           </table>
         </div>
-        <div id="paginationControls"></div>
+        <div class="paginationControls" id="paginationControls"></div>
         <!-- Modal/Formulir Permintaan Barang -->
         <div id="requestFormModal" class="modal">
           <div class="modal-content">
