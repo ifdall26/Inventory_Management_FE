@@ -161,8 +161,12 @@ async function fetchAndDisplayItemsForAdmin(page = 1, itemsPerPage = 5) {
         <td>${item.harga_satuan}</td>
         <td>${item.tipe_barang}</td>
         <td>
-          <button class="edit-btn" data-id="${item.kode_barang}">Edit</button>
-          <button class="delete-btn" data-id="${item.kode_barang}">Hapus</button>
+          <button class="edit-btn" data-id="${item.kode_barang}">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button class="delete-btn" data-id="${item.kode_barang}">
+            <i class="fas fa-trash-alt"></i>
+          </button>
         </td>
       `;
 
@@ -334,14 +338,41 @@ async function deleteItem(kodeBarang) {
 }
 
 // Fungsi untuk mengambil dan menampilkan permintaan untuk Admin Gudang
-async function fetchAndDisplayRequestsForAdmin(page = 1, itemsPerPage = 5) {
+async function fetchAndDisplayRequestsForAdmin(
+  page = 1,
+  itemsPerPage = 5,
+  month = null,
+  year = null
+) {
   try {
-    const response = await fetch("http://localhost:3000/api/requests_gudang");
+    let url = "http://localhost:3000/api/requests_gudang";
+    const response = await fetch(url);
     const requests = await response.json();
+
+    // Filter berdasarkan bulan dan tahun jika dipilih
+    const filteredRequests = requests.filter((request) => {
+      const requestDate = new Date(request.tanggal_request); // Misalkan Anda memiliki field ini
+
+      const requestMonth = requestDate.getMonth() + 1; // getMonth() mengembalikan 0-11, tambahkan 1 agar jadi 1-12
+      const requestYear = requestDate.getFullYear();
+
+      let monthMatch = true;
+      let yearMatch = true;
+
+      if (month) {
+        monthMatch = requestMonth === parseInt(month);
+      }
+
+      if (year) {
+        yearMatch = requestYear === parseInt(year);
+      }
+
+      return monthMatch && yearMatch;
+    });
 
     const start = (page - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    const paginatedRequests = requests.slice(start, end);
+    const paginatedRequests = filteredRequests.slice(start, end);
 
     const requestsTableBody = document.querySelector("#requestsTable tbody");
     requestsTableBody.innerHTML = ""; // Kosongkan tabel sebelum menambahkan data baru
@@ -357,17 +388,16 @@ async function fetchAndDisplayRequestsForAdmin(page = 1, itemsPerPage = 5) {
         <td>${request.status}</td>
         <td>${request.catatan}</td>
         <td>
-                    <button id="approve-btn-${
-                      request.id_request
-                    }" class="approve-btn" data-id="${request.id_request}" ${
+          <button id="approve-btn-${
+            request.id_request
+          }" class="approve-btn" data-id="${request.id_request}" ${
         request.status !== "Menunggu Persetujuan Admin" ? "disabled" : ""
-      } >Setujui</button>
+      }>Setujui</button>
           <button id="reject-btn-${
             request.id_request
-          }" class="reject-btn" data-id="${request.id_request}"  ${
+          }" class="reject-btn" data-id="${request.id_request}" ${
         request.status !== "Menunggu Persetujuan Admin" ? "disabled" : ""
       }>Tolak</button>
-
         </td>
       `;
 
@@ -375,16 +405,25 @@ async function fetchAndDisplayRequestsForAdmin(page = 1, itemsPerPage = 5) {
     });
 
     setupPagination(
-      requests.length,
+      filteredRequests.length,
       page,
       itemsPerPage,
       "paginationRequests",
-      fetchAndDisplayRequestsForAdmin
+      (newPage) =>
+        fetchAndDisplayRequestsForAdmin(newPage, itemsPerPage, month, year)
     ); // Setup pagination
   } catch (error) {
     console.error("Error fetching requests:", error);
   }
 }
+
+document.getElementById("filterBtn").addEventListener("click", () => {
+  const month = document.getElementById("monthFilter").value;
+  const year = document.getElementById("yearFilter").value;
+
+  // Panggil fungsi dengan bulan dan tahun yang dipilih
+  fetchAndDisplayRequestsForAdmin(1, 5, month, year); // Memulai dari halaman pertama dengan filter bulan dan tahun
+});
 
 function setupPagination(
   totalItems,

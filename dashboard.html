@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/css/dashboard.css" />
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
+    <link rel="stylesheet" href="css/all.min.css">
+
 
   </head>
   <body>
@@ -122,6 +124,33 @@
         <div id="paginationBarang" class="pagination"></div>  
 
         <h2 id="reqAdminGudang">Daftar Permintaan Gudang</h2>
+        <div class="timeFilterContainer">
+
+          <select class="timeFilter" id="monthFilter">
+            <option value="">Pilih Bulan</option>
+            <option value="1">Januari</option>
+            <option value="2">Februari</option>
+            <option value="3">Maret</option>
+            <option value="4">April</option>
+            <option value="5">Mei</option>
+            <option value="6">Juni</option>
+            <option value="7">Juli</option>
+            <option value="8">Agustus</option>
+            <option value="9">September</option>
+            <option value="10">Oktober</option>
+            <option value="11">November</option>
+            <option value="12">Desember</option>
+          </select>
+          
+          <select class="timeFilter" id="yearFilter">
+            <option value="">Pilih Tahun</option>
+          </select>
+          
+          <button id="filterBtn" class="submit-btn">
+            <i class="fas fa-filter"></i>
+          </button>
+        </div>
+        
         <div class="tabelRequests" style="overflow-x: scroll;">
           <table id="requestsTable">
             <thead>
@@ -445,6 +474,19 @@
               });
           });
       });
+  </script>
+
+  <script>
+    const yearDropdown = document.getElementById("yearFilter");
+    const currentYear = new Date().getFullYear(); // Mendapatkan tahun saat ini
+    const startYear = 2010; // Tahun awal yang ingin Anda tampilkan, bisa disesuaikan
+  
+    for (let year = currentYear; year >= startYear; year--) {
+      const option = document.createElement("option");
+      option.value = year;
+      option.text = year;
+      yearDropdown.appendChild(option);
+    }
   </script>
   
   </body>
