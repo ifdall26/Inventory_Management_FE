@@ -379,6 +379,12 @@ async function fetchAndDisplayRequestsForAdmin(
 
     paginatedRequests.forEach((request) => {
       const row = document.createElement("tr");
+      const tanggalRequest = new Date(request.tanggal_request);
+
+      const options = { year: "numeric", month: "long", day: "numeric" };
+      const formattedDate = tanggalRequest.toLocaleDateString("id-ID", options); // Format: 23 Agustus 2024
+
+      const formattedTime = tanggalRequest.toLocaleTimeString("id-ID"); // Format: 05:17:49
 
       row.innerHTML = `
         <td>${request.id_request}</td>
@@ -386,6 +392,7 @@ async function fetchAndDisplayRequestsForAdmin(
         <td>${request.nama_barang}</td>
         <td>${request.quantity_diminta}</td>
         <td>${request.status}</td>
+        <td>${formattedDate} ${formattedTime}</td>
         <td>${request.catatan}</td>
         <td>
           <button id="approve-btn-${
