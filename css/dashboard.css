@@ -558,3 +558,27 @@ button.disabled {
   opacity: 0.6; /* Tambahkan transparansi untuk efek visual tambahan */
   z-index: 0;
 }
+
+/* filter bulan & tahun untuk request */
+.timeFilter {
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  flex: 1;
+}
+
+.timeFilterContainer {
+  display: flex;
+  align-items: baseline;
+}
+
+button#filterBtn {
+  width: auto;
+  background-color: #1f2833;
+  color: white;
+  transition: 0.3s;
+}
+
+button#filterBtn:hover {
+  background-color: #66fcf1;
+}
