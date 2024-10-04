@@ -320,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <td>${item.lokasi_daerah}</td>
         <td>${item.lokasi_area}</td>
         <td>${item.tipe_barang}</td>
-        <td><button class="request-button" data-kode-barang="${item.kode_barang}">Minta Barang</button></td>
+        <td><button class="request-button" data-kode-barang="${item.kode_barang}" title="Minta Barang"><i class="fas fa-box-open" ></i></button></td>
       `;
       tbody.appendChild(row);
     });
