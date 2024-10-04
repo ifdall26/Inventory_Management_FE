@@ -368,6 +368,7 @@ div.paginationControls {
   justify-content: center;
   margin-top: 15px;
   margin-bottom: 15px;
+  flex-flow: wrap;
 }
 
 div#paginationBarang {
@@ -494,6 +495,7 @@ div#requestTable {
 .footer-grid {
   display: flex;
   justify-content: space-between;
+  gap: 20px;
 }
 
 .footer-logo h2 {
@@ -581,4 +583,37 @@ button#filterBtn {
 
 button#filterBtn:hover {
   background-color: #66fcf1;
+}
+
+.export-btn {
+  padding: 10px 20px;
+  background-color: #1f2833;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.export-btn i {
+  margin-right: 5px;
+}
+
+.export-btn:hover {
+  background-color: #66fcf1;
+  color: #000;
+}
+
+/* Untuk responsivitas */
+@media (max-width: 600px) {
+  .footer-grid {
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+  .footer {
+    padding: 20px 20px;
+  }
 }

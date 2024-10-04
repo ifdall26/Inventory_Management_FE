@@ -172,6 +172,15 @@
         </div>
         <!-- Pagination for Daftar Permintaan Gudang -->
         <div id="paginationRequests" class="pagination"></div>
+
+        <h2>Ekspor Laporan</h2>
+        <button id="exportExcelBtn" class="export-btn">
+          <i class="fas fa-file-excel"></i> Ekspor ke Excel
+        </button>
+        <button id="exportPdfBtn" class="export-btn">
+          <i class="fas fa-file-pdf"></i> Ekspor ke PDF
+        </button>
+        
       </div>
 
       <!-- User Content -->
@@ -459,36 +468,46 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
       document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
-          anchor.addEventListener('click', function(e) {
-              e.preventDefault();
-  
-              const target = document.querySelector(this.getAttribute('href'));
-              const offset = -100; // Adjust the scroll offset here (-200px)
-              const bodyRect = document.body.getBoundingClientRect().top;
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const target = document.querySelector(this.getAttribute('href'));
+          const offset = -100; // Adjust the scroll offset here (-200px)
+          const bodyRect = document.body.getBoundingClientRect().top;
               const targetRect = target.getBoundingClientRect().top;
               const targetPosition = targetRect - bodyRect;
               const offsetPosition = targetPosition + offset;
-  
+              
               window.scrollTo({
                   top: offsetPosition,
                   behavior: 'smooth'
               });
+            });
           });
-      });
-  </script>
+        </script>
+        
+        <script>
+          const yearDropdown = document.getElementById("yearFilter");
+          const currentYear = new Date().getFullYear(); // Mendapatkan tahun saat ini
+          const startYear = 2010; // Tahun awal yang ingin Anda tampilkan, bisa disesuaikan
+          
+          for (let year = currentYear; year >= startYear; year--) {
+            const option = document.createElement("option");
+            option.value = year;
+            option.text = year;
+            yearDropdown.appendChild(option);
+          }
+        </script>
+        
+        <!-- SheetJS untuk Excel -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+        
+        <!-- jsPDF untuk PDF -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
-  <script>
-    const yearDropdown = document.getElementById("yearFilter");
-    const currentYear = new Date().getFullYear(); // Mendapatkan tahun saat ini
-    const startYear = 2010; // Tahun awal yang ingin Anda tampilkan, bisa disesuaikan
-  
-    for (let year = currentYear; year >= startYear; year--) {
-      const option = document.createElement("option");
-      option.value = year;
-      option.text = year;
-      yearDropdown.appendChild(option);
-    }
-  </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+        
+        <script src="/js/export.js"></script>
   
   </body>
 </html>
