@@ -422,6 +422,7 @@ async function fetchAndDisplayRequestsForAdmin(
   } catch (error) {
     console.error("Error fetching requests:", error);
   }
+  setupApproveAndRejectButtons();
 }
 
 document.getElementById("filterBtn").addEventListener("click", () => {
