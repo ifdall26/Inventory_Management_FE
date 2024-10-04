@@ -537,7 +537,10 @@ async function approveRequest(id_request) {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ status: "Disetujui" }),
+            body: JSON.stringify({
+              status: "Disetujui",
+              catatan: "Silahkan Ambil Barang ke Gudang", // Ubah kolom catatan
+            }),
           }
         );
 
