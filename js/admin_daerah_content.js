@@ -45,6 +45,8 @@ function displayBarang(barang) {
       <td>${item.lokasi_daerah}</td>
       <td>${item.lokasi_area}</td>
       <td>${item.tipe_barang}</td>
+      <td>${item.gudang}</td>
+      <td>${item.lemari}</td>
     `;
     tbody.appendChild(row);
   });

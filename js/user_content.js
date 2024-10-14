@@ -320,6 +320,8 @@ document.addEventListener("DOMContentLoaded", function () {
         <td>${item.lokasi_daerah}</td>
         <td>${item.lokasi_area}</td>
         <td>${item.tipe_barang}</td>
+        <td>${item.gudang}</td>
+        <td>${item.lemari}</td>
         <td><button class="request-button" data-kode-barang="${item.kode_barang}" title="Minta Barang"><i class="fas fa-box-open" ></i></button></td>
       `;
       tbody.appendChild(row);
@@ -387,6 +389,12 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("lokasiAreaFilter")
     .addEventListener("change", searchAndFilterBarang);
+  document
+    .getElementById("gudangFilter")
+    .addEventListener("change", searchAndFilterBarang);
+  document
+    .getElementById("lemariFilter")
+    .addEventListener("change", searchAndFilterBarang);
 
   // Fungsi gabungan pencarian dan filter
   function searchAndFilterBarang() {
@@ -394,6 +402,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const tipeBarang = document.getElementById("tipeBarangFilter").value;
     const lokasiDaerah = document.getElementById("lokasiDaerahFilter").value;
     const lokasiArea = document.getElementById("lokasiAreaFilter").value;
+    const gudang = document.getElementById("gudangFilter").value;
+    const lemari = document.getElementById("lemariFilter").value;
+
+    console.log("Filters:", {
+      query,
+      tipeBarang,
+      lokasiDaerah,
+      lokasiArea,
+      gudang,
+      lemari,
+    });
 
     filteredBarang = allBarang.filter((item) => {
       const matchesSearch = item.nama_barang.toLowerCase().includes(query);
@@ -401,9 +420,25 @@ document.addEventListener("DOMContentLoaded", function () {
       const matchesLokasiDaerah =
         !lokasiDaerah || item.lokasi_daerah === lokasiDaerah;
       const matchesLokasiArea = !lokasiArea || item.lokasi_area === lokasiArea;
+      const matchesGudang = !gudang || item.gudang === gudang;
+      const matchesLemari = !lemari || item.lemari === lemari;
+
+      console.log("Item:", item, "Matches:", {
+        matchesSearch,
+        matchesTipe,
+        matchesLokasiDaerah,
+        matchesLokasiArea,
+        matchesGudang,
+        matchesLemari,
+      });
 
       return (
-        matchesSearch && matchesTipe && matchesLokasiDaerah && matchesLokasiArea
+        matchesSearch &&
+        matchesTipe &&
+        matchesLokasiDaerah &&
+        matchesLokasiArea &&
+        matchesGudang &&
+        matchesLemari
       );
     });
 

@@ -222,6 +222,23 @@
             <option value="Cement Mill">Cement Mill</option>
             <!-- Tambahkan lebih banyak opsi jika diperlukan -->
           </select>
+
+          <select id="gudangFilter" onchange="filterBarangUser()">
+            <option value="">Pilih Gudang</option>
+            <option value="Gudang 1">Gudang 1</option>
+            <option value="Gudang 2">Gudang 2</option>
+            <option value="Gudang 3">Gudang 3</option>
+          </select>
+          
+          <select id="lemariFilter" onchange="filterBarangUser()">
+            <option value="">Pilih Lemari</option>
+            <option value="Lemari A">Lemari A</option>
+            <option value="Lemari B">Lemari B</option>
+            <option value="Lemari C">Lemari C</option>
+            <option value="Lemari D">Lemari D</option>
+            <option value="Lemari E">Lemari E</option>
+          </select>
+          
         </div>
 
         <!-- Tabel Daftar Barang (untuk User) -->
@@ -237,6 +254,8 @@
                 <th>Lokasi Daerah</th>
                 <th>Lokasi Area</th>
                 <th>Tipe Barang</th>
+                <th>Gudang</th>
+                <th>Lemari</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -335,6 +354,22 @@
             <option value="Kiln">Kiln</option>
             <option value="Cement Mill">Cement Mill</option>
           </select>
+
+          <select id="gudangFilter" onchange="filterBarang()">
+            <option value="">Pilih Gudang</option>
+            <option value="Gudang 1">Gudang 1</option>
+            <option value="Gudang 2">Gudang 2</option>
+            <option value="Gudang 3">Gudang 3</option>
+          </select>
+          
+          <select id="lemariFilter" onchange="filterBarang()">
+            <option value="">Pilih Lemari</option>
+            <option value="Lemari A">Lemari A</option>
+            <option value="Lemari B">Lemari B</option>
+            <option value="Lemari C">Lemari C</option>
+            <option value="Lemari D">Lemari D</option>
+            <option value="Lemari E">Lemari E</option>
+          </select>
         </div>
         <div class="tabelBarangDaerah">
           <table id="barangDaerahTable">
@@ -348,6 +383,8 @@
                 <th>Lokasi Daerah</th>
                 <th>Lokasi Area</th>
                 <th>Tipe Barang</th>
+                <th>Gudang</th>
+                <th>Lemari</th>
               </tr>
             </thead>
             <tbody id="barangTableBody">
