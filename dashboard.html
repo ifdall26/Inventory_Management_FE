@@ -219,7 +219,7 @@
             <option value="">Pilih Lokasi Area</option>
             <option value="Raw Mill">Raw Mill</option>
             <option value="Kiln">Kiln</option>
-            <option value="Cement Mill">Cement Mill</option>
+            <option value="Finish Mill">Finish Mill</option>
             <!-- Tambahkan lebih banyak opsi jika diperlukan -->
           </select>
 
@@ -246,6 +246,7 @@
           <table id="barangDaerahUserTable">
             <thead>
               <tr>
+                <th>Kode Lokasi</th>
                 <th>Kode Barang</th>
                 <th>Nama Barang</th>
                 <th>Quantity</th>
@@ -322,9 +323,6 @@
         <h3>Admin Daerah Section</h3>
         <p>This content is visible only to Admin Daerah</p>
 
-        <input type="file" id="excelFile" accept=".xlsx, .xls" />
-        <button type="button" id="uploadExcelButton">Unggah Excel</button>
-
         <!-- Tabel untuk menampilkan barang daerah -->
         <h2 id="itemsAdminDaerah">Daftar Barang Daerah</h2>
         <div class="search-filter">
@@ -355,17 +353,17 @@
             <option value="">Pilih Lokasi Area</option>
             <option value="Raw Mill">Raw Mill</option>
             <option value="Kiln">Kiln</option>
-            <option value="Cement Mill">Cement Mill</option>
+            <option value="Finish Mill">Finish Mill</option>
           </select>
 
-          <select id="gudangFilter" onchange="filterBarang()">
+          <select id="adminGudangFilter" onchange="filterBarang()">
             <option value="">Pilih Gudang</option>
             <option value="Gudang 1">Gudang 1</option>
             <option value="Gudang 2">Gudang 2</option>
             <option value="Gudang 3">Gudang 3</option>
           </select>
           
-          <select id="lemariFilter" onchange="filterBarang()">
+          <select id="adminLemariFilter" onchange="filterBarang()">
             <option value="">Pilih Lemari</option>
             <option value="Lemari A">Lemari A</option>
             <option value="Lemari B">Lemari B</option>
@@ -378,6 +376,7 @@
           <table id="barangDaerahTable">
             <thead>
               <tr>
+                <th>Kode Lokasi</th>
                 <th>Kode Barang</th>
                 <th>Nama Barang</th>
                 <th>Quantity</th>
@@ -398,8 +397,16 @@
         <div id="pagination"></div>
 
         <h2 id="addAdminDaerah">Input Barang</h2>
-        <form id="barangDaerahForm">
-          <!-- Kolom barang yang sama dengan tabel barang -->
+
+        <!-- Upload File data barang-->
+        <div class="upload-container">
+          <label for="excelFile">Pilih File Excel</label>
+          <input type="file" id="excelFile" accept=".xlsx, .xls" />
+          <button type="button" id="uploadExcelButton">Unggah Excel</button>
+        </div>
+        
+        <!-- form input barang daerah -->
+        <!-- <form id="barangDaerahForm">
           <label for="kode_barang">Kode Barang:</label>
           <input type="text" id="kode_barang" name="kode_barang" required />
 
@@ -417,32 +424,26 @@
 
           <label for="lokasi_daerah">Lokasi Daerah:</label>
           <select id="lokasi_daerah" name="lokasi_daerah">
-            <!-- <option value="Indarung 1">Indarung 1</option>
-            <option value="Indarung 2">Indarung 2</option>
-            <option value="Indarung 3">Indarung 3</option> -->
             <option value="Indarung 4">Indarung 4</option>
             <option value="Indarung 5">Indarung 5</option>
             <option value="Indarung 6">Indarung 6</option>
-            <!-- Tambahkan tipe barang lainnya jika ada -->
           </select>
 
           <label for="lokasi_area">Lokasi Area:</label>
           <select id="lokasi_area" name="lokasi_area">
             <option value="Raw Mill">Raw Mill</option>
             <option value="Kiln">Kiln</option>
-            <option value="Cement Mill">Cement Mill</option>
-            <!-- Tambahkan tipe barang lainnya jika ada -->
+            <option value="Finish Mill">Finish Mill</option>
           </select>
 
           <label for="tipe_barang">Tipe Barang:</label>
           <select id="tipe_barang" name="tipe_barang">
             <option value="Mechanical">Mechanical</option>
             <option value="Electrical">Electrical</option>
-            <!-- Tambahkan tipe barang lainnya jika ada -->
           </select>
 
           <button type="submit">Simpan</button>
-        </form>
+        </form> -->
 
         <!-- tabel request -->
         <div id="requestTable">
