@@ -312,6 +312,7 @@ document.addEventListener("DOMContentLoaded", function () {
     paginatedItems.forEach((item) => {
       const row = document.createElement("tr");
       row.innerHTML = `
+        <td>${item.kode_lokasi}</td>
         <td>${item.kode_barang}</td>
         <td>${item.nama_barang}</td>
         <td>${item.quantity}</td>
@@ -415,7 +416,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     filteredBarang = allBarang.filter((item) => {
-      const matchesSearch = item.nama_barang.toLowerCase().includes(query);
+      const matchesSearch =
+        item.nama_barang.toLowerCase().includes(query) ||
+        item.kode_barang.toLowerCase().includes(query);
       const matchesTipe = !tipeBarang || item.tipe_barang === tipeBarang;
       const matchesLokasiDaerah =
         !lokasiDaerah || item.lokasi_daerah === lokasiDaerah;
@@ -444,6 +447,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     displayBarang(filteredBarang, 1);
   }
+
+  // Fungsi untuk mereset semua filter
+  function resetFilters() {
+    document.getElementById("searchInput").value = ""; // Reset input pencarian
+    document.getElementById("tipeBarangFilter").value = ""; // Reset tipe barang
+    document.getElementById("lokasiDaerahFilter").value = ""; // Reset lokasi daerah
+    document.getElementById("lokasiAreaFilter").value = ""; // Reset lokasi area
+    document.getElementById("gudangFilter").value = ""; // Reset gudang
+    document.getElementById("lemariFilter").value = ""; // Reset lemari
+
+    // Panggil fungsi pencarian dan filter untuk menerapkan reset
+    searchAndFilterBarang();
+  }
+
+  // Tambahkan event listener untuk tombol reset
+  document
+    .getElementById("resetFilters")
+    .addEventListener("click", resetFilters);
 
   function fetchUserRequests() {
     fetch(`http://localhost:3000/api/requests/user/${userId}`)
