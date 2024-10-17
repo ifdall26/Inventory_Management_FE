@@ -37,6 +37,7 @@ function displayBarang(barang) {
   barang.forEach((item) => {
     const row = document.createElement("tr");
     row.innerHTML = `
+      <td>${item.kode_lokasi}</td>
       <td>${item.kode_barang}</td>
       <td>${item.nama_barang}</td>
       <td>${item.quantity}</td>
@@ -80,16 +81,27 @@ function applySearchAndFilter() {
   const tipeBarang = document.getElementById("adminTipeBarangFilter").value;
   const lokasiDaerah = document.getElementById("adminLokasiDaerahFilter").value;
   const lokasiArea = document.getElementById("adminLokasiAreaFilter").value;
+  const gudang = document.getElementById("adminGudangFilter").value; // Tambahkan filter gudang
+  const lemari = document.getElementById("adminLemariFilter").value; // Tambahkan filter lemari
 
   filteredBarang = allBarang.filter((item) => {
-    const matchesSearch = item.nama_barang.toLowerCase().includes(query);
+    const matchesSearch =
+      item.nama_barang.toLowerCase().includes(query) ||
+      item.kode_barang.toLowerCase().includes(query);
     const matchesTipe = !tipeBarang || item.tipe_barang === tipeBarang;
     const matchesLokasiDaerah =
       !lokasiDaerah || item.lokasi_daerah === lokasiDaerah;
     const matchesLokasiArea = !lokasiArea || item.lokasi_area === lokasiArea;
+    const matchesGudang = !gudang || item.gudang === gudang; // Tambahkan kondisi filter gudang
+    const matchesLemari = !lemari || item.lemari === lemari; // Tambahkan kondisi filter lemari
 
     return (
-      matchesSearch && matchesTipe && matchesLokasiDaerah && matchesLokasiArea
+      matchesSearch &&
+      matchesTipe &&
+      matchesLokasiDaerah &&
+      matchesLokasiArea &&
+      matchesGudang && // Periksa kecocokan gudang
+      matchesLemari // Periksa kecocokan lemari
     );
   });
 
@@ -176,6 +188,12 @@ document
   .addEventListener("change", applySearchAndFilter);
 document
   .getElementById("adminLokasiAreaFilter")
+  .addEventListener("change", applySearchAndFilter);
+document
+  .getElementById("adminGudangFilter") // Tambahkan event listener untuk filter gudang
+  .addEventListener("change", applySearchAndFilter);
+document
+  .getElementById("adminLemariFilter") // Tambahkan event listener untuk filter lemari
   .addEventListener("change", applySearchAndFilter);
 
 // Panggil fetchBarang saat halaman dimuat
