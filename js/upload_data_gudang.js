@@ -18,7 +18,7 @@ document
 function uploadDataToApi(file) {
   // Siapkan data Excel
   const formData = new FormData();
-  formData.append("file", file); // "file" adalah kunci di multer upload.single('file')
+  formData.append("file", file);
 
   // Kirim data ke server melalui endpoint baru
   fetch("http://localhost:3000/api/barang_gudang/upload_excel_barang_gudang", {
