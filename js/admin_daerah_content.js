@@ -75,6 +75,24 @@ function displayBarangPagination() {
   }
 }
 
+// Fungsi untuk mereset filter admin
+function resetAdminFilters() {
+  document.getElementById("adminSearchInput").value = ""; // Reset input pencarian
+  document.getElementById("adminTipeBarangFilter").value = ""; // Reset tipe barang
+  document.getElementById("adminLokasiDaerahFilter").value = ""; // Reset lokasi daerah
+  document.getElementById("adminLokasiAreaFilter").value = ""; // Reset lokasi area
+  document.getElementById("adminGudangFilter").value = ""; // Reset gudang
+  document.getElementById("adminLemariFilter").value = ""; // Reset lemari
+
+  // Panggil kembali fungsi pencarian dan filter untuk menerapkan reset
+  applySearchAndFilter();
+}
+
+// Event listener untuk tombol reset filter admin
+document
+  .getElementById("resetFilterAdmin")
+  .addEventListener("click", resetAdminFilters);
+
 // Fungsi pencarian dan filter
 function applySearchAndFilter() {
   const query = document.getElementById("adminSearchInput").value.toLowerCase();

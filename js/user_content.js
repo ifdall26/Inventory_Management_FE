@@ -448,24 +448,6 @@ document.addEventListener("DOMContentLoaded", function () {
     displayBarang(filteredBarang, 1);
   }
 
-  // Fungsi untuk mereset semua filter
-  function resetFilters() {
-    document.getElementById("searchInput").value = ""; // Reset input pencarian
-    document.getElementById("tipeBarangFilter").value = ""; // Reset tipe barang
-    document.getElementById("lokasiDaerahFilter").value = ""; // Reset lokasi daerah
-    document.getElementById("lokasiAreaFilter").value = ""; // Reset lokasi area
-    document.getElementById("gudangFilter").value = ""; // Reset gudang
-    document.getElementById("lemariFilter").value = ""; // Reset lemari
-
-    // Panggil fungsi pencarian dan filter untuk menerapkan reset
-    searchAndFilterBarang();
-  }
-
-  // Tambahkan event listener untuk tombol reset
-  document
-    .getElementById("resetFilters")
-    .addEventListener("click", resetFilters);
-
   function fetchUserRequests() {
     fetch(`http://localhost:3000/api/requests/user/${userId}`)
       .then((response) => response.json())
