@@ -52,7 +52,7 @@
         <p>This content is visible only to Admin Gudang.</p>
 
         <!-- Form Entry Data Barang -->
-        <h2 id="addAdminGudang">Entry Data Barang</h2>
+        <!-- <h2 id="addAdminGudang">Entry Data Barang</h2>
         <form id="itemForm">
           <label for="kode_barang">Kode Barang:</label>
           <input
@@ -83,12 +83,11 @@
           <select id="tipe_barang" name="tipe_barang">
             <option value="Mechanical">Mechanical</option>
             <option value="Electrical">Electrical</option>
-            <!-- Tambahkan tipe barang lainnya jika ada -->
           </select>
           <br>
           <button type="submit">Tambah Barang</button>
         </form>
-        <p id="statusMessage"></p>
+        <p id="statusMessage"></p> -->
 
         <!-- Tabel Daftar Barang -->
         <h2 id="itemsAdminGudang">Daftar Barang</h2>
@@ -101,6 +100,15 @@
           <option value="Electrical">Electrical</option>
           <!-- Tambahkan tipe barang lainnya jika ada -->
         </select>
+        <select id="gudangLemariFilter">
+          <option value="">Semua Lemari</option>
+          <option value="Lemari A">Lemari A</option>
+          <option value="Lemari B">Lemari B</option>
+          <option value="Lemari C">Lemari C</option>
+          <option value="Lemari D">Lemari D</option>
+          <option value="Lemari E">Lemari E</option>
+          <!-- Tambahkan opsi lemari lain jika perlu -->
+        </select>
         </div>
         <div class="tabelBrangGudang" style="overflow-x: scroll;">
           <table id="itemsTable">
@@ -112,6 +120,7 @@
                 <th>Satuan</th>
                 <th>Harga Satuan</th>
                 <th>Tipe Barang</th>
+                <th>Lemari</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -122,6 +131,13 @@
         </div>
         <!-- Pagination for Daftar Barang -->
         <div id="paginationBarang" class="pagination"></div>  
+
+        <!-- Upload File data barang-->
+        <div class="upload-container">
+          <label for="excelFile">Pilih File Excel</label>
+          <input type="file" id="excelFile" accept=".xlsx, .xls" />
+          <button type="button" id="uploadExcelButton">Unggah Excel</button>
+        </div>
 
         <h2 id="reqAdminGudang">Daftar Permintaan Gudang</h2>
         <div class="timeFilterContainer">
@@ -331,6 +347,9 @@
         <!-- Tabel untuk menampilkan barang daerah -->
         <h2 id="itemsAdminDaerah">Daftar Barang Daerah</h2>
         <div class="search-filter">
+          <button id="resetFilterAdmin" class="reset-button">
+            <i class="fa fa-undo"></i>
+          </button>
           <input
             type="text"
             id="adminSearchInput"
@@ -556,6 +575,10 @@
         <script src="/js/export.js"></script>
 
         <script src="/js/upload_data.js"></script>
+        
+        <script src="/js/upload_data_gudang.js"></script>
+
+        <script src="/js/resetfilter.js"></script>
   
   </body>
 </html>

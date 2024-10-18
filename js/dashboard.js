@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  let allBarangGudang = [];
   // Get the hamburger button and the navigation menu
   const hamburgerBtn = document.getElementById("hamburger-btn");
   const navMenu = document.getElementById("navMenu");
@@ -34,7 +35,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("userNavigation").style.display = "none";
         document.getElementById("adminDaerahNavigation").style.display = "none";
         document.getElementById("adminGudangNavigation").style.display = "flex";
-        fetchAndDisplayItemsForAdmin(1, 5); // Ambil data barang untuk Admin Gudang
+        fetchAndDisplayItemsForAdmin(1, 10); // Ambil data barang untuk Admin Gudang
+        loadAllBarangGudang();
         fetchAndDisplayRequestsForAdmin(1, 5);
       } else if (user.role === "Admin Daerah") {
         document.getElementById("superAdminContent").style.display = "none";
@@ -60,85 +62,133 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Entry Data Barang (Admin Gudang)
-  document
-    .getElementById("itemForm")
-    .addEventListener("submit", async function (event) {
-      event.preventDefault();
+  // document
+  //   .getElementById("itemForm")
+  //   .addEventListener("submit", async function (event) {
+  //     event.preventDefault();
 
-      const itemData = {
-        kode_barang: document.getElementById("kode_barang").value,
-        nama_barang: document.getElementById("nama_barang").value,
-        quantity: document.getElementById("quantity").value,
-        satuan: document.getElementById("satuan").value,
-        harga_satuan: document.getElementById("harga_satuan").value,
-        tipe_barang: document.getElementById("tipe_barang").value,
-      };
+  //     const itemData = {
+  //       kode_barang: document.getElementById("kode_barang").value,
+  //       nama_barang: document.getElementById("nama_barang").value,
+  //       quantity: document.getElementById("quantity").value,
+  //       satuan: document.getElementById("satuan").value,
+  //       harga_satuan: document.getElementById("harga_satuan").value,
+  //       tipe_barang: document.getElementById("tipe_barang").value,
+  //     };
 
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/barang_gudang",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(itemData),
-          }
-        );
+  //     try {
+  //       const response = await fetch(
+  //         "http://localhost:3000/api/barang_gudang",
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(itemData),
+  //         }
+  //       );
 
-        if (response.ok) {
-          const result = await response.json();
-          Swal.fire("Success!", "Barang berhasil ditambahkan!", "success");
-          document.getElementById("itemForm").reset();
-          fetchAndDisplayItemsForAdmin(); // Refresh data barang
-        } else {
-          const result = await response.json();
-          Swal.fire("Error!", `Error: ${result.error}`, "error");
-        }
-      } catch (error) {
-        Swal.fire(
-          "Error!",
-          "Terjadi kesalahan saat menambahkan barang.",
-          "error"
-        );
-        console.error("Error:", error);
-      }
-    });
+  //       if (response.ok) {
+  //         const result = await response.json();
+  //         Swal.fire("Success!", "Barang berhasil ditambahkan!", "success");
+  //         document.getElementById("itemForm").reset();
+  //         fetchAndDisplayItemsForAdmin(); // Refresh data barang
+  //       } else {
+  //         const result = await response.json();
+  //         Swal.fire("Error!", `Error: ${result.error}`, "error");
+  //       }
+  //     } catch (error) {
+  //       Swal.fire(
+  //         "Error!",
+  //         "Terjadi kesalahan saat menambahkan barang.",
+  //         "error"
+  //       );
+  //       console.error("Error:", error);
+  //     }
+  //   });
 });
 
 // Pencarian dan Filter untuk Admin Gudang
+// Event listener untuk pencarian dan filter di Admin Gudang
 document
   .getElementById("gudangSearchInput")
-  .addEventListener("input", applyGudangSearchAndFilter);
+  .addEventListener("input", searchAndFilterBarangGudang);
 document
   .getElementById("gudangTipeBarangFilter")
-  .addEventListener("change", applyGudangSearchAndFilter);
+  .addEventListener("change", searchAndFilterBarangGudang);
+document
+  .getElementById("gudangLemariFilter")
+  .addEventListener("change", searchAndFilterBarangGudang);
 
-function applyGudangSearchAndFilter() {
-  const searchKeyword = document
-    .getElementById("gudangSearchInput")
-    .value.toLowerCase();
-  const tipeFilter = document.getElementById("gudangTipeBarangFilter").value;
+// Array untuk menyimpan semua data barang
+let allBarangGudang = [];
 
+// Fungsi untuk mengisi allBarangGudang dengan data dari tabel (DOM)
+function loadAllBarangGudang() {
   const rows = document.querySelectorAll("#itemsTable tbody tr");
+  allBarangGudang = []; // Reset array sebelum mengisi ulang
 
   rows.forEach((row) => {
+    const kodeBarang = row.cells[0].textContent.toLowerCase();
     const namaBarang = row.cells[1].textContent.toLowerCase();
     const tipeBarang = row.cells[5].textContent;
+    const lemariBarang = row.cells[6].textContent;
 
-    const matchesSearch = namaBarang.includes(searchKeyword);
-    const matchesTipe = tipeFilter === "" || tipeBarang === tipeFilter;
-
-    if (matchesSearch && matchesTipe) {
-      row.style.display = ""; // Tampilkan baris yang cocok
-    } else {
-      row.style.display = "none"; // Sembunyikan baris yang tidak cocok
-    }
+    // Tambahkan data ke allBarangGudang
+    allBarangGudang.push({
+      element: row,
+      kode_barang: kodeBarang,
+      nama_barang: namaBarang,
+      tipe_barang: tipeBarang,
+      lemari: lemariBarang,
+    });
   });
 }
 
+// Fungsi untuk melakukan pencarian dan filter
+function searchAndFilterBarangGudang() {
+  const query = document
+    .getElementById("gudangSearchInput")
+    .value.toLowerCase();
+  const tipeBarang = document.getElementById("gudangTipeBarangFilter").value;
+  const lemari = document.getElementById("gudangLemariFilter").value;
+
+  console.log("Filters:", { query, tipeBarang, lemari });
+
+  const filteredBarang = allBarangGudang.filter((item) => {
+    const matchesSearch =
+      item.nama_barang.includes(query) || item.kode_barang.includes(query);
+    const matchesTipe = !tipeBarang || item.tipe_barang === tipeBarang;
+    const matchesLemari = !lemari || item.lemari === lemari;
+
+    return matchesSearch && matchesTipe && matchesLemari;
+  });
+
+  // Tampilkan hasil filter
+  displayFilteredBarangGudang(filteredBarang);
+}
+
+// Fungsi untuk menampilkan barang yang difilter
+function displayFilteredBarangGudang(filteredBarang) {
+  // Sembunyikan semua baris terlebih dahulu
+  allBarangGudang.forEach((item) => {
+    item.element.style.display = "none";
+  });
+
+  // Tampilkan hanya baris yang cocok dengan filter
+  filteredBarang.forEach((item) => {
+    item.element.style.display = ""; // Tampilkan elemen yang sesuai
+  });
+}
+
+// Muat data saat halaman pertama kali dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  loadAllBarangGudang();
+  let allBarangGudang = [];
+});
+
 // Fungsi untuk mengambil dan menampilkan data barang untuk Admin Gudang
-async function fetchAndDisplayItemsForAdmin(page = 1, itemsPerPage = 5) {
+async function fetchAndDisplayItemsForAdmin(page = 1, itemsPerPage = 10) {
   try {
     const response = await fetch("http://localhost:3000/api/barang_gudang");
     const barang_gudang = await response.json();
@@ -160,6 +210,7 @@ async function fetchAndDisplayItemsForAdmin(page = 1, itemsPerPage = 5) {
         <td>${item.satuan}</td>
         <td>${item.harga_satuan}</td>
         <td>${item.tipe_barang}</td>
+        <td>${item.lemari}</td>
         <td>
           <button class="edit-btn" data-id="${item.kode_barang}">
             <i class="fas fa-pencil-alt"></i>
@@ -181,6 +232,9 @@ async function fetchAndDisplayItemsForAdmin(page = 1, itemsPerPage = 5) {
       "paginationBarang",
       fetchAndDisplayItemsForAdmin
     ); // Setup pagination
+
+    // Panggil loadAllBarangGudang setelah tabel diisi data
+    loadAllBarangGudang();
   } catch (error) {
     console.error("Error fetching barang_gudang:", error);
   }
