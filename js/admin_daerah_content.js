@@ -59,8 +59,38 @@ function displayBarangPagination() {
   paginationElement.innerHTML = ""; // Kosongkan pagination
 
   const totalPages = Math.ceil(filteredBarang.length / itemsPerPage);
+  const maxButtons = 10; // Maksimal 10 tombol
+  const half = Math.floor(maxButtons / 2);
 
-  for (let i = 1; i <= totalPages; i++) {
+  // Hitung halaman awal dan akhir yang akan ditampilkan
+  let startPage = Math.max(1, currentPage - half);
+  let endPage = Math.min(totalPages, currentPage + half);
+
+  // Jika halaman awal terlalu dekat ke awal
+  if (currentPage <= half) {
+    endPage = Math.min(totalPages, maxButtons);
+  }
+
+  // Jika halaman akhir terlalu dekat ke akhir
+  if (currentPage + half >= totalPages) {
+    startPage = Math.max(1, totalPages - maxButtons + 1);
+  }
+
+  // Tombol Previous
+  const prevButton = document.createElement("button");
+  prevButton.textContent = "Previous";
+  prevButton.disabled = currentPage === 1; // Nonaktifkan jika di halaman pertama
+  prevButton.classList.add("page-btn");
+  prevButton.addEventListener("click", function () {
+    if (currentPage > 1) {
+      currentPage--;
+      displayBarangWithPagination();
+    }
+  });
+  paginationElement.appendChild(prevButton);
+
+  // Tombol untuk halaman dalam range
+  for (let i = startPage; i <= endPage; i++) {
     const pageButton = document.createElement("button");
     pageButton.innerText = i;
     pageButton.classList.add("page-btn");
@@ -73,6 +103,19 @@ function displayBarangPagination() {
     });
     paginationElement.appendChild(pageButton);
   }
+
+  // Tombol Next
+  const nextButton = document.createElement("button");
+  nextButton.textContent = "Next";
+  nextButton.disabled = currentPage === totalPages; // Nonaktifkan jika di halaman terakhir
+  nextButton.classList.add("page-btn");
+  nextButton.addEventListener("click", function () {
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayBarangWithPagination();
+    }
+  });
+  paginationElement.appendChild(nextButton);
 }
 
 // Fungsi untuk mereset filter admin
@@ -178,8 +221,38 @@ function displayRequestPagination() {
   paginationElement.innerHTML = ""; // Kosongkan pagination
 
   const totalPages = Math.ceil(allRequests.length / requestsPerPage);
+  const maxButtons = 10; // Maksimal 10 tombol
+  const half = Math.floor(maxButtons / 2);
 
-  for (let i = 1; i <= totalPages; i++) {
+  // Hitung halaman awal dan akhir yang akan ditampilkan
+  let startPage = Math.max(1, currentRequestPage - half);
+  let endPage = Math.min(totalPages, currentRequestPage + half);
+
+  // Jika halaman awal terlalu dekat ke awal
+  if (currentRequestPage <= half) {
+    endPage = Math.min(totalPages, maxButtons);
+  }
+
+  // Jika halaman akhir terlalu dekat ke akhir
+  if (currentRequestPage + half >= totalPages) {
+    startPage = Math.max(1, totalPages - maxButtons + 1);
+  }
+
+  // Tombol Previous
+  const prevButton = document.createElement("button");
+  prevButton.textContent = "Previous";
+  prevButton.disabled = currentRequestPage === 1; // Nonaktifkan jika di halaman pertama
+  prevButton.classList.add("page-btn");
+  prevButton.addEventListener("click", function () {
+    if (currentRequestPage > 1) {
+      currentRequestPage--;
+      displayRequestsWithPagination();
+    }
+  });
+  paginationElement.appendChild(prevButton);
+
+  // Tombol untuk halaman dalam range
+  for (let i = startPage; i <= endPage; i++) {
     const pageButton = document.createElement("button");
     pageButton.innerText = i;
     pageButton.classList.add("page-btn");
@@ -192,6 +265,19 @@ function displayRequestPagination() {
     });
     paginationElement.appendChild(pageButton);
   }
+
+  // Tombol Next
+  const nextButton = document.createElement("button");
+  nextButton.textContent = "Next";
+  nextButton.disabled = currentRequestPage === totalPages; // Nonaktifkan jika di halaman terakhir
+  nextButton.classList.add("page-btn");
+  nextButton.addEventListener("click", function () {
+    if (currentRequestPage < totalPages) {
+      currentRequestPage++;
+      displayRequestsWithPagination();
+    }
+  });
+  paginationElement.appendChild(nextButton);
 }
 
 // Event listeners for search and filter

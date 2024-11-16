@@ -394,10 +394,22 @@ div.paginationControls button {
   width: auto;
 }
 
+#pagination button.active {
+  background-color: #66fcf1;
+  color: #0b0c10;
+  font-weight: bold;
+}
+
 #paginationBarang button {
   background-color: #1f2833;
   color: #fff;
   width: auto;
+}
+
+#paginationBarang button.active {
+  background-color: #66fcf1;
+  color: #0b0c10;
+  font-weight: bold;
 }
 
 #paginationRequests button {
@@ -406,15 +418,33 @@ div.paginationControls button {
   width: auto;
 }
 
+#paginationRequests button.active {
+  background-color: #66fcf1;
+  color: #0b0c10;
+  font-weight: bold;
+}
+
 #requestPagination button {
   background-color: #1f2833;
   color: #fff;
   width: auto;
 }
 
+#requestPagination button.active {
+  background-color: #66fcf1;
+  color: #0b0c10;
+  font-weight: bold;
+}
+
 .paginationControls button {
   background-color: #1f2833;
   color: #fff;
+}
+
+.paginationControls button.active {
+  background-color: #66fcf1;
+  color: #0b0c10;
+  font-weight: bold;
 }
 
 /* Style untuk modal */

@@ -348,8 +348,24 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     paginationControls.appendChild(prevButton);
 
-    // Tombol untuk setiap halaman
-    for (let i = 1; i <= totalPages; i++) {
+    // Menentukan range tombol pagination
+    const maxButtons = 10; // Maksimal 10 tombol
+    const half = Math.floor(maxButtons / 2);
+    let startPage = Math.max(1, currentPage - half);
+    let endPage = Math.min(totalPages, currentPage + half);
+
+    // Jika halaman awal terlalu dekat ke awal
+    if (currentPage <= half) {
+      endPage = Math.min(totalPages, maxButtons);
+    }
+
+    // Jika halaman akhir terlalu dekat ke akhir
+    if (currentPage + half >= totalPages) {
+      startPage = Math.max(1, totalPages - maxButtons + 1);
+    }
+
+    // Tombol untuk setiap halaman dalam range
+    for (let i = startPage; i <= endPage; i++) {
       const pageButton = document.createElement("button");
       pageButton.textContent = i;
       pageButton.className = i === currentPage ? "active" : "";

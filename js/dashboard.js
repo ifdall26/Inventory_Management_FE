@@ -495,24 +495,44 @@ function setupPagination(
   fetchFunction
 ) {
   const paginationElement = document.getElementById(paginationElementId);
-  paginationElement.innerHTML = "";
+  paginationElement.innerHTML = ""; // Kosongkan elemen pagination
 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const maxButtons = 10; // Maksimal 10 tombol
+  const half = Math.floor(maxButtons / 2);
+
+  // Hitung halaman awal dan akhir yang akan ditampilkan
+  let startPage = Math.max(1, currentPage - half);
+  let endPage = Math.min(totalPages, currentPage + half);
+
+  // Sesuaikan jika halaman awal terlalu dekat ke awal
+  if (currentPage <= half) {
+    endPage = Math.min(totalPages, maxButtons);
+  }
+
+  // Sesuaikan jika halaman akhir terlalu dekat ke akhir
+  if (currentPage + half >= totalPages) {
+    startPage = Math.max(1, totalPages - maxButtons + 1);
+  }
 
   // Tombol Previous
   const prevButton = document.createElement("button");
   prevButton.innerText = "Previous";
-  prevButton.disabled = currentPage === 1;
+  prevButton.disabled = currentPage === 1; // Nonaktifkan jika di halaman pertama
+  prevButton.classList.add("page-btn");
   prevButton.addEventListener("click", () =>
     fetchFunction(currentPage - 1, itemsPerPage)
   );
   paginationElement.appendChild(prevButton);
 
-  // Tombol halaman
-  for (let i = 1; i <= totalPages; i++) {
+  // Tombol untuk halaman dalam range
+  for (let i = startPage; i <= endPage; i++) {
     const pageButton = document.createElement("button");
     pageButton.innerText = i;
-    pageButton.disabled = i === currentPage;
+    pageButton.classList.add("page-btn");
+    if (i === currentPage) {
+      pageButton.classList.add("active"); // Tandai halaman aktif
+    }
     pageButton.addEventListener("click", () => fetchFunction(i, itemsPerPage));
     paginationElement.appendChild(pageButton);
   }
@@ -520,7 +540,8 @@ function setupPagination(
   // Tombol Next
   const nextButton = document.createElement("button");
   nextButton.innerText = "Next";
-  nextButton.disabled = currentPage === totalPages;
+  nextButton.disabled = currentPage === totalPages; // Nonaktifkan jika di halaman terakhir
+  nextButton.classList.add("page-btn");
   nextButton.addEventListener("click", () =>
     fetchFunction(currentPage + 1, itemsPerPage)
   );
