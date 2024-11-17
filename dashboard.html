@@ -201,8 +201,13 @@
 
       <!-- User Content -->
       <div id="userContent" style="display: none">
-        <h3>User Section</h3>
-        <p>This content is visible only to Users.</p>
+        <div class="chartContainer">
+          <div class="section">
+            <h3>User Section</h3>
+            <p>This content is visible only to Users.</p>
+          </div>
+          <div id="mostRequestedChart"></div>
+        </div>
         <h2 id="items">Daftar Barang</h4>
 
         <div class="search-filter">
@@ -579,6 +584,10 @@
         <script src="/js/upload_data_gudang.js"></script>
 
         <script src="/js/resetfilter.js"></script>
+
+        <script src="/js/charts.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   
   </body>
 </html>

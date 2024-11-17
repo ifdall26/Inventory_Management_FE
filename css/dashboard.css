@@ -731,3 +731,53 @@ button#filterBtn:hover {
 .reset-button:hover {
   background-color: #c62828; /* Warna latar belakang saat hover */
 }
+
+/* style untuk statistik */
+
+.chartContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 20px;
+  /* background-color: #f9f9f9; */
+  border-radius: 8px;
+  /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+}
+
+.section {
+  flex: 1;
+  margin-right: 20px;
+}
+
+#mostRequestedChart {
+  border-radius: 10px;
+  padding: 5px;
+  background-color: #f9f9f9;
+  flex: 2;
+  max-width: 600px;
+  height: 400px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: 0.3s;
+}
+
+div#mostRequestedChart:hover {
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .chartContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section {
+    margin-right: 0;
+    margin-bottom: 20px;
+  }
+
+  #mostRequestedChart {
+    width: 100%;
+    height: auto;
+  }
+}
