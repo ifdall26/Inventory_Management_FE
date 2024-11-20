@@ -1,0 +1,69 @@
+.notification {
+  position: relative;
+  display: inline-block;
+}
+
+.notification .badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 0.2em 0.4em;
+  font-size: 0.8em;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  width: 250px;
+  display: none;
+}
+
+.dropdown.hidden {
+  display: none;
+}
+
+.dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown ul li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.dropdown ul li:last-child {
+  border-bottom: none;
+}
+
+.dropdown ul li:hover {
+  background: #f9f9f9;
+}
+
+#notification-dropdown {
+  box-sizing: border-box;
+  padding: 4px;
+  display: none; /* Default tersembunyi */
+  position: absolute;
+  top: 50px;
+  right: -154px;
+  width: 200px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+#notification-dropdown.show {
+  display: block; /* Tampilkan dropdown */
+}

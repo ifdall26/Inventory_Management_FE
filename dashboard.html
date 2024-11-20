@@ -6,6 +6,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="/css/dashboard.css" />
     <link rel="stylesheet" href="/css/animation.css" />
+    <link rel="stylesheet" href="/css/userNotification.css" />
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
@@ -201,12 +202,21 @@
 
       <!-- User Content -->
       <div id="userContent" style="display: none">
+        <div id="notification-container" class="notification">
+          <button id="notification-button">
+            🔔 <span id="notification-count" class="badge">0</span>
+          </button>
+          <div id="notification-dropdown" class="dropdown hidden">
+            <ul id="notification-list"></ul>
+          </div>
+        </div>
+        
         <div class="chartContainer">
           <div class="section">
             <h3>User Section</h3>
             <p>This content is visible only to Users.</p>
           </div>
-          <div id="mostRequestedChart" class="fade-in"></div>
+          <div id="mostRequestedChart"></div>
         </div>
         <h2 id="items" class="fade-in">Daftar Barang</h4>
 
@@ -597,6 +607,8 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
         <script src="/js/animation.js"></script>
+
+        <script src="/js/user_notification.js"></script>
   
   </body>
 </html>
