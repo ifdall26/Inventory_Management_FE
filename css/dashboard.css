@@ -154,7 +154,6 @@ main p {
 #adminGudangContent,
 #userContent,
 #adminDaerahContent {
-  background-color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -240,6 +239,11 @@ button[type="submit"]:hover {
   background-size: cover;
 } */
 
+input,
+select {
+  border-radius: 20px;
+}
+
 /* Style untuk tabel barang di dashboard */
 table {
   width: 100%;
@@ -276,7 +280,7 @@ tr:hover {
 }
 
 main button {
-  background-color: #007bff;
+  background-color: #1f2833;
   color: #fff;
   border: none;
   padding: 8px 12px;
@@ -286,6 +290,10 @@ main button {
   margin-right: 5px;
   width: -webkit-fill-available;
   margin-bottom: 5px;
+}
+
+main button:hover {
+  background-color: #66fcf1;
 }
 
 button:hover {
@@ -728,6 +736,10 @@ button#filterBtn:hover {
   align-self: self-end;
 }
 
+#resetFilters {
+  border-radius: 50%;
+}
+
 .reset-button:hover {
   background-color: #c62828; /* Warna latar belakang saat hover */
 }
@@ -798,5 +810,78 @@ div#mostRequestedChart:hover {
   #chartIndarung5,
   #chartIndarung6 {
     width: 100%;
+  }
+}
+
+/* Tabel Stylish */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Header Tabel */
+th {
+  background-color: #1f2833;
+  color: white;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Baris Tabel */
+td {
+  color: #333;
+  padding: 12px 15px;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+tr {
+  transition: 0.3s;
+}
+
+/* Hover Effect pada Baris Tabel */
+tr:hover {
+  /* background-color: #66fcf1; */
+  transform: scale(1.005);
+}
+
+thead tr:hover {
+  transform: none;
+}
+
+/* Border Bottom untuk Header dan Baris */
+th,
+td {
+  border-bottom: 2px solid #f1f1f1;
+}
+
+/* Tombol di dalam Tabel */
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Padding lebih besar di tabel mobile */
+@media (max-width: 768px) {
+  th,
+  td {
+    padding: 10px 8px;
+    font-size: 12px;
   }
 }

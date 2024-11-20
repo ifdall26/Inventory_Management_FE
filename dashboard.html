@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
     <link rel="stylesheet" href="/css/dashboard.css" />
+    <link rel="stylesheet" href="/css/animation.css" />
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
     <link rel="stylesheet" href="css/all.min.css">
-
 
   </head>
   <body>
@@ -110,7 +110,7 @@
           <!-- Tambahkan opsi lemari lain jika perlu -->
         </select>
         </div>
-        <div class="tabelBrangGudang" style="overflow-x: scroll;">
+        <div class="tabelBrangGudang fade-in" style="overflow-x: scroll;">
           <table id="itemsTable">
             <thead>
               <tr>
@@ -133,7 +133,7 @@
         <div id="paginationBarang" class="pagination"></div>  
 
         <!-- Upload File data barang-->
-        <div class="upload-container">
+        <div class="upload-container fade-in">
           <label for="excelFile">Pilih File Excel</label>
           <input type="file" id="excelFile" accept=".xlsx, .xls" />
           <button type="button" id="uploadExcelButton">Unggah Excel</button>
@@ -167,7 +167,7 @@
           </button>
         </div>
         
-        <div class="tabelRequests" style="overflow-x: scroll;">
+        <div class="tabelRequests fade-in" style="overflow-x: scroll;">
           <table id="requestsTable">
             <thead>
               <tr>
@@ -190,10 +190,10 @@
         <div id="paginationRequests" class="pagination"></div>
 
         <h2>Ekspor Laporan</h2>
-        <button id="exportExcelBtn" class="export-btn">
+        <button id="exportExcelBtn" class="export-btn fade-in">
           <i class="fas fa-file-excel"></i> Ekspor ke Excel
         </button>
-        <button id="exportPdfBtn" class="export-btn">
+        <button id="exportPdfBtn" class="export-btn fade-in">
           <i class="fas fa-file-pdf"></i> Ekspor ke PDF
         </button>
         
@@ -206,9 +206,9 @@
             <h3>User Section</h3>
             <p>This content is visible only to Users.</p>
           </div>
-          <div id="mostRequestedChart"></div>
+          <div id="mostRequestedChart" class="fade-in"></div>
         </div>
-        <h2 id="items">Daftar Barang</h4>
+        <h2 id="items" class="fade-in">Daftar Barang</h4>
 
         <div class="search-filter">
           <button id="resetFilters" class="reset-button">
@@ -268,7 +268,7 @@
         </div>
 
         <!-- Tabel Daftar Barang (untuk User) -->
-        <div class="tabelBarangDaerah">
+        <div class="tabelBarangDaerah fade-in">
           <table id="barangDaerahUserTable">
             <thead>
               <tr>
@@ -308,9 +308,9 @@
           </div>
         </div>
 
-        <h2 id="req">Riwayat Request</h2>
+        <h2 id="req" class="fade-in">Riwayat Request</h2>
         <h4>Request Barang Daerah</h4>
-        <div class="userRequestsTable">
+        <div class="userRequestsTable fade-in">
           <table>
             <thead>
               <tr>
@@ -328,7 +328,7 @@
           </table>
         </div>
         <h4>Request Barang Gudang</h4>
-        <div class="userRequestsTable">
+        <div class="userRequestsTable fade-in">
           <table>
             <thead>
               <tr>
@@ -349,9 +349,9 @@
         <h3>Admin Daerah Section</h3>
         <p>This content is visible only to Admin Daerah</p>
         <div class="chartContainer">
-          <div id="chartIndarung4" style="margin-bottom: 20px;"></div>
-          <div id="chartIndarung5" style="margin-bottom: 20px;"></div>
-          <div id="chartIndarung6" style="margin-bottom: 20px;"></div>
+          <div id="chartIndarung4" class="fade-in" style="margin-bottom: 20px;"></div>
+          <div id="chartIndarung5" class="fade-in" style="margin-bottom: 20px;"></div>
+          <div id="chartIndarung6" class="fade-in" style="margin-bottom: 20px;"></div>
         </div>
 
         <!-- Tabel untuk menampilkan barang daerah -->
@@ -406,7 +406,7 @@
             <option value="Lemari E">Lemari E</option>
           </select>
         </div>
-        <div class="tabelBarangDaerah">
+        <div class="tabelBarangDaerah fade-in">
           <table id="barangDaerahTable">
             <thead>
               <tr>
@@ -433,7 +433,7 @@
         <h2 id="addAdminDaerah">Input Barang</h2>
 
         <!-- Upload File data barang-->
-        <div class="upload-container">
+        <div class="upload-container fade-in">
           <label for="excelFile">Pilih File Excel</label>
           <input type="file" id="excelFile" accept=".xlsx, .xls" />
           <button type="button" id="uploadExcelButton">Unggah Excel</button>
@@ -480,7 +480,7 @@
         </form> -->
 
         <!-- tabel request -->
-        <div id="requestTable">
+        <div id="requestTable" class="fade-in">
           <h2 id="reqAdminDaerah">Requests</h2>
           <table>
             <thead>
@@ -593,8 +593,10 @@
         <script src="/js/charts.js"></script>
 
         <script src="/js/charts_admin.js"></script>
-
+        
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+        <script src="/js/animation.js"></script>
   
   </body>
 </html>
