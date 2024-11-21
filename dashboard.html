@@ -49,8 +49,16 @@
 
       <!-- Admin Gudang Content -->
       <div id="adminGudangContent" style="display: none">
-        <h3>Admin Section</h3>
-        <p>This content is visible only to Admin Gudang.</p>
+        <div class="chartContainer">
+          <div class="section">
+            <div>
+              <h3>Admin Section</h3>
+              <p>This content is visible only to Admin Gudang.</p>
+            </div>
+            <div id="total-barang-chart"></div>
+            <div id="tipe-barang-chart"></div>
+          </div>
+        </div>
 
         <!-- Form Entry Data Barang -->
         <!-- <h2 id="addAdminGudang">Entry Data Barang</h2>
@@ -139,7 +147,7 @@
           <input type="file" id="excelFile" accept=".xlsx, .xls" />
           <button type="button" id="uploadExcelButton">Unggah Excel</button>
         </div>
-
+        
         <h2 id="reqAdminGudang">Daftar Permintaan Gudang</h2>
         <div class="timeFilterContainer">
 
@@ -167,7 +175,7 @@
             <i class="fas fa-filter"></i>
           </button>
         </div>
-        
+
         <div class="tabelRequests fade-in" style="overflow-x: scroll;">
           <table id="requestsTable">
             <thead>
@@ -189,14 +197,20 @@
         </div>
         <!-- Pagination for Daftar Permintaan Gudang -->
         <div id="paginationRequests" class="pagination"></div>
-
-        <h2>Ekspor Laporan</h2>
-        <button id="exportExcelBtn" class="export-btn fade-in">
-          <i class="fas fa-file-excel"></i> Ekspor ke Excel
-        </button>
-        <button id="exportPdfBtn" class="export-btn fade-in">
-          <i class="fas fa-file-pdf"></i> Ekspor ke PDF
-        </button>
+        
+        <!-- chart permintaan barang -->
+        <div class="grafik-ekspor">
+          <div id="status-permintaan-chart"></div>
+          <div class="exportContainer">
+            <h2>Ekspor Laporan</h2>
+            <button id="exportExcelBtn" class="export-btn fade-in">
+              <i class="fas fa-file-excel"></i> Ekspor ke Excel
+            </button>
+            <button id="exportPdfBtn" class="export-btn fade-in">
+              <i class="fas fa-file-pdf"></i> Ekspor ke PDF
+            </button>
+          </div>
+        </div>
         
       </div>
 
@@ -609,6 +623,8 @@
         <script src="/js/animation.js"></script>
 
         <script src="/js/user_notification.js"></script>
+
+        <script src="/js/charts_admin_gudang.js"></script>
   
   </body>
 </html>

@@ -756,18 +756,37 @@ button#filterBtn:hover {
 }
 
 .section {
+  display: flex;
+  gap: 15px;
+  width: 100%;
   flex: 1;
   margin-right: 20px;
 }
 
 #chartIndarung4,
 #chartIndarung5,
-#chartIndarung6 {
+#chartIndarung6,
+#total-barang-chart,
+#tipe-barang-chart,
+#status-permintaan-chart {
+  margin-top: 20px;
   border-radius: 10px;
   padding: 5px;
   background-color: #f9f9f9;
   transition: 0.3s;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#total-barang-chart,
+#tipe-barang-chart,
+#status-permintaan-chart {
+  width: 45%;
+}
+
+#total-barang-chart:hover,
+#tipe-barang-chart:hover,
+#status-permintaan-chart:hover- {
+  transform: scale(1.05);
 }
 
 #chartIndarung4:hover,
@@ -791,6 +810,19 @@ div#mostRequestedChart:hover {
   transform: scale(1.05);
 }
 
+.grafik-ekspor {
+  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.exportContainer {
+  width: 45%;
+  padding: 15px;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 768px) {
   .chartContainer {
     flex-direction: column;
@@ -800,6 +832,7 @@ div#mostRequestedChart:hover {
   .section {
     margin-right: 0;
     margin-bottom: 20px;
+    flex-direction: column;
   }
 
   #mostRequestedChart {
@@ -809,6 +842,12 @@ div#mostRequestedChart:hover {
   #chartIndarung4,
   #chartIndarung5,
   #chartIndarung6 {
+    width: 100%;
+  }
+  #total-barang-chart,
+  #tipe-barang-chart,
+  #status-permintaan-chart,
+  .exportContainer {
     width: 100%;
   }
 }
