@@ -35,7 +35,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       notifications.forEach((notif) => {
         const li = document.createElement("li");
-        li.textContent = `Barang "${notif.nama_barang}" telah disetujui.`;
+        // Tampilkan pesan sesuai status
+        if (notif.status === "Disetujui") {
+          li.textContent = `Barang "${notif.nama_barang}" telah disetujui.`;
+        } else if (notif.status === "Ditolak") {
+          li.textContent = `Permintaan untuk barang "${notif.nama_barang}" ditolak.`;
+        }
         notificationList.appendChild(li);
       });
 
