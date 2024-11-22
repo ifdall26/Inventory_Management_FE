@@ -49,6 +49,17 @@
 
       <!-- Admin Gudang Content -->
       <div id="adminGudangContent" style="display: none">
+
+        <!-- notifikasi request dari user -->
+        <div id="admin-notification-container" class="notification">
+          <button id="admin-notification-button">
+            🔔 <span id="admin-notification-count" class="badge">0</span>
+          </button>
+          <div id="admin-notification-dropdown" class="dropdown hidden">
+            <ul id="admin-notification-list"></ul>
+          </div>
+        </div>
+        
         <div class="chartContainer">
           <div class="section">
             <div>
@@ -625,6 +636,8 @@
         <script src="/js/animation.js"></script>
 
         <script src="/js/user_notification.js"></script>
+
+        <script src="/js/gudang_notification.js"></script>
 
   </body>
 </html>
