@@ -110,7 +110,18 @@
         <p id="statusMessage"></p> -->
 
         <!-- Tabel Daftar Barang -->
-        <h2 id="itemsAdminGudang">Daftar Barang</h2>
+        <div class="headDaftarBarang">
+          <h2 id="itemsAdminGudang">Daftar Barang</h2>
+          <div id="low-stock-container" class="notification">
+            <button id="low-stock-button">
+              ⚠️ <span id="low-stock-count" class="badge">0</span>
+            </button>
+            <div id="low-stock-dropdown" class="dropdown hidden">
+              <ul id="low-stock-list"></ul>
+            </div>
+          </div>
+        </div>
+        
         <div class="search-filter">
         <!-- Input Pencarian dan Filter -->
         <input type="text" id="gudangSearchInput" placeholder="Cari Nama Barang" />

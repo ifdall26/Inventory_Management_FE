@@ -56,3 +56,58 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Refresh notifications every 30 seconds
   setInterval(updateNotifications, 30000);
 });
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const lowStockButton = document.getElementById("low-stock-button");
+  const lowStockDropdown = document.getElementById("low-stock-dropdown");
+  const lowStockList = document.getElementById("low-stock-list");
+  const lowStockCount = document.getElementById("low-stock-count");
+
+  // Fetch out-of-stock items
+  async function fetchLowStockItems() {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/gudang_notification/low-stock"
+      );
+      if (!response.ok) throw new Error(`Error: ${response.statusText}`);
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching low-stock items:", error);
+      return [];
+    }
+  }
+
+  // Update Low Stock Notifications
+  async function updateLowStockNotifications() {
+    const lowStockItems = await fetchLowStockItems();
+
+    // Update badge count
+    lowStockCount.textContent = lowStockItems.length;
+
+    // Clear previous items
+    lowStockList.innerHTML = "";
+
+    if (lowStockItems.length === 0) {
+      const noItems = document.createElement("li");
+      noItems.textContent = "Semua barang tersedia.";
+      lowStockList.appendChild(noItems);
+    } else {
+      lowStockItems.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = `Stok barang "${item.nama_barang}" habis!`;
+        lowStockList.appendChild(li);
+      });
+    }
+  }
+
+  // Toggle dropdown visibility
+  lowStockButton.addEventListener("click", () => {
+    lowStockDropdown.classList.toggle("show");
+  });
+
+  // Initial fetch
+  await updateLowStockNotifications();
+
+  // Refresh notifications every 30 seconds
+  setInterval(updateLowStockNotifications, 30000);
+});

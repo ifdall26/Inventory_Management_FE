@@ -924,3 +924,63 @@ button:hover {
     font-size: 12px;
   }
 }
+
+/* style untuk peringatan stok habis */
+#low-stock-container {
+  position: relative;
+  display: inline-block;
+}
+
+#low-stock-container .badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: orange; /* Warna untuk peringatan */
+  color: white;
+  border-radius: 50%;
+  padding: 0.2em 0.4em;
+  font-size: 0.8em;
+}
+
+#low-stock-dropdown {
+  box-sizing: border-box;
+  padding: 4px;
+  display: none; /* Default tersembunyi */
+  position: absolute;
+  top: 50px;
+  right: 0px;
+  width: 250px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+}
+
+#low-stock-dropdown.show {
+  display: block; /* Tampilkan dropdown */
+}
+
+#low-stock-dropdown ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#low-stock-dropdown ul li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+#low-stock-dropdown ul li:last-child {
+  border-bottom: none;
+}
+
+#low-stock-dropdown ul li:hover {
+  background: #f9f9f9;
+}
+
+.headDaftarBarang {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
