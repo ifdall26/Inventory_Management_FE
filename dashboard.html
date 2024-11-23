@@ -59,6 +59,15 @@
             <ul id="admin-notification-list"></ul>
           </div>
         </div>
+
+        <div id="low-stock-container" class="notification">
+          <button id="low-stock-button">
+            ⚠️ <span id="low-stock-count" class="badge">0</span>
+          </button>
+          <div id="low-stock-dropdown" class="dropdown hidden">
+            <ul id="low-stock-list"></ul>
+          </div>
+        </div>
         
         <div class="chartContainer">
           <div class="section">
@@ -112,14 +121,6 @@
         <!-- Tabel Daftar Barang -->
         <div class="headDaftarBarang">
           <h2 id="itemsAdminGudang">Daftar Barang</h2>
-          <div id="low-stock-container" class="notification">
-            <button id="low-stock-button">
-              ⚠️ <span id="low-stock-count" class="badge">0</span>
-            </button>
-            <div id="low-stock-dropdown" class="dropdown hidden">
-              <ul id="low-stock-list"></ul>
-            </div>
-          </div>
         </div>
         
         <div class="search-filter">
@@ -392,6 +393,15 @@
 
       <!-- admin daerah content -->
       <div id="adminDaerahContent" style="display: none">
+        <div id="daerah-low-stock-container" class="notification">
+          <button id="daerah-low-stock-button">
+            ⚠️ <span id="daerah-low-stock-count" class="badge">0</span>
+          </button>
+          <div id="daerah-low-stock-dropdown" class="dropdown hidden">
+            <ul id="daerah-low-stock-list"></ul>
+          </div>
+        </div>
+        
         <h3>Admin Daerah Section</h3>
         <p>This content is visible only to Admin Daerah</p>
         <div class="chartContainer fade-in">
@@ -649,6 +659,8 @@
         <script src="/js/user_notification.js"></script>
 
         <script src="/js/gudang_notification.js"></script>
+
+        <script src="/js/barang_daerah_notification.js"></script>
 
   </body>
 </html>

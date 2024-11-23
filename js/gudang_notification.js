@@ -46,8 +46,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Toggle dropdown visibility
-  notificationButton.addEventListener("click", () => {
+  notificationButton.addEventListener("click", (event) => {
+    event.stopPropagation(); // Prevent event bubbling
     notificationDropdown.classList.toggle("show");
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (event) => {
+    if (
+      !notificationDropdown.contains(event.target) &&
+      !notificationButton.contains(event.target)
+    ) {
+      notificationDropdown.classList.remove("show");
+    }
   });
 
   // Initial fetch
@@ -101,8 +112,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Toggle dropdown visibility
-  lowStockButton.addEventListener("click", () => {
+  lowStockButton.addEventListener("click", (event) => {
+    event.stopPropagation(); // Prevent event bubbling
     lowStockDropdown.classList.toggle("show");
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (event) => {
+    if (
+      !lowStockDropdown.contains(event.target) &&
+      !lowStockButton.contains(event.target)
+    ) {
+      lowStockDropdown.classList.remove("show");
+    }
   });
 
   // Initial fetch

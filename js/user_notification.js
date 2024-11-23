@@ -76,8 +76,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Toggle dropdown visibility
-  notificationButton.addEventListener("click", () => {
+  notificationButton.addEventListener("click", (event) => {
+    event.stopPropagation(); // Prevent event bubbling
     notificationDropdown.classList.toggle("show");
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener("click", (event) => {
+    if (
+      !notificationDropdown.contains(event.target) &&
+      !notificationButton.contains(event.target)
+    ) {
+      notificationDropdown.classList.remove("show");
+    }
   });
 
   // Initial fetch

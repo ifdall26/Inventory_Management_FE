@@ -948,7 +948,7 @@ button:hover {
   display: none; /* Default tersembunyi */
   position: absolute;
   top: 50px;
-  right: 0px;
+  right: -200px;
   width: 250px;
   background-color: white;
   border: 1px solid #ccc;
