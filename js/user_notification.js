@@ -6,12 +6,29 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Fetch unnotified approved requests
   async function fetchNotifications() {
+    // Ambil userId dari localStorage
+    const userId = localStorage.getItem("userId"); // Gunakan kunci 'userId'
+    if (!userId) {
+      console.error("User ID not found in localStorage");
+      return [];
+    }
+
     try {
       const response = await fetch(
-        "http://localhost:3000/api/user_notification/unnotification" // Endpoint baru
+        `http://localhost:3000/api/user_notification/unnotification?user_id=${userId}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
       );
-      if (!response.ok) throw new Error(`Error: ${response.statusText}`);
-      return await response.json();
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("Notifications fetched successfully:", data);
+      return data;
     } catch (error) {
       console.error("Error fetching notifications:", error);
       return [];
@@ -59,15 +76,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Tandai Notifikasi Sebagai Telah Dibaca
   async function markNotificationsAsRead(ids) {
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      console.error("User ID not found in localStorage");
+      return;
+    }
+
     try {
       const response = await fetch(
         "http://localhost:3000/api/user_notification/mark-read",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ids }),
+          body: JSON.stringify({ ids, user_id: userId }), // Sertakan user_id
         }
       );
+
       if (!response.ok) throw new Error("Gagal menandai notifikasi.");
       console.log("Notifikasi berhasil ditandai.");
     } catch (error) {
