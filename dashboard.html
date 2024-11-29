@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/dashboard.css" />
     <link rel="stylesheet" href="/css/animation.css" />
     <link rel="stylesheet" href="/css/userNotification.css" />
+    <link rel="stylesheet" href="/css/clustering.css" />
     <!-- SweetAlert2 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> -->
@@ -404,6 +405,26 @@
         
         <h3>Admin Daerah Section</h3>
         <p>This content is visible only to Admin Daerah</p>
+        <!-- Halaman tempat menampilkan grafik -->
+        <div class="clusteringContainer">
+          <select id="yearSelect"></select>
+          <select id="monthSelect"></select>
+          
+          <div id="clusteringChart"></div>
+  
+          <!-- Tampilkan daftar barang per cluster -->
+          <div id="clusters">
+            <h3>Cluster 1 (Permintaan Rendah)</h3>
+            <ul id="cluster1Items"></ul>
+  
+            <h3>Cluster 2 (Permintaan Sedang)</h3>
+            <ul id="cluster2Items"></ul>
+  
+            <h3>Cluster 3 (Permintaan Tinggi)</h3>
+            <ul id="cluster3Items"></ul>
+          </div>
+        </div>
+
         <div class="chartContainer fade-in">
           <div id="chartIndarung4" style="margin-bottom: 20px;"></div>
           <div id="chartIndarung5" style="margin-bottom: 20px;"></div>
@@ -652,6 +673,10 @@
         
         <script src="/js/charts_admin_gudang.js"></script>
 
+        <script src="/js/clustering.js"></script>
+
+        <script src="/js/month_selector.js"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
         <script src="/js/animation.js"></script>
@@ -661,6 +686,7 @@
         <script src="/js/gudang_notification.js"></script>
 
         <script src="/js/barang_daerah_notification.js"></script>
+
 
   </body>
 </html>
