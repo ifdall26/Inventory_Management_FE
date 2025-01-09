@@ -1,5 +1,5 @@
 document
-  .getElementById("uploadExcelButton")
+  .getElementById("uploadExcelButtonDaerah")
   .addEventListener("click", function () {
     const fileInput = document.getElementById("excelFile");
     const file = fileInput.files[0];
@@ -9,25 +9,24 @@ document
       return;
     }
 
-    // Kirim data ke API tanpa memprosesnya di frontend
-    uploadDataToApi(file);
+    console.log("File yang dipilih:", file.name); // Log nama file yang dipilih
+    uploadDataToApi(file); // Panggil fungsi uploadDataToApi
   });
 
 function uploadDataToApi(file) {
-  // Siapkan data Excel
   const formData = new FormData();
-  formData.append("file", file); // "file" adalah kunci di multer upload.single('file')
+  formData.append("file", file); // Pastikan kunci 'file' cocok dengan backend
 
-  // Kirim data ke server melalui endpoint baru
   fetch("http://localhost:3000/api/barang_daerah/upload_excel", {
     method: "POST",
-    body: formData,
+    body: formData, // Kirim form data berisi file
   })
     .then((response) => {
       if (!response.ok) {
-        return response.text().then((text) => {
+        // Tangani jika server memberikan respons error
+        return response.json().then((data) => {
           throw new Error(
-            `HTTP error! Status: ${response.status}, Message: ${text}`
+            data.error || `HTTP error! Status: ${response.status}`
           );
         });
       }
@@ -35,10 +34,18 @@ function uploadDataToApi(file) {
     })
     .then((data) => {
       console.log("Barang berhasil ditambahkan:", data);
-      alert("Data berhasil diupload!");
+
+      // Tampilkan pesan sukses dengan detail jumlah data
+      alert(
+        `${data.message}\n${
+          data.duplicate
+            ? `${data.duplicate}`
+            : "Semua data berhasil ditambahkan tanpa duplikat."
+        }`
+      );
     })
     .catch((error) => {
-      console.error("Error:", error);
-      alert("Terjadi kesalahan saat mengupload data.");
+      console.error("Error:", error.message);
+      alert("Terjadi kesalahan saat mengupload data. " + error.message);
     });
 }
