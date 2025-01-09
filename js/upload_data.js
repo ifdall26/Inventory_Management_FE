@@ -1,3 +1,16 @@
+// Event listener untuk menampilkan nama file yang dipilih
+document.getElementById("excelFile").addEventListener("change", function () {
+  const file = this.files[0]; // Ambil file yang dipilih
+  const fileNameElement = document.getElementById("selectedFileName");
+
+  if (file) {
+    fileNameElement.textContent = `File yang dipilih: ${file.name}`;
+  } else {
+    fileNameElement.textContent = "Tidak ada file yang dipilih.";
+  }
+});
+
+// Event listener untuk tombol unggah
 document
   .getElementById("uploadExcelButtonDaerah")
   .addEventListener("click", function () {
