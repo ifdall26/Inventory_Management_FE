@@ -508,13 +508,26 @@
         <div id="pagination"></div>
 
         <h2 id="addAdminDaerah">Input Barang</h2>
+        <div class="inputBarangContainer">
+          <!-- button unduh template file excel -->
+          <div class="template-container fade-in">
+            <button id="downloadTemplate" class="template-btn">
+                <i class="fa fa-download"></i> Unduh Format Input Barang
+            </button>
+            <p class="template-info">
+                Gunakan template ini untuk menambahkan data barang. Pastikan data sesuai dengan kolom yang tersedia.
+            </p>
+          </div>
 
-        <!-- Upload File data barang -->
-        <div class="upload-container fade-in">
-          <label for="excelFile">Pilih File Excel</label>
-          <input type="file" id="excelFile" accept=".xlsx, .xls" />
-          <button type="button" id="uploadExcelButtonDaerah">Unggah Excel</button>
+          <!-- Upload File data barang -->
+          <div class="upload-container fade-in">
+            <label for="excelFile">Pilih File Excel</label>
+            <input type="file" id="excelFile" accept=".xlsx, .xls" />
+            <button type="button" id="uploadExcelButtonDaerah">Unggah Excel</button>
+          </div>
+          
         </div>
+
 
         
         <!-- form input barang daerah -->
@@ -687,6 +700,8 @@
         <script src="/js/upload_data_gudang.js"></script>
 
         <script src="/js/upload_data.js"></script>
+        
+        <script src="/js/template_input_data.js"></script>
 
   </body>
 </html>
