@@ -46,19 +46,12 @@ document.addEventListener("DOMContentLoaded", function () {
       );
 
       if (selectedBarang.quantity <= 0) {
-        // Tampilkan SweetAlert jika stok habis
+        // Tampilkan SweetAlert jika stok habis tanpa opsi lanjut ke gudang
         Swal.fire({
           title: "Stok Habis!",
-          text: "Lakukan permintaan ke gudang?",
+          text: "Maaf, stok barang ini kosong.",
           icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Ya",
-          cancelButtonText: "Tidak",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Jika pengguna memilih "Ya", tampilkan form pencarian barang di gudang
-            showGudangRequestForm();
-          }
+          confirmButtonText: "OK",
         });
       } else {
         // Jika stok cukup, tampilkan form permintaan barang biasa
