@@ -30,7 +30,6 @@ function displayBarangWithPagination() {
 }
 
 // Fungsi untuk menampilkan barang dalam tabel
-// Fungsi untuk menampilkan barang dalam tabel
 function displayBarang(barang) {
   const tbody = document.getElementById("barangTableBody");
   tbody.innerHTML = "";
@@ -104,47 +103,96 @@ function deleteBarang(kode_lokasi) {
 
 // Fungsi edit berdasarkan kode_lokasi
 function editBarang(kode_lokasi) {
-  const formData = {
-    kode_barang: prompt("Masukkan kode barang baru:"),
-    nama_barang: prompt("Masukkan nama barang baru:"),
-    quantity: parseInt(prompt("Masukkan jumlah quantity baru:"), 10),
-    satuan: prompt("Masukkan satuan:"),
-    harga_satuan: parseInt(prompt("Masukkan harga satuan:"), 10),
-    lokasi_daerah: prompt("Masukkan lokasi daerah:"),
-    lokasi_area: prompt("Masukkan lokasi area:"),
-    tipe_barang: prompt("Masukkan tipe barang:"),
-    gudang: prompt("Masukkan gudang:"),
-    lemari: prompt("Masukkan lemari:"),
-  };
+  const modal = document.getElementById("editBarangModal");
+  const form = document.getElementById("editBarangForm");
 
-  fetch(`http://localhost:3000/api/barang_daerah/${kode_lokasi}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(formData),
-  })
+  fetch(`http://localhost:3000/api/barang_daerah/${kode_lokasi}`)
     .then((res) => {
       if (!res.ok) {
-        throw new Error("Gagal mengupdate barang");
+        throw new Error(`Error fetching barang: ${res.statusText}`);
       }
-      return res.json();
+      return res.json(); // Kembalikan JSON secara langsung
     })
-    .then((data) => {
-      alert("Barang berhasil diperbarui");
-      loadBarang(); // Reload data
+    .then((barang) => {
+      if (!barang) {
+        alert("Barang tidak ditemukan.");
+        return;
+      }
+
+      // Isi form dengan data barang
+      document.getElementById("kode_barang").value = barang.kode_barang;
+      document.getElementById("nama_barang").value = barang.nama_barang;
+      document.getElementById("quantity").value = barang.quantity;
+      document.getElementById("satuan").value = barang.satuan;
+      document.getElementById("harga_satuan").value = barang.harga_satuan;
+      document.getElementById("lokasi_daerah").value = barang.lokasi_daerah;
+      document.getElementById("lokasi_area").value = barang.lokasi_area;
+      document.getElementById("tipe_barang").value = barang.tipe_barang;
+      document.getElementById("gudang").value = barang.gudang;
+      document.getElementById("lemari").value = barang.lemari;
+
+      modal.style.display = "block";
+
+      form.onsubmit = function (event) {
+        event.preventDefault();
+
+        const formData = {
+          kode_barang: form.kode_barang.value,
+          nama_barang: form.nama_barang.value,
+          quantity: parseInt(form.quantity.value, 10),
+          satuan: form.satuan.value,
+          harga_satuan: parseInt(form.harga_satuan.value, 10),
+          lokasi_daerah: form.lokasi_daerah.value,
+          lokasi_area: form.lokasi_area.value,
+          tipe_barang: form.tipe_barang.value,
+          gudang: form.gudang.value,
+          lemari: form.lemari.value,
+        };
+
+        fetch(`http://localhost:3000/api/barang_daerah/${kode_lokasi}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error("Gagal mengupdate barang");
+            }
+            return res.json();
+          })
+          .then(() => {
+            alert("Barang berhasil diperbarui");
+            loadBarang();
+            modal.style.display = "none";
+          })
+          .catch((err) => {
+            console.error("Error:", err);
+            alert("Terjadi kesalahan saat mengupdate barang");
+          });
+      };
     })
     .catch((err) => {
-      console.error(err);
-      alert("Terjadi kesalahan saat mengupdate barang");
+      console.error("Error fetching barang:", err);
+      alert(`Terjadi kesalahan saat mengambil data barang: ${err.message}`);
     });
 }
+
+// Menutup modal
+document.querySelector(".close").addEventListener("click", function () {
+  document.getElementById("editBarangModal").style.display = "none";
+});
 
 // Fungsi untuk memuat ulang data barang dari server
 function loadBarang() {
   fetch("http://localhost:3000/api/barang_daerah")
     .then((res) => res.json())
-    .then((data) => displayBarang(data))
+    .then((data) => {
+      allBarang = data;
+      filteredBarang = allBarang;
+      displayBarangWithPagination();
+    })
     .catch((err) => console.error("Gagal mengambil data barang:", err));
 }
 

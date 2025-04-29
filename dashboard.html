@@ -508,6 +508,69 @@
         </div>
         <div id="pagination"></div>
 
+        <!-- Modal Edit Barang -->
+        <div id="editBarangModal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Barang</h2>
+            <form id="editBarangForm">
+              <label for="kode_barang">Kode Barang:</label>
+              <input type="text" id="kode_barang" name="kode_barang" required>
+              
+              <label for="nama_barang">Nama Barang:</label>
+              <input type="text" id="nama_barang" name="nama_barang" required>
+
+              <label for="quantity">Quantity:</label>
+              <input type="number" id="quantity" name="quantity" required>
+
+              <label for="satuan">Satuan:</label>
+              <input type="text" id="satuan" name="satuan" required>
+
+              <label for="harga_satuan">Harga Satuan:</label>
+              <input type="number" id="harga_satuan" name="harga_satuan" required>
+
+              <label for="lokasi_daerah">Lokasi Daerah:</label>
+              <select id="lokasi_daerah" name="lokasi_daerah" required>
+                <option value="Indarung 4">Indarung 4</option>
+                <option value="Indarung 5">Indarung 5</option>
+                <option value="Indarung 6">Indarung 6</option>
+              </select>
+
+              <label for="lokasi_area">Lokasi Area:</label>
+              <select id="lokasi_area" name="lokasi_area" required>
+                <option value="Raw Mill">Raw Mill</option>
+                <option value="Kiln">Kiln</option>
+                <option value="Finish Mill">Finish Mill</option>
+              </select>
+
+              <label for="tipe_barang">Tipe Barang:</label>
+              <select id="tipe_barang" name="tipe_barang" required>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Electrical">Electrical</option>
+              </select>
+
+              <label for="gudang">Gudang:</label>
+              <select id="gudang" name="gudang" required>
+                <option value="Gudang 1">Gudang 1</option>
+                <option value="Gudang 2">Gudang 2</option>
+                <option value="Gudang 3">Gudang 3</option>
+              </select>
+
+              <label for="lemari">Lemari:</label>
+              <select id="lemari" name="lemari" required>
+                <option value="Lemari A">Lemari A</option>
+                <option value="Lemari B">Lemari B</option>
+                <option value="Lemari C">Lemari C</option>
+                <option value="Lemari D">Lemari D</option>
+                <option value="Lemari E">Lemari E</option>
+              </select>
+
+              <button type="submit">Simpan</button>
+            </form>
+          </div>
+        </div>
+
+
         <h2 id="addAdminDaerah">Input Barang</h2>
         <div class="inputBarangContainer">
           <!-- button unduh template file excel -->
