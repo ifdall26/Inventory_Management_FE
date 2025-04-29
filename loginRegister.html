@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login & Register - InventoryPro</title>
+    <title>Login - InventoryPro</title>
     <link rel="stylesheet" href="/css/loginRegister.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
@@ -17,14 +17,6 @@
         <div class="logo">
           <h1>InventoryPro</h1>
         </div>
-        <!-- <nav>
-          <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li>
-              <a href="loginRegister.html" class="btn-register">Register</a>
-            </li>
-          </ul>
-        </nav> -->
       </div>
     </header>
 
@@ -32,7 +24,7 @@
     <main>
       <div id="auth-container">
         <!-- Login Form -->
-        <div id="login-container" class="auth-form" style="display: none">
+        <div id="login-container" class="auth-form">
           <h2>Login</h2>
           <form id="login-form">
             <input
@@ -50,40 +42,6 @@
             <button type="submit">Login</button>
           </form>
           <p id="login-error" class="error-message"></p>
-          <p>
-            Don't have an account?
-            <a href="#" id="show-register">Register here</a>
-          </p>
-        </div>
-
-        <!-- Register Form -->
-        <div id="register-container" class="auth-form">
-          <h2>Register</h2>
-          <form id="register-form">
-            <input
-              type="text"
-              id="register-name"
-              placeholder="Enter your name"
-              required
-            />
-            <input
-              type="email"
-              id="register-email"
-              placeholder="Enter your email"
-              required
-            />
-            <input
-              type="password"
-              id="register-password"
-              placeholder="Enter your password"
-              required
-            />
-            <button type="submit">Register</button>
-          </form>
-          <p id="register-error" class="error-message"></p>
-          <p>
-            Already have an account? <a href="#" id="show-login">Login here</a>
-          </p>
         </div>
       </div>
     </main>
