@@ -111,7 +111,7 @@ function editBarang(kode_lokasi) {
       if (!res.ok) {
         throw new Error(`Error fetching barang: ${res.statusText}`);
       }
-      return res.json(); // Kembalikan JSON secara langsung
+      return res.json();
     })
     .then((barang) => {
       if (!barang) {
@@ -119,17 +119,27 @@ function editBarang(kode_lokasi) {
         return;
       }
 
+      console.log("Data barang:", barang); // Tambahkan ini untuk debugging
+      console.log("Quantity:", barang.quantity);
+
       // Isi form dengan data barang
-      document.getElementById("kode_barang").value = barang.kode_barang;
-      document.getElementById("nama_barang").value = barang.nama_barang;
-      document.getElementById("quantity").value = barang.quantity;
-      document.getElementById("satuan").value = barang.satuan;
-      document.getElementById("harga_satuan").value = barang.harga_satuan;
-      document.getElementById("lokasi_daerah").value = barang.lokasi_daerah;
-      document.getElementById("lokasi_area").value = barang.lokasi_area;
-      document.getElementById("tipe_barang").value = barang.tipe_barang;
-      document.getElementById("gudang").value = barang.gudang;
-      document.getElementById("lemari").value = barang.lemari;
+      document.getElementById("kode_barang").value = barang.kode_barang ?? "";
+      document.getElementById("nama_barang").value = barang.nama_barang ?? "";
+      document.getElementById("editQuantity").value = barang.quantity;
+
+      console.log(
+        "Quantity yang ditampilkan di form:",
+        document.getElementById("editQuantity").value
+      );
+
+      document.getElementById("satuan").value = barang.satuan ?? "";
+      document.getElementById("harga_satuan").value = barang.harga_satuan ?? "";
+      document.getElementById("lokasi_daerah").value =
+        barang.lokasi_daerah ?? "";
+      document.getElementById("lokasi_area").value = barang.lokasi_area ?? "";
+      document.getElementById("tipe_barang").value = barang.tipe_barang ?? "";
+      document.getElementById("gudang").value = barang.gudang ?? "";
+      document.getElementById("lemari").value = barang.lemari ?? "";
 
       modal.style.display = "block";
 
@@ -139,9 +149,9 @@ function editBarang(kode_lokasi) {
         const formData = {
           kode_barang: form.kode_barang.value,
           nama_barang: form.nama_barang.value,
-          quantity: parseInt(form.quantity.value, 10),
+          quantity: parseInt(form.quantity.value, 10) || 0,
           satuan: form.satuan.value,
-          harga_satuan: parseInt(form.harga_satuan.value, 10),
+          harga_satuan: parseInt(form.harga_satuan.value, 10) || 0,
           lokasi_daerah: form.lokasi_daerah.value,
           lokasi_area: form.lokasi_area.value,
           tipe_barang: form.tipe_barang.value,
@@ -177,12 +187,11 @@ function editBarang(kode_lokasi) {
       console.error("Error fetching barang:", err);
       alert(`Terjadi kesalahan saat mengambil data barang: ${err.message}`);
     });
+  const closeBtn = modal.querySelector(".close");
+  closeBtn.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
 }
-
-// Menutup modal
-document.querySelector(".close").addEventListener("click", function () {
-  document.getElementById("editBarangModal").style.display = "none";
-});
 
 // Fungsi untuk memuat ulang data barang dari server
 function loadBarang() {
