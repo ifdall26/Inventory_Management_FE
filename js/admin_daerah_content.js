@@ -30,6 +30,7 @@ function displayBarangWithPagination() {
 }
 
 // Fungsi untuk menampilkan barang dalam tabel
+// Fungsi untuk menampilkan barang dalam tabel
 function displayBarang(barang) {
   const tbody = document.getElementById("barangTableBody");
   tbody.innerHTML = "";
@@ -48,10 +49,107 @@ function displayBarang(barang) {
       <td>${item.tipe_barang}</td>
       <td>${item.gudang}</td>
       <td>${item.lemari}</td>
+      <td>
+        <button class="edit-button" data-id="${item.kode_lokasi}"><i class="fas fa-pencil-alt"></i></button>
+        <button class="delete-button" data-id="${item.kode_lokasi}"><i class="fas fa-trash-alt"></i></button>
+      </td>
     `;
     tbody.appendChild(row);
   });
+
+  attachActionListeners(); // Pasang event listener setelah render
 }
+
+// Memasang event listener untuk tombol edit dan delete
+function attachActionListeners() {
+  // Edit
+  document.querySelectorAll(".edit-button").forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = this.getAttribute("data-id");
+      editBarang(id);
+    });
+  });
+
+  // Delete
+  document.querySelectorAll(".delete-button").forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = this.getAttribute("data-id");
+      if (confirm("Apakah Anda yakin ingin menghapus barang ini?")) {
+        deleteBarang(id);
+      }
+    });
+  });
+}
+
+// Fungsi delete berdasarkan kode_lokasi
+function deleteBarang(kode_lokasi) {
+  fetch(`http://localhost:3000/api/barang_daerah/${kode_lokasi}`, {
+    method: "DELETE",
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Gagal menghapus barang");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      alert("Barang berhasil dihapus");
+      loadBarang(); // Reload data
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("Terjadi kesalahan saat menghapus barang");
+    });
+}
+
+// Fungsi edit berdasarkan kode_lokasi
+function editBarang(kode_lokasi) {
+  const formData = {
+    kode_barang: prompt("Masukkan kode barang baru:"),
+    nama_barang: prompt("Masukkan nama barang baru:"),
+    quantity: parseInt(prompt("Masukkan jumlah quantity baru:"), 10),
+    satuan: prompt("Masukkan satuan:"),
+    harga_satuan: parseInt(prompt("Masukkan harga satuan:"), 10),
+    lokasi_daerah: prompt("Masukkan lokasi daerah:"),
+    lokasi_area: prompt("Masukkan lokasi area:"),
+    tipe_barang: prompt("Masukkan tipe barang:"),
+    gudang: prompt("Masukkan gudang:"),
+    lemari: prompt("Masukkan lemari:"),
+  };
+
+  fetch(`http://localhost:3000/api/barang_daerah/${kode_lokasi}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Gagal mengupdate barang");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      alert("Barang berhasil diperbarui");
+      loadBarang(); // Reload data
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("Terjadi kesalahan saat mengupdate barang");
+    });
+}
+
+// Fungsi untuk memuat ulang data barang dari server
+function loadBarang() {
+  fetch("http://localhost:3000/api/barang_daerah")
+    .then((res) => res.json())
+    .then((data) => displayBarang(data))
+    .catch((err) => console.error("Gagal mengambil data barang:", err));
+}
+
+// Panggil loadBarang() saat halaman dimuat
+window.addEventListener("DOMContentLoaded", loadBarang);
 
 // Fungsi untuk menampilkan pagination untuk barang
 function displayBarangPagination() {
