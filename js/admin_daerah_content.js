@@ -73,9 +73,21 @@ function attachActionListeners() {
   document.querySelectorAll(".delete-button").forEach((button) => {
     button.addEventListener("click", function () {
       const id = this.getAttribute("data-id");
-      if (confirm("Apakah Anda yakin ingin menghapus barang ini?")) {
-        deleteBarang(id);
-      }
+
+      Swal.fire({
+        title: "Apakah Anda yakin?",
+        text: "Data akan dihapus secara permanen!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Ya, hapus!",
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteBarang(id);
+        }
+      });
     });
   });
 }
@@ -91,13 +103,23 @@ function deleteBarang(kode_lokasi) {
       }
       return res.json();
     })
-    .then((data) => {
-      alert("Barang berhasil dihapus");
+    .then(() => {
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Barang berhasil dihapus.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
       loadBarang(); // Reload data
     })
     .catch((err) => {
       console.error(err);
-      alert("Terjadi kesalahan saat menghapus barang");
+      Swal.fire({
+        title: "Error!",
+        text: "Terjadi kesalahan saat menghapus barang",
+        icon: "error",
+      });
     });
 }
 
