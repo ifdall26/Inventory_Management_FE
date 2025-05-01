@@ -1022,3 +1022,27 @@ button:hover {
   color: #555;
   margin-top: 10px;
 }
+
+/* filter bulan & tahun untuk request */
+.reqTimeFilter {
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  flex: 1;
+}
+
+.filter-request-date {
+  display: flex;
+  align-items: baseline;
+}
+
+button#reqFilterButton {
+  width: auto;
+  background-color: #1f2833;
+  color: white;
+  transition: 0.3s;
+}
+
+button#reqFilterBtn:hover {
+  background-color: #66fcf1;
+}

@@ -349,7 +349,7 @@ function applySearchAndFilter() {
 
 // Fungsi untuk load request dari server
 function loadRequests() {
-  fetch("http://localhost:3000/api/requests")
+  fetch("http://localhost:3000/api/requests") // Ganti endpoint untuk barang daerah
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -363,7 +363,6 @@ function loadRequests() {
     .catch((error) => console.error("Error loading requests:", error));
 }
 
-// Fungsi untuk menampilkan request dengan pagination
 function displayRequestsWithPagination() {
   const startIndex = (currentRequestPage - 1) * requestsPerPage;
   const endIndex = startIndex + requestsPerPage;
@@ -373,7 +372,6 @@ function displayRequestsWithPagination() {
   displayRequestPagination();
 }
 
-// Fungsi untuk menampilkan requests dalam tabel
 function displayRequests(requests) {
   const tbody = document.getElementById("requestTableBody");
   tbody.innerHTML = "";
@@ -392,33 +390,28 @@ function displayRequests(requests) {
   });
 }
 
-// Fungsi untuk menampilkan pagination untuk requests
 function displayRequestPagination() {
   const paginationElement = document.getElementById("requestPagination");
-  paginationElement.innerHTML = ""; // Kosongkan pagination
+  paginationElement.innerHTML = "";
 
   const totalPages = Math.ceil(allRequests.length / requestsPerPage);
-  const maxButtons = 10; // Maksimal 10 tombol
+  const maxButtons = 10;
   const half = Math.floor(maxButtons / 2);
 
-  // Hitung halaman awal dan akhir yang akan ditampilkan
   let startPage = Math.max(1, currentRequestPage - half);
   let endPage = Math.min(totalPages, currentRequestPage + half);
 
-  // Jika halaman awal terlalu dekat ke awal
   if (currentRequestPage <= half) {
     endPage = Math.min(totalPages, maxButtons);
   }
 
-  // Jika halaman akhir terlalu dekat ke akhir
   if (currentRequestPage + half >= totalPages) {
     startPage = Math.max(1, totalPages - maxButtons + 1);
   }
 
-  // Tombol Previous
   const prevButton = document.createElement("button");
   prevButton.textContent = "Previous";
-  prevButton.disabled = currentRequestPage === 1; // Nonaktifkan jika di halaman pertama
+  prevButton.disabled = currentRequestPage === 1;
   prevButton.classList.add("page-btn");
   prevButton.addEventListener("click", function () {
     if (currentRequestPage > 1) {
@@ -428,13 +421,12 @@ function displayRequestPagination() {
   });
   paginationElement.appendChild(prevButton);
 
-  // Tombol untuk halaman dalam range
   for (let i = startPage; i <= endPage; i++) {
     const pageButton = document.createElement("button");
     pageButton.innerText = i;
     pageButton.classList.add("page-btn");
     if (i === currentRequestPage) {
-      pageButton.classList.add("active"); // Tandai halaman aktif
+      pageButton.classList.add("active");
     }
     pageButton.addEventListener("click", function () {
       currentRequestPage = i;
@@ -443,10 +435,9 @@ function displayRequestPagination() {
     paginationElement.appendChild(pageButton);
   }
 
-  // Tombol Next
   const nextButton = document.createElement("button");
   nextButton.textContent = "Next";
-  nextButton.disabled = currentRequestPage === totalPages; // Nonaktifkan jika di halaman terakhir
+  nextButton.disabled = currentRequestPage === totalPages;
   nextButton.classList.add("page-btn");
   nextButton.addEventListener("click", function () {
     if (currentRequestPage < totalPages) {
@@ -456,6 +447,33 @@ function displayRequestPagination() {
   });
   paginationElement.appendChild(nextButton);
 }
+
+function filterRequestByDate() {
+  const selectedMonth = document.getElementById("filterMonth").value;
+  const selectedYear = document.getElementById("filterYear").value;
+
+  const filtered = allRequests.filter((req) => {
+    const reqDate = new Date(req["tanggal_request"]);
+    return (
+      (!selectedMonth || reqDate.getMonth() + 1 === parseInt(selectedMonth)) &&
+      (!selectedYear || reqDate.getFullYear() === parseInt(selectedYear))
+    );
+  });
+
+  displayRequests(filtered);
+}
+
+function populateYearOptions() {
+  const currentYear = new Date().getFullYear();
+  const filterYear = document.getElementById("filterYear");
+  for (let year = currentYear; year >= currentYear - 5; year--) {
+    const option = document.createElement("option");
+    option.value = year;
+    option.textContent = year;
+    filterYear.appendChild(option);
+  }
+}
+populateYearOptions();
 
 // Event listeners for search and filter
 document
