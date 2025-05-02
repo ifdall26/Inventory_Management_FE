@@ -372,11 +372,36 @@ function displayRequestsWithPagination() {
   displayRequestPagination();
 }
 
+function formatTanggalIndonesia(dateString) {
+  const bulan = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+
+  const date = new Date(dateString);
+  const tgl = date.getDate();
+  const bln = bulan[date.getMonth()];
+  const thn = date.getFullYear();
+
+  return `${tgl} ${bln} ${thn}`;
+}
+
 function displayRequests(requests) {
   const tbody = document.getElementById("requestTableBody");
   tbody.innerHTML = "";
 
   requests.forEach((request) => {
+    const formattedDateReq = formatTanggalIndonesia(request.tanggal_request);
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${request.id_request}</td>
@@ -384,6 +409,7 @@ function displayRequests(requests) {
       <td>${request.kode_barang}</td>
       <td>${request.quantity_diminta}</td>
       <td>${request.status}</td>
+      <td>${formattedDateReq}</td>
       <td>${request.catatan}</td>
     `;
     tbody.appendChild(row);
