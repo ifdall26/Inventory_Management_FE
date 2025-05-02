@@ -95,3 +95,97 @@ function getFilteredRequests() {
 
   return filteredRequests;
 }
+
+function getFilteredRequestsDaerahFromData() {
+  const selectedMonth = document.getElementById("filterMonth").value;
+  const selectedYear = document.getElementById("filterYear").value;
+
+  return allRequests
+    .filter((req) => {
+      const reqDate = new Date(req.tanggal_request);
+      const monthMatch =
+        !selectedMonth || reqDate.getMonth() + 1 === parseInt(selectedMonth);
+      const yearMatch =
+        !selectedYear || reqDate.getFullYear() === parseInt(selectedYear);
+      return monthMatch && yearMatch;
+    })
+    .map((req) => ({
+      id_request: req.id_request,
+      nama_user: req.nama_user,
+      kode_barang: req.kode_barang,
+      quantity_diminta: req.quantity_diminta,
+      status: req.status,
+      tanggal_request: formatTanggalIndonesia(req.tanggal_request),
+      catatan: req.catatan,
+    }));
+}
+
+function exportToExcelDaerah(data, month, year) {
+  const worksheet = XLSX.utils.json_to_sheet(data);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    `Laporan_Daerah_${month}_${year}`
+  );
+  XLSX.writeFile(workbook, `Laporan_Daerah_${month}_${year}.xlsx`);
+}
+
+function exportToPDFDaerah(data, month, year) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  doc.setFontSize(16);
+  doc.text(`Laporan Permintaan Barang Daerah - ${month}/${year}`, 10, 10);
+
+  const tableColumn = [
+    "No",
+    "Nama User",
+    "Kode Barang",
+    "Qty",
+    "Status",
+    "Tanggal",
+    "Catatan",
+  ];
+  const tableRows = [];
+
+  data.forEach((item, index) => {
+    tableRows.push([
+      index + 1,
+      item.nama_user,
+      item.kode_barang,
+      item.quantity_diminta,
+      item.status,
+      item.tanggal_request,
+      item.catatan,
+    ]);
+  });
+
+  doc.autoTable({
+    head: [tableColumn],
+    body: tableRows,
+    startY: 20,
+    styles: { fontSize: 10 },
+  });
+
+  doc.save(`Laporan_Daerah_${month}_${year}.pdf`);
+}
+
+// Event Listener untuk tombol ekspor
+document
+  .getElementById("exportExcelDaerahBtn")
+  .addEventListener("click", () => {
+    const filteredData = getFilteredRequestsDaerahFromData();
+    const month = document.getElementById("filterMonth").value || "Semua";
+    const year = document.getElementById("filterYear").value || "Semua";
+
+    exportToExcelDaerah(filteredData, month, year);
+  });
+
+document.getElementById("exportPdfDaerahBtn").addEventListener("click", () => {
+  const filteredData = getFilteredRequestsDaerahFromData();
+  const month = document.getElementById("filterMonth").value || "Semua";
+  const year = document.getElementById("filterYear").value || "Semua";
+
+  exportToPDFDaerah(filteredData, month, year);
+});
