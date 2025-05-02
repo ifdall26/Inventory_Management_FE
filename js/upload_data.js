@@ -56,6 +56,7 @@ function uploadDataToApi(file) {
             : "Semua data berhasil ditambahkan tanpa duplikat."
         }`
       );
+      location.reload();
     })
     .catch((error) => {
       console.error("Error:", error.message);

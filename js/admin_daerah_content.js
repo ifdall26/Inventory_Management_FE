@@ -198,6 +198,7 @@ function editBarang(kode_lokasi) {
             alert("Barang berhasil diperbarui");
             loadBarang();
             modal.style.display = "none";
+            location.reload();
           })
           .catch((err) => {
             console.error("Error:", err);
