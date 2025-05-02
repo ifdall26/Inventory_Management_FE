@@ -40,6 +40,11 @@
           <li><a href="#itemsAdminGudang"><i class="fas fa-warehouse"></i> Items</a></li>
           <li><a href="loginRegister.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
+
+        <ul class="navMenu" id="superAdminNavigation" style="display: none;">
+          <li><a href="#"><i class="fas fa-warehouse"></i> Items</a></li>
+          <li><a href="loginRegister.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
         
       </nav>
     </header>
@@ -650,8 +655,25 @@
       </div>
       
       <div id="superAdminContent" style="display: none">
-        <h3>Admin Super Section</h3>
-        <p>This content is visible only to Super Admin/p>
+        <h3>Kepala Gudang Section</h3>
+        <p>This content is visible only to Kepala Gudang</p>
+        <div class="clusteringContainer">
+          <select id="kepalaGudang_yearSelect"></select>
+          <select id="kepalaGudang_monthSelect"></select>
+        
+          <div id="kepalaGudang_clusteringChart"></div>
+        
+          <div id="kepalaGudang_clusters">
+            <h3>Cluster 1 (Permintaan Rendah)</h3>
+            <ul id="kepalaGudang_cluster1Items"></ul>
+        
+            <h3>Cluster 2 (Permintaan Sedang)</h3>
+            <ul id="kepalaGudang_cluster2Items"></ul>
+        
+            <h3>Cluster 3 (Permintaan Tinggi)</h3>
+            <ul id="kepalaGudang_cluster3Items"></ul>
+          </div>
+        </div>
       </div>
     </main>
 
@@ -742,6 +764,8 @@
         <script src="/js/charts_admin_gudang.js"></script>
 
         <script src="/js/clustering.js"></script>
+
+        <script src="/js/clustering_super_admin.js"></script>
 
         <script src="/js/month_selector.js"></script>
 

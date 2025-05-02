@@ -26,6 +26,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("adminGudangContent").style.display = "none";
         document.getElementById("adminDaerahContent").style.display = "none";
         document.getElementById("userContent").style.display = "none";
+        document.getElementById("userNavigation").style.display = "none";
+        document.getElementById("adminDaerahNavigation").style.display = "none";
+        document.getElementById("adminGudangNavigation").style.display = "none";
+        document.getElementById("superAdminNavigation").style.display = "flex";
         fetchAndDisplayAllDataForSuperAdmin(); // Ambil data lengkap untuk Super Admin
       } else if (user.role === "Admin Gudang") {
         document.getElementById("superAdminContent").style.display = "none";
@@ -35,6 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("userNavigation").style.display = "none";
         document.getElementById("adminDaerahNavigation").style.display = "none";
         document.getElementById("adminGudangNavigation").style.display = "flex";
+        document.getElementById("superAdminNavigation").style.display = "none";
         fetchAndDisplayItemsForAdmin(1, 10); // Ambil data barang untuk Admin Gudang
         loadAllBarangGudang();
         fetchAndDisplayRequestsForAdmin(1, 5);
@@ -46,6 +51,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("userNavigation").style.display = "none";
         document.getElementById("adminDaerahNavigation").style.display = "flex";
         document.getElementById("adminGudangNavigation").style.display = "none";
+        document.getElementById("superAdminNavigation").style.display = "none";
       } else if (user.role === "User Area") {
         document.getElementById("superAdminContent").style.display = "none";
         document.getElementById("adminGudangContent").style.display = "none";
@@ -54,6 +60,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("userNavigation").style.display = "flex";
         document.getElementById("adminDaerahNavigation").style.display = "none";
         document.getElementById("adminGudangNavigation").style.display = "none";
+        document.getElementById("superAdminNavigation").style.display = "none";
       }
     } else {
       // Jika tidak ada user yang login, redirect ke login page

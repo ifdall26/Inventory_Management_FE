@@ -32,24 +32,31 @@
   margin: 20px auto;
   max-width: 600px;
 }
+#kepalaGudang_clusteringChart {
+  margin: 20px auto;
+  max-width: 600px;
+}
 
 /* Gaya untuk daftar cluster */
 #clusters {
   margin-top: 20px;
 }
+#kepalaGudang_clusters {
+  margin-top: 20px;
+}
 
-#clusters h3 {
+#kepalaGudang_clusters h3 {
   color: #333;
   font-size: 18px;
   margin-bottom: 10px;
 }
 
-#clusters ul {
+#kepalaGudang_clusters ul {
   list-style: none;
   padding: 0;
 }
 
-#clusters ul li {
+#kepalaGudang_clusters ul li {
   background-color: #e9ecef;
   margin: 5px 0;
   padding: 10px;
@@ -57,13 +64,13 @@
   color: #555;
 }
 
-#clusters ul li:nth-child(odd) {
+#kepalaGudang_clusters ul li:nth-child(odd) {
   background-color: #f8f9fa;
 }
 
-#cluster1Items,
-#cluster2Items,
-#cluster3Items {
+#kepalaGudang_cluster1Items,
+#kepalaGudang_cluster2Items,
+#kepalaGudang_cluster3Items {
   max-height: 200px;
   overflow-y: scroll;
   scrollbar-width: thin;
@@ -71,27 +78,27 @@
 }
 
 /* Untuk browser berbasis WebKit */
-#cluster1Items::-webkit-scrollbar,
-#cluster2Items::-webkit-scrollbar,
-#cluster3Items::-webkit-scrollbar {
+#kepalaGudang_cluster1Items::-webkit-scrollbar,
+#kepalaGudang_cluster2Items::-webkit-scrollbar,
+#kepalaGudang_cluster3Items::-webkit-scrollbar {
   width: 6px; /* Lebar scrollbar */
 }
 
-#cluster1Items::-webkit-scrollbar-track,
-#cluster2Items::-webkit-scrollbar-track,
-#cluster3Items::-webkit-scrollbar-track {
+#kepalaGudang_cluster1Items::-webkit-scrollbar-track,
+#kepalaGudang_cluster2Items::-webkit-scrollbar-track,
+#kepalaGudang_cluster3Items::-webkit-scrollbar-track {
   background: #f0f0f0; /* Warna track scrollbar */
 }
 
-#cluster1Items::-webkit-scrollbar-thumb,
-#cluster2Items::-webkit-scrollbar-thumb,
-#cluster3Items::-webkit-scrollbar-thumb {
+#kepalaGudang_cluster1Items::-webkit-scrollbar-thumb,
+#kepalaGudang_cluster2Items::-webkit-scrollbar-thumb,
+#kepalaGudang_cluster3Items::-webkit-scrollbar-thumb {
   background-color: #888; /* Warna thumb scrollbar */
   border-radius: 3px; /* Membuat thumb bulat */
 }
 
-#cluster1Items::-webkit-scrollbar-thumb:hover,
-#cluster2Items::-webkit-scrollbar-thumb:hover,
-#cluster3Items::-webkit-scrollbar-thumb:hover {
+#kepalaGudang_cluster1Items::-webkit-scrollbar-thumb:hover,
+#kepalaGudang_cluster2Items::-webkit-scrollbar-thumb:hover,
+#kepalaGudang_cluster3Items::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Warna thumb saat hover */
 }
