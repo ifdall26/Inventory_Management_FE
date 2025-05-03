@@ -51,7 +51,7 @@
 
     <main>
       <h2>Welcome, <span id="userName">[User Name]</span></h2>
-      <p>Role: <span id="userRole">[Role]</span></p>
+      <!-- <p>Role: <span id="userRole">[Role]</span></p> -->
 
       <!-- Admin Gudang Content -->
       <div id="adminGudangContent" style="display: none">
@@ -257,7 +257,7 @@
         <div class="chartContainer">
           <div class="section">
             <h3>User Section</h3>
-            <p>This content is visible only to Users.</p>
+            <!-- <p>This content is visible only to Users.</p> -->
           </div>
           <div id="mostRequestedChart"></div>
         </div>
@@ -409,8 +409,8 @@
           </div>
         </div>
         
-        <h3>Admin Daerah Section</h3>
-        <p>This content is visible only to Admin Daerah</p>
+        <h3>Admin Section</h3>
+        <!-- <p>This content is visible only to Admin Daerah</p> -->
         <!-- Halaman tempat menampilkan grafik -->
         <div class="clusteringContainer">
           <select id="yearSelect"></select>
@@ -656,7 +656,7 @@
       
       <div id="superAdminContent" style="display: none">
         <h3>Kepala Gudang Section</h3>
-        <p>This content is visible only to Kepala Gudang</p>
+        <!-- <p>This content is visible only to Kepala Gudang</p> -->
         <div class="clusteringContainer">
           <select id="kepalaGudang_yearSelect"></select>
           <select id="kepalaGudang_monthSelect"></select>
@@ -674,6 +674,82 @@
             <ul id="kepalaGudang_cluster3Items"></ul>
           </div>
         </div>
+
+        <!-- tabel barang -->
+        <h2 class="fade-in">Daftar Barang</h2>
+
+        <div class="search-filter">
+          <button id="resetFiltersKepalaGudang" class="reset-button">
+            <i class="fa fa-undo"></i>
+          </button>
+          <br />
+      
+          <input
+            type="text"
+            id="searchInputKepalaGudang"
+            placeholder="Cari barang..."
+            oninput="searchBarangKepalaGudang()"
+          />
+      
+          <select id="tipeBarangFilterKepalaGudang" onchange="filterBarangKepalaGudang()">
+            <option value="">Pilih Tipe Barang</option>
+            <option value="Mechanical">Mechanical</option>
+            <option value="Electrical">Electrical</option>
+          </select>
+      
+          <select id="lokasiDaerahFilterKepalaGudang" onchange="filterBarangKepalaGudang()">
+            <option value="">Pilih Lokasi Daerah</option>
+            <option value="Indarung 4">Indarung 4</option>
+            <option value="Indarung 5">Indarung 5</option>
+            <option value="Indarung 6">Indarung 6</option>
+          </select>
+      
+          <select id="lokasiAreaFilterKepalaGudang" onchange="filterBarangKepalaGudang()">
+            <option value="">Pilih Lokasi Area</option>
+            <option value="Raw Mill">Raw Mill</option>
+            <option value="Kiln">Kiln</option>
+            <option value="Finish Mill">Finish Mill</option>
+          </select>
+      
+          <select id="gudangFilterKepalaGudang" onchange="filterBarangKepalaGudang()">
+            <option value="">Pilih Gudang</option>
+            <option value="Gudang 1">Gudang 1</option>
+            <option value="Gudang 2">Gudang 2</option>
+            <option value="Gudang 3">Gudang 3</option>
+          </select>
+      
+          <select id="lemariFilterKepalaGudang" onchange="filterBarangKepalaGudang()">
+            <option value="">Pilih Lemari</option>
+            <option value="Lemari A">Lemari A</option>
+            <option value="Lemari B">Lemari B</option>
+            <option value="Lemari C">Lemari C</option>
+            <option value="Lemari D">Lemari D</option>
+            <option value="Lemari E">Lemari E</option>
+          </select>
+        </div>
+      
+        <div class="tabelBarangDaerah fade-in">
+          <table id="barangKepalaGudangTable">
+            <thead>
+              <tr>
+                <th>Kode Lokasi</th>
+                <th>Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>Quantity</th>
+                <th>Satuan</th>
+                <th>Harga Satuan</th>
+                <th>Lokasi Daerah</th>
+                <th>Lokasi Area</th>
+                <th>Tipe Barang</th>
+                <th>Gudang</th>
+                <th>Lemari</th>
+              </tr>
+            </thead>
+            <tbody id="barangKepalaGudangTableBody"></tbody>
+          </table>
+        </div>
+        
+        <div class="paginationControls" id="paginationControlsKepalaGudang"></div>
       </div>
     </main>
 
@@ -710,6 +786,7 @@
     <script src="/js/barang_daerah.js"></script>
     <script src="/js/user_content.js"></script>
     <script src="/js/admin_daerah_content.js"></script>
+    <script src="/js/kepala_gudang_content.js"></script>
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
