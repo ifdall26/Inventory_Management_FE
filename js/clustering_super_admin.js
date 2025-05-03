@@ -1,4 +1,3 @@
-// Fungsi untuk mengambil data clustering dari API (khusus kepala gudang)
 async function kepalaGudang_fetchClusteringData() {
   const response = await fetch(
     "http://localhost:3000/api/clusteringRoutes/clustering"
@@ -157,6 +156,21 @@ async function kepalaGudang_displayChart() {
     3: clusters[3].length,
   };
 
+  const monthNames = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+
   const chartData = {
     series: [clusterCounts[1], clusterCounts[2], clusterCounts[3]],
     chart: {
@@ -165,9 +179,7 @@ async function kepalaGudang_displayChart() {
     },
     labels: ["Cluster 1 (Rendah)", "Cluster 2 (Sedang)", "Cluster 3 (Tinggi)"],
     title: {
-      text: `Distribusi Permintaan Barang (Bulan: ${
-        month + 1
-      }, Tahun: ${year})`,
+      text: `Distribusi Permintaan Barang (Bulan: ${monthNames[month]}, Tahun: ${year})`,
       align: "center",
     },
   };
@@ -181,25 +193,47 @@ async function kepalaGudang_displayChart() {
   kepalaGudang_chart.render();
 }
 
-// Inisialisasi dropdown
+// Inisialisasi dropdown untuk tahun (5 tahun terakhir)
 function kepalaGudang_initDateSelector() {
   const yearSelect = document.getElementById("kepalaGudang_yearSelect");
   const monthSelect = document.getElementById("kepalaGudang_monthSelect");
 
   const currentYear = new Date().getFullYear();
-  for (let i = currentYear - 1; i <= currentYear; i++) {
+
+  // Tambahkan pilihan tahun untuk 5 tahun terakhir
+  for (let i = currentYear - 5; i <= currentYear; i++) {
     const option = document.createElement("option");
     option.value = i;
     option.textContent = i;
     yearSelect.appendChild(option);
   }
 
-  for (let i = 1; i <= 12; i++) {
+  const monthNames = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+
+  monthNames.forEach((month, index) => {
     const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
+    option.value = index + 1; // value tetap 1-12
+    option.textContent = month;
     monthSelect.appendChild(option);
-  }
+  });
+
+  // Set default to current month and year
+  const currentMonth = new Date().getMonth() + 1;
+  monthSelect.value = currentMonth;
+  yearSelect.value = currentYear;
 
   yearSelect.addEventListener("change", kepalaGudang_displayChart);
   monthSelect.addEventListener("change", kepalaGudang_displayChart);

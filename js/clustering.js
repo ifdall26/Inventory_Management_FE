@@ -1,14 +1,20 @@
 // Fungsi untuk mengambil data clustering dari API
+// Tambahkan pengecekan jika response gagal
 async function fetchClusteringData() {
-  const response = await fetch(
-    "http://localhost:3000/api/clusteringRoutes/clustering"
-  ); // Ganti URL dengan endpoint yang sesuai
-  const data = await response.json();
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/clusteringRoutes/clustering"
+    );
+    const data = await response.json();
 
-  if (data.status === "success") {
-    return data.data;
-  } else {
-    console.error("Error fetching data:", data.message);
+    if (data.status === "success") {
+      return data.data;
+    } else {
+      console.error("Error fetching data:", data.message);
+      return [];
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
     return [];
   }
 }
@@ -79,12 +85,14 @@ function classifyItemsByFrequencyAndRequest(averageRequests) {
       (frequency <= lowFrequencyThreshold &&
         average > lowQuantityThreshold &&
         average <= highQuantityThreshold &&
-        totalQuantity <= highTotalQuantityThreshold)
+        totalQuantity <= highTotalQuantityThreshold) ||
+      (totalQuantity >= highQuantityThreshold &&
+        totalQuantity < highTotalQuantityThreshold)
     ) {
       clusters[2].push(item); // Cluster 2: Sedang
     } else if (
-      frequency > highFrequencyThreshold ||
-      totalQuantity > highTotalQuantityThreshold
+      frequency >= highFrequencyThreshold ||
+      totalQuantity >= highTotalQuantityThreshold
     ) {
       clusters[3].push(item); // Cluster 3: Tinggi
     }
@@ -171,31 +179,55 @@ async function displayChart() {
   chart.render();
 }
 
-// Inisialisasi dropdown bulan dan tahun
-function initDateSelector() {
-  const yearSelect = document.getElementById("yearSelect");
+// Inisialisasi dropdown bulan dan tahun (5 tahun terakhir) untuk admin
+function admin_initDateSelector() {
   const monthSelect = document.getElementById("monthSelect");
+  const yearSelect = document.getElementById("yearSelect");
 
-  const currentYear = new Date().getFullYear();
-  for (let i = currentYear - 1; i <= currentYear; i++) {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth(); // 0–11
+  const currentYear = currentDate.getFullYear();
+
+  // Isi dropdown bulan
+  const months = [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ];
+  months.forEach((month, index) => {
     const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
+    option.value = index + 1; // 1–12
+    option.textContent = month;
+    if (index === currentMonth) option.selected = true;
+    monthSelect.appendChild(option);
+  });
+
+  // Isi dropdown tahun dari 2020 sampai tahun sekarang
+  for (let y = 2020; y <= currentYear; y++) {
+    const option = document.createElement("option");
+    option.value = y;
+    option.textContent = y;
+    if (y === currentYear) option.selected = true;
     yearSelect.appendChild(option);
   }
 
-  for (let i = 1; i <= 12; i++) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    monthSelect.appendChild(option);
-  }
-
-  yearSelect.addEventListener("change", displayChart);
+  // Trigger chart saat bulan/tahun berubah
   monthSelect.addEventListener("change", displayChart);
+  yearSelect.addEventListener("change", displayChart);
+
+  // Tampilkan chart pertama kali
+  displayChart();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  initDateSelector();
-  displayChart();
+  admin_initDateSelector();
 });
