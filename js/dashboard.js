@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (user) {
       // Tampilkan nama pengguna dan role
       document.getElementById("userName").innerText = user.nama;
-      document.getElementById("userRole").innerText = user.role;
+      // document.getElementById("userRole").innerText = user.role;
 
       // Tampilkan konten berdasarkan role
       if (user.role === "Super Admin") {
