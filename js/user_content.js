@@ -17,8 +17,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Fungsi untuk menampilkan modal formulir permintaan barang
-  function showRequestForm(kode_barang) {
+  function showRequestForm(kode_barang, kode_lokasi) {
     document.getElementById("kodeBarang").value = kode_barang;
+    document.getElementById("kodeLokasi").value = kode_lokasi;
     document.getElementById("requestFormModal").style.display = "block";
   }
 
@@ -39,6 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.addEventListener("click", function (event) {
     if (event.target.classList.contains("request-button")) {
       const kode_barang = event.target.getAttribute("data-kode-barang");
+      const kode_lokasi = event.target.getAttribute("data-kode-lokasi");
 
       // Cek apakah stok barang habis
       const selectedBarang = allBarang.find(
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
       } else {
         // Jika stok cukup, tampilkan form permintaan barang biasa
-        showRequestForm(kode_barang);
+        showRequestForm(kode_barang, kode_lokasi);
       }
     }
   });
@@ -179,7 +181,8 @@ document.addEventListener("DOMContentLoaded", function () {
       const userInfo = getUserInfo();
 
       const data = {
-        kode_barang: formData.get("kode_barang"),
+        kode_lokasi: formData.get("kode_lokasi"),
+        kode_barang: formData.get("kode_barang"), // ✅ DITAMBAHKAN
         nama_user: userInfo.nama,
         quantity_diminta: parseInt(formData.get("quantity")),
         status: "Disetujui",
@@ -206,21 +209,22 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error("Network response was not ok");
+            return response.json().then((error) => {
+              throw new Error(error.error || "Gagal mengirim permintaan.");
+            });
           }
           return response.json();
         })
-        .then((data) => {
-          console.log("Request berhasil:", data);
-          updateStock(data.kode_barang, data.quantity_diminta);
+        .then((result) => {
+          console.log("Request berhasil:", result);
           Swal.fire({
             title: "Permintaan Berhasil!",
-            text: "Permintaan Anda telah berhasil dikirim. Stok barang akan diperbarui.",
+            text: "Barang bisa diambil di lokasi. Stok barang telah diperbarui.",
             icon: "success",
             confirmButtonText: "OK",
           }).then(() => {
-            hideRequestForm(); // Tutup modal setelah permintaan dikirim
-            window.location.reload(); // Refresh halaman setelah modal ditutup
+            hideRequestForm();
+            window.location.reload();
           });
         })
         .catch((error) => {
@@ -231,55 +235,10 @@ document.addEventListener("DOMContentLoaded", function () {
             icon: "error",
             confirmButtonText: "OK",
           }).then(() => {
-            window.location.reload(); // Refresh halaman setelah SweetAlert2 ditutup
+            window.location.reload();
           });
         });
     });
-
-  // Fungsi untuk mengupdate stok barang
-  function updateStock(kode_barang, quantity_diminta) {
-    quantity_diminta = parseFloat(quantity_diminta);
-
-    if (isNaN(quantity_diminta) || quantity_diminta <= 0) {
-      console.error("Jumlah yang diminta tidak valid.");
-      return;
-    }
-
-    fetch(`http://localhost:3000/api/barang_daerah/${kode_barang}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ quantity: -quantity_diminta }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((error) => {
-            throw new Error(error.message || "Network response was not ok");
-          });
-        }
-        return response.json();
-      })
-      .then(() => {
-        console.log("Menampilkan SweetAlert");
-        if (typeof Swal !== "undefined") {
-          Swal.fire({
-            title: "Permintaan Berhasil!",
-            text: "Barang bisa diambil di lokasi. Stok barang telah diperbarui.",
-            icon: "success",
-            confirmButtonText: "OK",
-          }).then(() => {
-            hideRequestForm(); // Tutup modal setelah permintaan dikirim
-          });
-        } else {
-          console.error("SweetAlert2 tidak terdefinisi.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating stock:", error);
-        alert("Gagal memperbarui stok barang: " + error.message);
-      });
-  }
 
   // Klik pada tombol close untuk menutup modal
   document
@@ -316,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
         <td>${item.tipe_barang}</td>
         <td>${item.gudang}</td>
         <td>${item.lemari}</td>
-        <td><button class="request-button" data-kode-barang="${item.kode_barang}" title="Minta Barang"><i class="fas fa-box-open" ></i></button></td>
+        <td><button class="request-button" data-kode-barang="${item.kode_barang}" data-kode-lokasi="${item.kode_lokasi}" title="Minta Barang"><i class="fas fa-box-open" ></i></button></td>
       `;
       tbody.appendChild(row);
     });

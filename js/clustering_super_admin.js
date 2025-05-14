@@ -62,6 +62,7 @@ function kepalaGudang_calculateFrequencyAndAverageRequest(
 // Pengelompokan ke dalam 3 cluster
 function kepalaGudang_classifyItemsByFrequencyAndRequest(averageRequests) {
   const clusters = { 1: [], 2: [], 3: [] };
+
   const lowFrequencyThreshold = 5;
   const highFrequencyThreshold = 15;
   const lowQuantityThreshold = 10;
@@ -76,7 +77,7 @@ function kepalaGudang_classifyItemsByFrequencyAndRequest(averageRequests) {
       average <= lowQuantityThreshold &&
       totalQuantity <= highTotalQuantityThreshold
     ) {
-      clusters[1].push(item);
+      clusters[1].push(item); // Cluster 1: Rendah
     } else if (
       (frequency > lowFrequencyThreshold &&
         frequency <= highFrequencyThreshold &&
@@ -84,14 +85,16 @@ function kepalaGudang_classifyItemsByFrequencyAndRequest(averageRequests) {
       (frequency <= lowFrequencyThreshold &&
         average > lowQuantityThreshold &&
         average <= highQuantityThreshold &&
-        totalQuantity <= highTotalQuantityThreshold)
+        totalQuantity <= highTotalQuantityThreshold) ||
+      (totalQuantity >= highQuantityThreshold &&
+        totalQuantity < highTotalQuantityThreshold)
     ) {
-      clusters[2].push(item);
+      clusters[2].push(item); // Cluster 2: Sedang
     } else if (
-      frequency > highFrequencyThreshold ||
-      totalQuantity > highTotalQuantityThreshold
+      frequency >= highFrequencyThreshold ||
+      totalQuantity >= highTotalQuantityThreshold
     ) {
-      clusters[3].push(item);
+      clusters[3].push(item); // Cluster 3: Tinggi
     }
   });
 

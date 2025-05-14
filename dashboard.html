@@ -31,6 +31,7 @@
           <li><a href="#reqAdminDaerah"><i class="fas fa-list"></i> Requests</a></li>
           <li><a href="#addAdminDaerah"><i class="fas fa-plus-square"></i> Add items</a></li>
           <li><a href="#itemsAdminDaerah"><i class="fas fa-boxes"></i> Items</a></li>
+          <li><a href="#clusterAdminDaerah"><i class="fas fa-chart-pie"></i>Cluster</a></li>
           <li><a href="loginRegister.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
         
@@ -42,7 +43,8 @@
         </ul>
 
         <ul class="navMenu" id="superAdminNavigation" style="display: none;">
-          <li><a href="#"><i class="fas fa-warehouse"></i> Items</a></li>
+          <li><a href="#daftarBarangKepalaGudang"><i class="fas fa-warehouse"></i> Items</a></li>
+          <li><a href="#clusteringKepalaGudang"><i class="fas fa-chart-pie"></i>Cluster</a></li>
           <li><a href="loginRegister.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
         
@@ -245,14 +247,14 @@
 
       <!-- User Content -->
       <div id="userContent" style="display: none">
-        <div id="notification-container" class="notification">
+        <!-- <div id="notification-container" class="notification">
           <button id="notification-button">
             🔔 <span id="notification-count" class="badge">0</span>
           </button>
           <div id="notification-dropdown" class="dropdown hidden">
             <ul id="notification-list"></ul>
           </div>
-        </div>
+        </div> -->
         
         <div class="chartContainer">
           <div class="section">
@@ -350,6 +352,7 @@
             <h2>Permintaan Barang</h2>
             <form id="requestForm">
               <input type="hidden" id="kodeBarang" name="kode_barang" />
+              <input type="hidden" id="kodeLokasi" name="kode_lokasi" />
               <label for="quantity">Jumlah:</label>
               <input type="number" id="quantity" name="quantity" required />
 
@@ -412,7 +415,7 @@
         <h3>Admin Section</h3>
         <!-- <p>This content is visible only to Admin Daerah</p> -->
         <!-- Halaman tempat menampilkan grafik -->
-        <div class="clusteringContainer">
+        <div id="clusterAdminDaerah" class="clusteringContainer">
           <select id="yearSelect"></select>
           <select id="monthSelect"></select>
           
@@ -657,7 +660,7 @@
       <div id="superAdminContent" style="display: none">
         <h3>Kepala Gudang Section</h3>
         <!-- <p>This content is visible only to Kepala Gudang</p> -->
-        <div class="clusteringContainer">
+        <div id="clusteringKepalaGudang" class="clusteringContainer">
           <select id="kepalaGudang_yearSelect"></select>
           <select id="kepalaGudang_monthSelect"></select>
         
@@ -676,7 +679,7 @@
         </div>
 
         <!-- tabel barang -->
-        <h2 class="fade-in">Daftar Barang</h2>
+        <h2 id="daftarBarangKepalaGudang" class="fade-in">Daftar Barang</h2>
 
         <div class="search-filter">
           <button id="resetFiltersKepalaGudang" class="reset-button">
