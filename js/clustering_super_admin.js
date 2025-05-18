@@ -1,19 +1,25 @@
-async function kepalaGudang_fetchClusteringData() {
-  const response = await fetch(
-    "http://localhost:3000/api/clusteringRoutes/clustering"
-  );
-  const data = await response.json();
+// Fungsi untuk mengambil data clustering dari API dengan pengecekan error (untuk Kepala Gudang)
+async function fetchClusteringDataKepalaGudang() {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/api/clusteringRoutes/clustering"
+    );
+    const data = await response.json();
 
-  if (data.status === "success") {
-    return data.data;
-  } else {
-    console.error("Error fetching data:", data.message);
+    if (data.status === "success") {
+      return data.data;
+    } else {
+      console.error("Error fetching data:", data.message);
+      return [];
+    }
+  } catch (error) {
+    console.error("Fetch error:", error);
     return [];
   }
 }
 
-// Filter data berdasarkan bulan dan tahun
-function kepalaGudang_filterDataByTimePeriod(data, year, month) {
+// Fungsi untuk memfilter data berdasarkan periode waktu tertentu (bulan dan tahun) - bisa dipakai sama seperti sebelumnya
+function filterDataByTimePeriodKepalaGudang(data, year, month) {
   return data.filter((item) => {
     const requestDate = new Date(item.tanggal_request);
     return (
@@ -22,14 +28,14 @@ function kepalaGudang_filterDataByTimePeriod(data, year, month) {
   });
 }
 
-// Hitung frekuensi dan rata-rata quantity
-function kepalaGudang_calculateFrequencyAndAverageRequest(
+// Fungsi untuk menghitung frekuensi dan rata-rata quantity untuk setiap barang berdasarkan periode waktu (Kepala Gudang)
+function calculateFrequencyAndAverageRequestKepalaGudang(
   clusteredData,
   year,
   month
 ) {
   const itemRequests = {};
-  const filteredData = kepalaGudang_filterDataByTimePeriod(
+  const filteredData = filterDataByTimePeriodKepalaGudang(
     clusteredData,
     year,
     month
@@ -59,159 +65,141 @@ function kepalaGudang_calculateFrequencyAndAverageRequest(
   return averageRequests;
 }
 
-// Pengelompokan ke dalam 3 cluster
-function kepalaGudang_classifyItemsByFrequencyAndRequest(averageRequests) {
-  const clusters = { 1: [], 2: [], 3: [] };
+// Fungsi K-Means untuk mengelompokkan data (bisa reuse yang sama, tapi saya buat ulang dengan nama berbeda untuk keamanan)
+function kMeansClusteringKepalaGudang(data, k = 3, maxIterations = 100) {
+  if (data.length === 0) return Array(k).fill([]);
 
-  const lowFrequencyThreshold = 5;
-  const highFrequencyThreshold = 15;
-  const lowQuantityThreshold = 10;
-  const highQuantityThreshold = 50;
-  const highTotalQuantityThreshold = 500;
+  let centroids = data
+    .slice()
+    .sort(() => Math.random() - 0.5)
+    .slice(0, k)
+    .map((item) => [item.average, item.frequency]);
 
-  averageRequests.forEach((item) => {
-    const { frequency, average, totalQuantity } = item;
+  let clusters = Array.from({ length: k }, () => []);
 
-    if (
-      frequency <= lowFrequencyThreshold &&
-      average <= lowQuantityThreshold &&
-      totalQuantity <= highTotalQuantityThreshold
-    ) {
-      clusters[1].push(item); // Cluster 1: Rendah
-    } else if (
-      (frequency > lowFrequencyThreshold &&
-        frequency <= highFrequencyThreshold &&
-        average <= highQuantityThreshold) ||
-      (frequency <= lowFrequencyThreshold &&
-        average > lowQuantityThreshold &&
-        average <= highQuantityThreshold &&
-        totalQuantity <= highTotalQuantityThreshold) ||
-      (totalQuantity >= highQuantityThreshold &&
-        totalQuantity < highTotalQuantityThreshold)
-    ) {
-      clusters[2].push(item); // Cluster 2: Sedang
-    } else if (
-      frequency >= highFrequencyThreshold ||
-      totalQuantity >= highTotalQuantityThreshold
-    ) {
-      clusters[3].push(item); // Cluster 3: Tinggi
+  for (let iteration = 0; iteration < maxIterations; iteration++) {
+    clusters = Array.from({ length: k }, () => []);
+
+    data.forEach((item) => {
+      const distances = centroids.map(([avg, freq]) =>
+        Math.sqrt(
+          Math.pow(item.average - avg, 2) + Math.pow(item.frequency - freq, 2)
+        )
+      );
+      const closestCentroid = distances.indexOf(Math.min(...distances));
+      clusters[closestCentroid].push(item);
+    });
+
+    const newCentroids = clusters.map((cluster) => {
+      if (cluster.length === 0) return [0, 0];
+
+      const avgAverage =
+        cluster.reduce((sum, item) => sum + item.average, 0) / cluster.length;
+      const avgFrequency =
+        cluster.reduce((sum, item) => sum + item.frequency, 0) / cluster.length;
+      return [avgAverage, avgFrequency];
+    });
+
+    if (centroidsConverged(centroids, newCentroids)) {
+      break;
     }
+
+    centroids = newCentroids;
+  }
+
+  const clusterStats = clusters.map((cluster, index) => {
+    const avgTotalQuantity =
+      cluster.reduce((sum, item) => sum + item.totalQuantity, 0) /
+      (cluster.length || 1);
+    return { index, cluster, avgTotalQuantity };
   });
 
-  return clusters;
+  clusterStats.sort((a, b) => a.avgTotalQuantity - b.avgTotalQuantity);
+
+  return clusterStats.map((cs) => cs.cluster);
 }
 
-let kepalaGudang_chart; // Chart instance khusus kepala gudang
+// Fungsi untuk cek konvergensi centroid, bisa dipakai ulang dari clustering.js
+function centroidsConverged(oldCentroids, newCentroids, tolerance = 1e-4) {
+  return oldCentroids.every((oldC, i) => {
+    const newC = newCentroids[i];
+    return (
+      Math.abs(oldC[0] - newC[0]) < tolerance &&
+      Math.abs(oldC[1] - newC[1]) < tolerance
+    );
+  });
+}
 
-async function kepalaGudang_displayChart() {
-  const clusteredData = await kepalaGudang_fetchClusteringData();
+let kepalaGudangChart; // variabel chart terpisah untuk kepala gudang
+
+async function displayChartKepalaGudang() {
+  const clusteredData = await fetchClusteringDataKepalaGudang();
+
   const year = parseInt(
     document.getElementById("kepalaGudang_yearSelect").value
   );
   const month =
     parseInt(document.getElementById("kepalaGudang_monthSelect").value) - 1;
 
-  const averageRequests = kepalaGudang_calculateFrequencyAndAverageRequest(
+  const averageRequests = calculateFrequencyAndAverageRequestKepalaGudang(
     clusteredData,
     year,
     month
   );
-  const clusters =
-    kepalaGudang_classifyItemsByFrequencyAndRequest(averageRequests);
 
-  // Tampilkan data per cluster
-  document.getElementById("kepalaGudang_cluster1Items").innerHTML = clusters[1]
-    .map(
-      (item) =>
-        `<li>${item.kode_barang} - Frekuensi: ${
-          item.frequency
-        } - Rata-rata: ${item.average.toFixed(2)} - Total: ${
-          item.totalQuantity
-        }</li>`
-    )
-    .join("");
+  const clusters = kMeansClusteringKepalaGudang(averageRequests, 3);
 
-  document.getElementById("kepalaGudang_cluster2Items").innerHTML = clusters[2]
-    .map(
-      (item) =>
-        `<li>${item.kode_barang} - Frekuensi: ${
-          item.frequency
-        } - Rata-rata: ${item.average.toFixed(2)} - Total: ${
-          item.totalQuantity
-        }</li>`
-    )
-    .join("");
+  clusters.forEach((cluster, i) => {
+    const listId = `kepalaGudang_cluster${i + 1}Items`;
+    document.getElementById(listId).innerHTML = cluster
+      .map(
+        (item) =>
+          `<li>${item.kode_barang} - Frekuensi: ${
+            item.frequency
+          } - Rata-rata: ${item.average.toFixed(2)} - Total: ${
+            item.totalQuantity
+          }</li>`
+      )
+      .join("");
+  });
 
-  document.getElementById("kepalaGudang_cluster3Items").innerHTML = clusters[3]
-    .map(
-      (item) =>
-        `<li>${item.kode_barang} - Frekuensi: ${
-          item.frequency
-        } - Rata-rata: ${item.average.toFixed(2)} - Total: ${
-          item.totalQuantity
-        }</li>`
-    )
-    .join("");
-
-  const clusterCounts = {
-    1: clusters[1].length,
-    2: clusters[2].length,
-    3: clusters[3].length,
-  };
-
-  const monthNames = [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ];
+  const clusterCounts = clusters.map((cluster) => cluster.length);
 
   const chartData = {
-    series: [clusterCounts[1], clusterCounts[2], clusterCounts[3]],
+    series: clusterCounts,
     chart: {
       type: "pie",
       height: 350,
     },
-    labels: ["Cluster 1 (Rendah)", "Cluster 2 (Sedang)", "Cluster 3 (Tinggi)"],
+    labels: ["Permintaan Rendah", "Permintaan Sedang", "Permintaan Tinggi"],
     title: {
-      text: `Distribusi Permintaan Barang (Bulan: ${monthNames[month]}, Tahun: ${year})`,
+      text: `Distribusi Permintaan Barang Kepala Gudang (Bulan: ${
+        month + 1
+      }, Tahun: ${year})`,
       align: "center",
     },
   };
 
-  if (kepalaGudang_chart) kepalaGudang_chart.destroy();
-
-  kepalaGudang_chart = new ApexCharts(
+  if (kepalaGudangChart) {
+    kepalaGudangChart.destroy();
+  }
+  kepalaGudangChart = new ApexCharts(
     document.querySelector("#kepalaGudang_clusteringChart"),
     chartData
   );
-  kepalaGudang_chart.render();
+  kepalaGudangChart.render();
 }
 
-// Inisialisasi dropdown untuk tahun (5 tahun terakhir)
+// Inisialisasi dropdown bulan dan tahun untuk kepala gudang
 function kepalaGudang_initDateSelector() {
-  const yearSelect = document.getElementById("kepalaGudang_yearSelect");
   const monthSelect = document.getElementById("kepalaGudang_monthSelect");
+  const yearSelect = document.getElementById("kepalaGudang_yearSelect");
 
-  const currentYear = new Date().getFullYear();
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
 
-  // Tambahkan pilihan tahun untuk 5 tahun terakhir
-  for (let i = currentYear - 5; i <= currentYear; i++) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    yearSelect.appendChild(option);
-  }
-
-  const monthNames = [
+  const months = [
     "Januari",
     "Februari",
     "Maret",
@@ -225,25 +213,28 @@ function kepalaGudang_initDateSelector() {
     "November",
     "Desember",
   ];
-
-  monthNames.forEach((month, index) => {
+  months.forEach((month, index) => {
     const option = document.createElement("option");
-    option.value = index + 1; // value tetap 1-12
+    option.value = index + 1;
     option.textContent = month;
+    if (index === currentMonth) option.selected = true;
     monthSelect.appendChild(option);
   });
 
-  // Set default to current month and year
-  const currentMonth = new Date().getMonth() + 1;
-  monthSelect.value = currentMonth;
-  yearSelect.value = currentYear;
+  for (let y = 2020; y <= currentYear; y++) {
+    const option = document.createElement("option");
+    option.value = y;
+    option.textContent = y;
+    if (y === currentYear) option.selected = true;
+    yearSelect.appendChild(option);
+  }
 
-  yearSelect.addEventListener("change", kepalaGudang_displayChart);
-  monthSelect.addEventListener("change", kepalaGudang_displayChart);
+  monthSelect.addEventListener("change", displayChartKepalaGudang);
+  yearSelect.addEventListener("change", displayChartKepalaGudang);
+
+  displayChartKepalaGudang();
 }
 
-// Jalankan saat halaman dimuat
 document.addEventListener("DOMContentLoaded", () => {
   kepalaGudang_initDateSelector();
-  kepalaGudang_displayChart();
 });

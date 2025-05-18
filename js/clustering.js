@@ -1,5 +1,4 @@
-// Fungsi untuk mengambil data clustering dari API
-// Tambahkan pengecekan jika response gagal
+// Fungsi untuk mengambil data clustering dari API dengan pengecekan error
 async function fetchClusteringData() {
   try {
     const response = await fetch(
@@ -32,7 +31,6 @@ function filterDataByTimePeriod(data, year, month) {
 // Fungsi untuk menghitung frekuensi dan rata-rata quantity untuk setiap barang berdasarkan periode waktu
 function calculateFrequencyAndAverageRequest(clusteredData, year, month) {
   const itemRequests = {};
-
   const filteredData = filterDataByTimePeriod(clusteredData, year, month);
 
   filteredData.forEach((item) => {
@@ -52,53 +50,83 @@ function calculateFrequencyAndAverageRequest(clusteredData, year, month) {
       kode_barang,
       average,
       frequency: data.frequency,
-      totalQuantity: data.total, // Total quantity diminta
+      totalQuantity: data.total,
     });
   }
 
   return averageRequests;
 }
 
-// Fungsi untuk mengelompokkan barang berdasarkan kriteria cluster
-function classifyItemsByFrequencyAndRequest(averageRequests) {
-  const clusters = { 1: [], 2: [], 3: [] };
+// Helper untuk mengecek apakah centroid sudah konvergen (dengan toleransi kecil)
+function centroidsConverged(oldCentroids, newCentroids, tolerance = 1e-4) {
+  return oldCentroids.every((oldC, i) => {
+    const newC = newCentroids[i];
+    return (
+      Math.abs(oldC[0] - newC[0]) < tolerance &&
+      Math.abs(oldC[1] - newC[1]) < tolerance
+    );
+  });
+}
 
-  const lowFrequencyThreshold = 5;
-  const highFrequencyThreshold = 15;
-  const lowQuantityThreshold = 10;
-  const highQuantityThreshold = 50;
-  const highTotalQuantityThreshold = 500;
+// Fungsi K-Means untuk mengelompokkan data
+function kMeansClustering(data, k = 3, maxIterations = 100) {
+  if (data.length === 0) return Array(k).fill([]); // Jika data kosong, kembalikan array kosong
 
-  averageRequests.forEach((item) => {
-    const { frequency, average, totalQuantity } = item;
+  // Inisialisasi centroid secara acak dari data yang ada
+  let centroids = data
+    .slice()
+    .sort(() => Math.random() - 0.5)
+    .slice(0, k)
+    .map((item) => [item.average, item.frequency]);
 
-    if (
-      frequency <= lowFrequencyThreshold &&
-      average <= lowQuantityThreshold &&
-      totalQuantity <= highTotalQuantityThreshold
-    ) {
-      clusters[1].push(item); // Cluster 1: Rendah
-    } else if (
-      (frequency > lowFrequencyThreshold &&
-        frequency <= highFrequencyThreshold &&
-        average <= highQuantityThreshold) ||
-      (frequency <= lowFrequencyThreshold &&
-        average > lowQuantityThreshold &&
-        average <= highQuantityThreshold &&
-        totalQuantity <= highTotalQuantityThreshold) ||
-      (totalQuantity >= highQuantityThreshold &&
-        totalQuantity < highTotalQuantityThreshold)
-    ) {
-      clusters[2].push(item); // Cluster 2: Sedang
-    } else if (
-      frequency >= highFrequencyThreshold ||
-      totalQuantity >= highTotalQuantityThreshold
-    ) {
-      clusters[3].push(item); // Cluster 3: Tinggi
+  let clusters = Array.from({ length: k }, () => []);
+
+  for (let iteration = 0; iteration < maxIterations; iteration++) {
+    // Bersihkan cluster sebelumnya
+    clusters = Array.from({ length: k }, () => []);
+
+    // Tetapkan setiap item ke cluster terdekat berdasarkan centroid
+    data.forEach((item) => {
+      const distances = centroids.map(([avg, freq]) =>
+        Math.sqrt(
+          Math.pow(item.average - avg, 2) + Math.pow(item.frequency - freq, 2)
+        )
+      );
+      const closestCentroid = distances.indexOf(Math.min(...distances));
+      clusters[closestCentroid].push(item);
+    });
+
+    // Update centroid baru berdasarkan rata-rata cluster
+    const newCentroids = clusters.map((cluster) => {
+      if (cluster.length === 0) return [0, 0]; // Jika cluster kosong, centroid direset ke [0,0]
+
+      const avgAverage =
+        cluster.reduce((sum, item) => sum + item.average, 0) / cluster.length;
+      const avgFrequency =
+        cluster.reduce((sum, item) => sum + item.frequency, 0) / cluster.length;
+      return [avgAverage, avgFrequency];
+    });
+
+    // Cek apakah centroid sudah konvergen
+    if (centroidsConverged(centroids, newCentroids)) {
+      break;
     }
+
+    centroids = newCentroids;
+  }
+
+  // Urutkan cluster berdasarkan rata-rata totalQuantity (ascending: rendah ke tinggi)
+  const clusterStats = clusters.map((cluster, index) => {
+    const avgTotalQuantity =
+      cluster.reduce((sum, item) => sum + item.totalQuantity, 0) /
+      (cluster.length || 1);
+    return { index, cluster, avgTotalQuantity };
   });
 
-  return clusters;
+  clusterStats.sort((a, b) => a.avgTotalQuantity - b.avgTotalQuantity);
+
+  // Kembalikan array cluster yang sudah diurutkan
+  return clusterStats.map((cs) => cs.cluster);
 }
 
 let chart; // Variabel global untuk menyimpan instance chart
@@ -115,54 +143,34 @@ async function displayChart() {
     month
   );
 
-  const clusters = classifyItemsByFrequencyAndRequest(averageRequests);
+  // Terapkan K-Means Clustering
+  const clusters = kMeansClustering(averageRequests, 3);
 
-  document.getElementById("cluster1Items").innerHTML = clusters[1]
-    .map(
-      (item) =>
-        `<li>${item.kode_barang} - Frekuensi: ${
-          item.frequency
-        } - Rata-rata: ${item.average.toFixed(2)} - Total: ${
-          item.totalQuantity
-        }</li>`
-    )
-    .join("");
+  // Tampilkan hasil ke dalam daftar cluster di UI
+  clusters.forEach((cluster, i) => {
+    const listId = `cluster${i + 1}Items`;
+    document.getElementById(listId).innerHTML = cluster
+      .map(
+        (item) =>
+          `<li>${item.kode_barang} - Frekuensi: ${
+            item.frequency
+          } - Rata-rata: ${item.average.toFixed(2)} - Total: ${
+            item.totalQuantity
+          }</li>`
+      )
+      .join("");
+  });
 
-  document.getElementById("cluster2Items").innerHTML = clusters[2]
-    .map(
-      (item) =>
-        `<li>${item.kode_barang} - Frekuensi: ${
-          item.frequency
-        } - Rata-rata: ${item.average.toFixed(2)} - Total: ${
-          item.totalQuantity
-        }</li>`
-    )
-    .join("");
-
-  document.getElementById("cluster3Items").innerHTML = clusters[3]
-    .map(
-      (item) =>
-        `<li>${item.kode_barang} - Frekuensi: ${
-          item.frequency
-        } - Rata-rata: ${item.average.toFixed(2)} - Total: ${
-          item.totalQuantity
-        }</li>`
-    )
-    .join("");
-
-  const clusterCounts = {
-    1: clusters[1].length,
-    2: clusters[2].length,
-    3: clusters[3].length,
-  };
+  // Siapkan data chart
+  const clusterCounts = clusters.map((cluster) => cluster.length);
 
   const chartData = {
-    series: [clusterCounts[1], clusterCounts[2], clusterCounts[3]],
+    series: clusterCounts,
     chart: {
       type: "pie",
       height: 350,
     },
-    labels: ["Cluster 1 (Rendah)", "Cluster 2 (Sedang)", "Cluster 3 (Tinggi)"],
+    labels: ["Permintaan Rendah", "Permintaan Sedang", "Permintaan Tinggi"],
     title: {
       text: `Distribusi Permintaan Barang (Bulan: ${
         month + 1
@@ -171,10 +179,10 @@ async function displayChart() {
     },
   };
 
+  // Render chart menggunakan ApexCharts
   if (chart) {
-    chart.destroy(); // Hancurkan chart lama jika ada
+    chart.destroy();
   }
-
   chart = new ApexCharts(document.querySelector("#clusteringChart"), chartData);
   chart.render();
 }
@@ -185,7 +193,7 @@ function admin_initDateSelector() {
   const yearSelect = document.getElementById("yearSelect");
 
   const currentDate = new Date();
-  const currentMonth = currentDate.getMonth(); // 0–11
+  const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
 
   // Isi dropdown bulan
