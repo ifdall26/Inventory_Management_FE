@@ -130,6 +130,55 @@ function centroidsConverged(oldCentroids, newCentroids, tolerance = 1e-4) {
   });
 }
 
+// Fungsi untuk menghitung Silhouette Score
+function calculateSilhouetteScoreKG(data, clusters, k) {
+  const itemClusterMap = {};
+  clusters.forEach((cluster, clusterIndex) => {
+    cluster.forEach((item) => {
+      itemClusterMap[item.kode_barang] = clusterIndex;
+    });
+  });
+
+  function euclideanDistance(a, b) {
+    return Math.sqrt(
+      Math.pow(a.average - b.average, 2) +
+        Math.pow(a.frequency - b.frequency, 2)
+    );
+  }
+
+  const silhouetteScores = data.map((item) => {
+    const clusterIndex = itemClusterMap[item.kode_barang];
+    const ownCluster = clusters[clusterIndex];
+    const otherClusters = clusters.filter((_, i) => i !== clusterIndex);
+
+    const a =
+      ownCluster.length <= 1
+        ? 0
+        : ownCluster
+            .filter((other) => other.kode_barang !== item.kode_barang)
+            .reduce((sum, other) => sum + euclideanDistance(item, other), 0) /
+          (ownCluster.length - 1);
+
+    const b = Math.min(
+      ...otherClusters.map((cluster) => {
+        return (
+          cluster.reduce(
+            (sum, other) => sum + euclideanDistance(item, other),
+            0
+          ) / cluster.length
+        );
+      })
+    );
+
+    const s = b > a ? (b - a) / b : a > b ? (b - a) / a : 0;
+    return s;
+  });
+
+  const averageSilhouette =
+    silhouetteScores.reduce((a, b) => a + b, 0) / silhouetteScores.length;
+  return averageSilhouette;
+}
+
 let kepalaGudangChart; // variabel chart terpisah untuk kepala gudang
 
 async function displayChartKepalaGudang() {
@@ -188,6 +237,16 @@ async function displayChartKepalaGudang() {
     chartData
   );
   kepalaGudangChart.render();
+
+  // Hitung dan tampilkan Silhouette Score
+  const silhouetteScore = calculateSilhouetteScoreKG(
+    averageRequests,
+    clusters,
+    3
+  );
+  document.getElementById(
+    "kepalaGudang_silhouetteScore"
+  ).textContent = `Silhouette Score: ${silhouetteScore.toFixed(3)}`;
 }
 
 // Inisialisasi dropdown bulan dan tahun untuk kepala gudang

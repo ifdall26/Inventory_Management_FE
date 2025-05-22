@@ -129,6 +129,52 @@ function kMeansClustering(data, k = 3, maxIterations = 100) {
   return clusterStats.map((cs) => cs.cluster);
 }
 
+function calculateSilhouetteScore(clusters) {
+  const allItems = clusters.flat();
+
+  function euclideanDistance(p1, p2) {
+    return Math.sqrt(
+      Math.pow(p1.average - p2.average, 2) +
+        Math.pow(p1.frequency - p2.frequency, 2)
+    );
+  }
+
+  const scores = allItems.map((item) => {
+    // Cari cluster tempat item ini berada
+    const ownCluster = clusters.find((cluster) => cluster.includes(item));
+
+    // a: jarak rata-rata ke anggota lain di cluster yang sama
+    const a =
+      ownCluster.length > 1
+        ? ownCluster
+            .filter((other) => other !== item)
+            .reduce((sum, other) => sum + euclideanDistance(item, other), 0) /
+          (ownCluster.length - 1)
+        : 0;
+
+    // b: jarak rata-rata ke cluster lain yang paling dekat
+    const b = Math.min(
+      ...clusters
+        .filter((cluster) => cluster !== ownCluster && cluster.length > 0)
+        .map((cluster) => {
+          const totalDist = cluster.reduce(
+            (sum, other) => sum + euclideanDistance(item, other),
+            0
+          );
+          return totalDist / cluster.length;
+        })
+    );
+
+    const s = b === 0 && a === 0 ? 0 : (b - a) / Math.max(a, b);
+    return s;
+  });
+
+  // Skor rata-rata seluruh titik
+  const averageSilhouette =
+    scores.reduce((sum, s) => sum + s, 0) / scores.length;
+  return averageSilhouette.toFixed(3); // Batasi 3 digit
+}
+
 let chart; // Variabel global untuk menyimpan instance chart
 
 async function displayChart() {
@@ -185,6 +231,11 @@ async function displayChart() {
   }
   chart = new ApexCharts(document.querySelector("#clusteringChart"), chartData);
   chart.render();
+  // Hitung dan tampilkan Silhouette Score
+  const silhouetteScore = calculateSilhouetteScore(clusters);
+  document.getElementById(
+    "silhouetteScore"
+  ).textContent = `Silhouette Score: ${silhouetteScore}`;
 }
 
 // Inisialisasi dropdown bulan dan tahun (5 tahun terakhir) untuk admin
