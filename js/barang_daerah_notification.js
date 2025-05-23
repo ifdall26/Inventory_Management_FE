@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function fetchDaerahLowStockItems() {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/barang_daerah_notification/low-stock"
+        "https://inventorybe.glitch.me/api/barang_daerah_notification/low-stock"
       );
       if (!response.ok) throw new Error(`Error: ${response.statusText}`);
       return await response.json();

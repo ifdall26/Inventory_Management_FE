@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const userId = localStorage.getItem("userId");
 
   function fetchBarang() {
-    fetch("http://localhost:3000/api/barang_daerah")
+    fetch("https://inventorybe.glitch.me/api/barang_daerah")
       .then((response) => response.json())
       .then((data) => {
         allBarang = data;
@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function searchBarangGudang(namaBarang) {
     fetch(
-      `http://localhost:3000/api/barang_gudang/by-name/${encodeURIComponent(
+      `https://inventorybe.glitch.me/api/barang_gudang/by-name/${encodeURIComponent(
         namaBarang
       )}`
     )
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
       id_user: userInfo.id_user,
     };
 
-    fetch("http://localhost:3000/api/requests_gudang", {
+    fetch("https://inventorybe.glitch.me/api/requests_gudang", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      fetch("http://localhost:3000/api/requests", {
+      fetch("https://inventorybe.glitch.me/api/requests", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function fetchUserRequests() {
-    fetch(`http://localhost:3000/api/requests/user/${userId}`)
+    fetch(`https://inventorybe.glitch.me/api/requests/user/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         displayUserRequests(data);
@@ -445,7 +445,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function fetchUserRequestsGudang() {
-    fetch(`http://localhost:3000/api/requests_gudang/user/${userId}`)
+    fetch(`https://inventorybe.glitch.me/api/requests_gudang/user/${userId}`)
       .then((response) => response.json())
       .then((data) => {
         displayUserRequestsGudang(data);

@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function fetchBarangKepalaGudang() {
-  fetch("http://localhost:3000/api/barang_daerah")
+  fetch("https://inventorybe.glitch.me/api/barang_daerah")
     .then((res) => res.json())
     .then((data) => {
       allBarangKepalaGudang = data;

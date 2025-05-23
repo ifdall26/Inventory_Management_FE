@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   //     try {
   //       const response = await fetch(
-  //         "http://localhost:3000/api/barang_gudang",
+  //         "https://inventorybe.glitch.me/api/barang_gudang",
   //         {
   //           method: "POST",
   //           headers: {
@@ -197,7 +197,9 @@ document.addEventListener("DOMContentLoaded", () => {
 // Fungsi untuk mengambil dan menampilkan data barang untuk Admin Gudang
 async function fetchAndDisplayItemsForAdmin(page = 1, itemsPerPage = 10) {
   try {
-    const response = await fetch("http://localhost:3000/api/barang_gudang");
+    const response = await fetch(
+      "https://inventorybe.glitch.me/api/barang_gudang"
+    );
     const barang_gudang = await response.json();
 
     const start = (page - 1) * itemsPerPage;
@@ -268,7 +270,7 @@ function setupEditAndDeleteButtons() {
 async function editItem(kodeBarang) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/barang_gudang/${kodeBarang}`
+      `https://inventorybe.glitch.me/api/barang_gudang/${kodeBarang}`
     );
     const item = await response.json();
 
@@ -336,7 +338,7 @@ async function editItem(kodeBarang) {
       };
 
       const updateResponse = await fetch(
-        `http://localhost:3000/api/barang_gudang/${kodeBarang}`,
+        `https://inventorybe.glitch.me/api/barang_gudang/${kodeBarang}`,
         {
           method: "PUT",
           headers: {
@@ -374,7 +376,7 @@ async function deleteItem(kodeBarang) {
     if (result.isConfirmed) {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/barang_gudang/${kodeBarang}`,
+          `https://inventorybe.glitch.me/api/barang_gudang/${kodeBarang}`,
           {
             method: "DELETE",
           }
@@ -406,7 +408,7 @@ async function fetchAndDisplayRequestsForAdmin(
   year = null
 ) {
   try {
-    let url = "http://localhost:3000/api/requests_gudang";
+    let url = "https://inventorybe.glitch.me/api/requests_gudang";
     const response = await fetch(url);
     const requests = await response.json();
 
@@ -613,7 +615,7 @@ async function approveRequest(id_request) {
     if (result.isConfirmed) {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/requests_gudang/${id_request}/approve`,
+          `https://inventorybe.glitch.me/api/requests_gudang/${id_request}/approve`,
           {
             method: "PUT",
             headers: {
@@ -662,7 +664,7 @@ async function rejectRequest(id_request) {
       const reason = result.value;
       try {
         const response = await fetch(
-          `http://localhost:3000/api/requests_gudang/${id_request}/reject`,
+          `https://inventorybe.glitch.me/api/requests_gudang/${id_request}/reject`,
           {
             method: "PUT",
             headers: {

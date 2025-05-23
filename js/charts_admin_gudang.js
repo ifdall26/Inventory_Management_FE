@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function fetchStatistics() {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/stat_gudang/statistics"
+        "https://inventorybe.glitch.me/api/stat_gudang/statistics"
       );
       if (!response.ok) throw new Error(`Error: ${response.statusText}`);
       return await response.json();

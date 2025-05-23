@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/user_notification/unnotification?user_id=${userId}`,
+        `https://inventorybe.glitch.me/api/user_notification/unnotification?user_id=${userId}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/user_notification/mark-read",
+        "https://inventorybe.glitch.me/api/user_notification/mark-read",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -15,7 +15,7 @@ document
       tipe_barang: formData.get("tipe_barang"),
     };
 
-    fetch("http://localhost:3000/api/barang_daerah", {
+    fetch("https://inventorybe.glitch.me/api/barang_daerah", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

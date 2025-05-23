@@ -2,7 +2,7 @@
 async function fetchClusteringData() {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/clusteringRoutes/clustering"
+      "https://inventorybe.glitch.me/api/clusteringRoutes/clustering"
     );
     const data = await response.json();
 

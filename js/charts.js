@@ -2,7 +2,7 @@
 async function fetchMostRequestedItems() {
   try {
     const response = await fetch(
-      "http://localhost:3000/api/requests/statistics/most-requested"
+      "https://inventorybe.glitch.me/api/requests/statistics/most-requested"
     );
 
     // Cek status respons sebelum melanjutkan

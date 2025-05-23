@@ -2,7 +2,7 @@
 async function fetchStatisticsByDaerah(lokasiDaerah) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/statistics/items-per-daerah-area?lokasi_daerah=${lokasiDaerah}`
+      `https://inventorybe.glitch.me/api/statistics/items-per-daerah-area?lokasi_daerah=${lokasiDaerah}`
     );
 
     // Cek status respons sebelum melanjutkan

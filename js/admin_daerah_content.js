@@ -9,7 +9,7 @@ const requestsPerPage = 10; // Jumlah request per halaman
 
 // Fungsi untuk mengambil data barang dari server
 function fetchBarang() {
-  fetch("http://localhost:3000/api/barang_daerah")
+  fetch("https://inventorybe.glitch.me/api/barang_daerah")
     .then((response) => response.json())
     .then((data) => {
       allBarang = data;
@@ -94,7 +94,7 @@ function attachActionListeners() {
 
 // Fungsi delete berdasarkan kode_lokasi
 function deleteBarang(kode_lokasi) {
-  fetch(`http://localhost:3000/api/barang_daerah/${kode_lokasi}`, {
+  fetch(`https://inventorybe.glitch.me/api/barang_daerah/${kode_lokasi}`, {
     method: "DELETE",
   })
     .then((res) => {
@@ -128,7 +128,7 @@ function editBarang(kode_lokasi) {
   const modal = document.getElementById("editBarangModal");
   const form = document.getElementById("editBarangForm");
 
-  fetch(`http://localhost:3000/api/barang_daerah/${kode_lokasi}`)
+  fetch(`https://inventorybe.glitch.me/api/barang_daerah/${kode_lokasi}`)
     .then((res) => {
       if (!res.ok) {
         throw new Error(`Error fetching barang: ${res.statusText}`);
@@ -181,13 +181,16 @@ function editBarang(kode_lokasi) {
           lemari: form.lemari.value,
         };
 
-        fetch(`http://localhost:3000/api/barang_daerah/${kode_lokasi}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        })
+        fetch(
+          `https://inventorybe.glitch.me/api/barang_daerah/${kode_lokasi}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          }
+        )
           .then((res) => {
             if (!res.ok) {
               throw new Error("Gagal mengupdate barang");
@@ -218,7 +221,7 @@ function editBarang(kode_lokasi) {
 
 // Fungsi untuk memuat ulang data barang dari server
 function loadBarang() {
-  fetch("http://localhost:3000/api/barang_daerah")
+  fetch("https://inventorybe.glitch.me/api/barang_daerah")
     .then((res) => res.json())
     .then((data) => {
       allBarang = data;
@@ -350,7 +353,7 @@ function applySearchAndFilter() {
 
 // Fungsi untuk load request dari server
 function loadRequests() {
-  fetch("http://localhost:3000/api/requests") // Ganti endpoint untuk barang daerah
+  fetch("https://inventorybe.glitch.me/api/requests") // Ganti endpoint untuk barang daerah
     .then((response) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");

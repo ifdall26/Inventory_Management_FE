@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function fetchNotifications() {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/gudang_notification/notifications"
+        "https://inventorybe.glitch.me/gudang_notification/notifications"
       );
       if (!response.ok) throw new Error(`Error: ${response.statusText}`);
       return await response.json();
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function fetchLowStockItems() {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/gudang_notification/low-stock"
+        "https://inventorybe.glitch.me/api/gudang_notification/low-stock"
       );
       if (!response.ok) throw new Error(`Error: ${response.statusText}`);
       return await response.json();

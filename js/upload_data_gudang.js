@@ -21,10 +21,13 @@ function uploadDataToApi(file) {
   formData.append("file", file);
 
   // Kirim data ke server melalui endpoint baru
-  fetch("http://localhost:3000/api/barang_gudang/upload_excel_barang_gudang", {
-    method: "POST",
-    body: formData,
-  })
+  fetch(
+    "https://inventorybe.glitch.me/api/barang_gudang/upload_excel_barang_gudang",
+    {
+      method: "POST",
+      body: formData,
+    }
+  )
     .then((response) => {
       if (!response.ok) {
         return response.text().then((text) => {
