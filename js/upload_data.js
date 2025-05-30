@@ -30,7 +30,7 @@ function uploadDataToApi(file) {
   const formData = new FormData();
   formData.append("file", file); // Pastikan kunci 'file' cocok dengan backend
 
-  fetch("https://inventorybe.glitch.me/barang_daerah/upload_excel", {
+  fetch("https://inventorybe.glitch.me/api/barang_daerah/upload_excel", {
     method: "POST",
     body: formData, // Kirim form data berisi file
   })
