@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function fetchNotifications() {
     try {
       const response = await fetch(
-        "https://inventorybe.glitch.me/gudang_notification/notifications"
+        "https://inventorybe.glitch.me/api/gudang_notification/notifications"
       );
       if (!response.ok) throw new Error(`Error: ${response.statusText}`);
       return await response.json();
