@@ -40,7 +40,7 @@ function displayBarang(barang) {
       <td>${item.kode_lokasi}</td>
       <td>${item.kode_barang}</td>
       <td>${item.nama_barang}</td>
-      <td>${item.quantity}</td>
+      <td>Rp.${item.quantity}</td>
       <td>${item.satuan}</td>
       <td>${item.harga_satuan}</td>
       <td>${item.lokasi_daerah}</td>
